@@ -1,5 +1,5 @@
---- ./Lib/site-packages/pydrive/auth.py	Mon Aug 10 15:17:35 2015
-+++ ./Lib/site-packages/pydrive/auth.py	Mon Aug 10 18:19:28 2015
+--- auth.py	Mon Aug 10 15:17:35 2015
++++ auth.py	Mon Aug 10 18:19:28 2015
 @@ -369,7 +369,7 @@
        raise RefreshError('No refresh_token found.'
                           'Please set access_type of OAuth to offline.')
