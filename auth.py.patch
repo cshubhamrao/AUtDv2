@@ -1,0 +1,20 @@
+--- ./Lib/site-packages/pydrive/auth.py	Mon Aug 10 15:17:35 2015
++++ ./Lib/site-packages/pydrive/auth.py	Mon Aug 10 18:19:28 2015
+@@ -369,7 +369,7 @@
+       raise RefreshError('No refresh_token found.'
+                          'Please set access_type of OAuth to offline.')
+     if self.http is None:
+-      self.http = httplib2.Http()
++      self.http = httplib2.Http(ca_certs='cacert.pem')
+     try:
+       self.credentials.refresh(self.http)
+     except AccessTokenRefreshError, error:
+@@ -415,7 +415,7 @@
+     :raises: AuthenticationError
+     """
+     if self.http is None:
+-      self.http = httplib2.Http()
++      self.http = httplib2.Http(ca_certs='cacert.pem')
+     if self.access_token_expired:
+       raise AuthenticationError('No valid credentials provided to authorize')
+     self.http = self.credentials.authorize(self.http)
