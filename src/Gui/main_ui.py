@@ -125,7 +125,8 @@ class Ui_MainWindow(object):
         self.txt_description.setMinimumSize(QtCore.QSize(230, 45))
         self.txt_description.setMaximumSize(QtCore.QSize(230, 90))
         self.txt_description.setTextInteractionFlags(
-            QtCore.Qt.LinksAccessibleByMouse | QtCore.Qt.TextEditable | QtCore.Qt.TextEditorInteraction | QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
+            QtCore.Qt.LinksAccessibleByMouse | QtCore.Qt.TextEditable | QtCore.Qt.TextEditorInteraction |
+            QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
         self.txt_description.setPlaceholderText("")
         self.txt_description.setObjectName("txt_description")
         self._3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.txt_description)
@@ -349,4 +350,8 @@ class Ui_MainWindow(object):
         self.btn_nb.setText(_translate("MainWindow", "Run NetBeans"))
         self.btn_mysql.setText(_translate("MainWindow", "Run MySQL"))
         self.txt_madewithlove.setText(_translate("MainWindow",
-                                                 "<html><head/><body><p><span style=\" color:#0000ff;\">Made with </span><span style=\" color:#ff0000;\">❤️ </span><span style=\" color:#0000ff;\">and code by </span><a href=\"https://cshubhamrao.me\"><span style=\" text-decoration: underline; color:#aa0000;\">Shubham Rao</span></a></p></body></html>"))
+                                                 '''<html><head/><body><p><span style="color:blue;">Made with </span>
+                                                 <span style="color: red;">❤</span>
+                                                 <span style=" color: blue;"> and code by </span>
+                                                 <a style="color:#aa0000;" href="https://cshubhamrao.me">Shubham Rao</a>
+                                                 </p></body></html>'''))
