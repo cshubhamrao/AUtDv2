@@ -10,9 +10,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def __init__(self):
-        self.cb_timeUnit = QtWidgets.QComboBox(self.frame_ulOpt)
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(407, 530)
@@ -128,8 +125,7 @@ class Ui_MainWindow(object):
         self.txt_description.setMinimumSize(QtCore.QSize(230, 45))
         self.txt_description.setMaximumSize(QtCore.QSize(230, 90))
         self.txt_description.setTextInteractionFlags(
-            QtCore.Qt.LinksAccessibleByMouse | QtCore.Qt.TextEditable | QtCore.Qt.TextEditorInteraction |
-            QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
+            QtCore.Qt.LinksAccessibleByMouse | QtCore.Qt.TextEditable | QtCore.Qt.TextEditorInteraction | QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
         self.txt_description.setPlaceholderText("")
         self.txt_description.setObjectName("txt_description")
         self._3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.txt_description)
@@ -150,6 +146,7 @@ class Ui_MainWindow(object):
         self.sb_time.setProperty("value", 5)
         self.sb_time.setObjectName("sb_time")
         self._4.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.sb_time)
+        self.cb_timeUnit = QtWidgets.QComboBox(self.frame_ulOpt)
         self.cb_timeUnit.setObjectName("cb_timeUnit")
         self.cb_timeUnit.addItem("")
         self.cb_timeUnit.addItem("")
@@ -213,7 +210,7 @@ class Ui_MainWindow(object):
         self.frame_options.addTab(self.frame_nbOpt, "")
         self.vboxlayout.addWidget(self.frame_options)
         self.lbl_ul = QtWidgets.QLabel(self.main_widget)
-        sizePolicy = QtWi2dgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbl_ul.sizePolicy().hasHeightForWidth())
