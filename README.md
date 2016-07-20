@@ -1,4 +1,3 @@
-
 Auto Upload to Drive v2!
 =================
 
@@ -24,14 +23,14 @@ in Java...
 This process of archiving, storing and transmitting is (currently) achieved in 
 the following steps:
 
-####Java/NetBeans:
+#### Java/NetBeans:
 
  - Create the program in NetBeans 
  - Finish all the work. Start all over if
  - Create a .zip of theProject folder 
  - Email the .zip to yourself 
  
-####MySQL 
+#### MySQL 
 It goes something like: 
 
 - Type the everything in terminal
