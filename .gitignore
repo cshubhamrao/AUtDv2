@@ -46,3 +46,4 @@ fabric.properties
 #
 src/build/
 src/dist/
+src/Gui/__pycache__
