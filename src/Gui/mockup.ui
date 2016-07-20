@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Shubham Rao</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -23,10 +24,10 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Auto Upload to Drive</string>
+   <string notr="true">Auto Upload to Drive</string>
   </property>
   <widget class="QWidget" name="main_widget">
-   <layout class="QVBoxLayout">
+   <layout class="QVBoxLayout" name="layout_main">
     <item>
      <widget class="QFrame" name="frame_welcome">
       <property name="sizePolicy">
@@ -57,7 +58,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Sign Out</string>
+        <string notr="true">Sign Out</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_welcome">
@@ -81,7 +82,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Welcome Shubham Rao! Have a nice day!</string>
+        <string notr="true">Welcome Shubham Rao! Have a nice day!</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -130,10 +131,10 @@
         <number>1</number>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
        </property>
        <property name="pixmap">
-        <pixmap resource="res.qrc">:/me.jpg</pixmap>
+        <pixmap resource="res.qrc">:/res/me.jpg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -163,13 +164,13 @@
         </sizepolicy>
        </property>
        <attribute name="title">
-        <string>Info</string>
+        <string notr="true">Info</string>
        </attribute>
-       <layout class="QFormLayout" name="_3">
+       <layout class="QFormLayout" name="layout_info">
         <item row="0" column="0">
          <widget class="QLabel" name="lbl_cw">
           <property name="text">
-           <string>Classwork/Period No.</string>
+           <string notr="true">Classwork/Period No.</string>
           </property>
           <property name="buddy">
            <cstring>sb_cw</cstring>
@@ -179,10 +180,10 @@
         <item row="0" column="1">
          <widget class="QSpinBox" name="sb_cw">
           <property name="suffix">
-           <string/>
+           <string notr="true"/>
           </property>
           <property name="prefix">
-           <string>C.W. </string>
+           <string notr="true">C.W. </string>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -191,7 +192,7 @@
            <number>150</number>
           </property>
           <property name="value">
-           <number>35</number>
+           <number>50</number>
           </property>
           <property name="displayIntegerBase">
            <number>10</number>
@@ -201,7 +202,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="lbl_date">
           <property name="text">
-           <string>Date:</string>
+           <string notr="true">Date:</string>
           </property>
           <property name="buddy">
            <cstring>dt_date</cstring>
@@ -216,8 +217,8 @@
             <minute>0</minute>
             <second>0</second>
             <year>2016</year>
-            <month>4</month>
-            <day>26</day>
+            <month>7</month>
+            <day>27</day>
            </datetime>
           </property>
           <property name="maximumDate">
@@ -240,12 +241,19 @@
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
+          <property name="date">
+           <date>
+            <year>2016</year>
+            <month>7</month>
+            <day>27</day>
+           </date>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="lbl_topic">
           <property name="text">
-           <string>Topic:</string>
+           <string notr="true">Topic:</string>
           </property>
           <property name="buddy">
            <cstring>cb_topic</cstring>
@@ -254,14 +262,17 @@
         </item>
         <item row="2" column="1">
          <widget class="QComboBox" name="cb_topic">
+          <property name="currentText">
+           <string notr="true">Java</string>
+          </property>
           <item>
            <property name="text">
-            <string>Java</string>
+            <string notr="true">Java</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>MySQL</string>
+            <string notr="true">MySQL</string>
            </property>
           </item>
          </widget>
@@ -269,7 +280,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="lbl_description">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Description/Name:&lt;br/&gt;(Recommended)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Description/Name:&lt;br/&gt;(Recommended)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="buddy">
            <cstring>txt_description</cstring>
@@ -297,7 +308,7 @@
            </size>
           </property>
           <property name="documentTitle">
-           <string>Practical Description</string>
+           <string notr="true">Practical Description</string>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::LinksAccessibleByMouse|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -317,13 +328,13 @@
         </sizepolicy>
        </property>
        <attribute name="title">
-        <string>Upload Options</string>
+        <string notr="true">Upload Options</string>
        </attribute>
-       <layout class="QFormLayout" name="_4">
+       <layout class="QFormLayout" name="layout_uIOpt">
         <item row="0" column="0">
          <widget class="QLabel" name="txt_ulInterval">
           <property name="text">
-           <string>Upload Interval:</string>
+           <string notr="true">Upload Interval:</string>
           </property>
           <property name="buddy">
            <cstring>sb_time</cstring>
@@ -332,6 +343,9 @@
         </item>
         <item row="0" column="1">
          <widget class="QSpinBox" name="sb_time">
+          <property name="prefix">
+           <string notr="true"/>
+          </property>
           <property name="value">
            <number>5</number>
           </property>
@@ -339,14 +353,17 @@
         </item>
         <item row="1" column="1">
          <widget class="QComboBox" name="cb_timeUnit">
+          <property name="currentText">
+           <string notr="true">Minutes</string>
+          </property>
           <item>
            <property name="text">
-            <string>Minutes</string>
+            <string notr="true">Minutes</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Seconds</string>
+            <string notr="true">Seconds</string>
            </property>
           </item>
          </widget>
@@ -354,14 +371,14 @@
         <item row="2" column="1">
          <widget class="QCheckBox" name="cb_fileSave">
           <property name="text">
-           <string>Upload on File Save [EXPERIMENTAL]</string>
+           <string notr="true">Upload on File Save [DUMMY]</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="lbl_fileName">
           <property name="text">
-           <string>File Name:</string>
+           <string notr="true">File Name:</string>
           </property>
           <property name="buddy">
            <cstring>txt_fileName</cstring>
@@ -371,7 +388,7 @@
         <item row="3" column="1">
          <widget class="QLineEdit" name="txt_fileName">
           <property name="text">
-           <string>.zip</string>
+           <string notr="true">.zip</string>
           </property>
           <property name="maxLength">
            <number>40</number>
@@ -394,9 +411,9 @@
         </sizepolicy>
        </property>
        <attribute name="title">
-        <string>NetBeans Options</string>
+        <string notr="true">NetBeans Options</string>
        </attribute>
-       <layout class="QFormLayout" name="_2">
+       <layout class="QFormLayout" name="layout_nbOpt">
         <item row="1" column="1">
          <widget class="QFrame" name="frame_browse">
           <property name="sizePolicy">
@@ -414,7 +431,7 @@
           <property name="lineWidth">
            <number>0</number>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="layout_browse">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -435,6 +452,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
             </widget>
            </item>
            <item>
@@ -446,7 +466,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Browse...</string>
+              <string notr="true">Browse...</string>
              </property>
             </widget>
            </item>
@@ -456,7 +476,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="lbl_location">
           <property name="text">
-           <string>Project Location:</string>
+           <string notr="true">Project Location:</string>
           </property>
           <property name="buddy">
            <cstring>txt_folderLocation</cstring>
@@ -476,7 +496,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Uploads Done:</string>
+       <string notr="true">Uploads Done:</string>
       </property>
      </widget>
     </item>
@@ -525,7 +545,7 @@
     <item>
      <widget class="QPushButton" name="btn_start">
       <property name="text">
-       <string>Start</string>
+       <string notr="true">Start</string>
       </property>
      </widget>
     </item>
@@ -577,11 +597,11 @@
           </size>
          </property>
          <property name="text">
-          <string>Run NetBeans</string>
+          <string notr="true">Run NetBeans</string>
          </property>
          <property name="icon">
           <iconset resource="res.qrc">
-           <normaloff>:/nb.png</normaloff>:/nb.png</iconset>
+           <normaloff>:/res/nb.png</normaloff>:/res/nb.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -612,7 +632,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Run MySQL</string>
+          <string notr="true">Run MySQL</string>
          </property>
         </widget>
        </item>
@@ -633,7 +653,7 @@
        </font>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;Made with &lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;❤️ &lt;/span&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;and code by &lt;/span&gt;&lt;a href=&quot;https://cshubhamrao.me&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#aa0000;&quot;&gt;Shubham Rao&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;Made with &lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;❤️ &lt;/span&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;and code by &lt;/span&gt;&lt;a href=&quot;https://cshubhamrao.me&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#aa0000;&quot;&gt;Shubham Rao&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -670,4 +690,21 @@
   <include location="res.qrc"/>
  </resources>
  <connections/>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>10</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>10</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
 </ui>
