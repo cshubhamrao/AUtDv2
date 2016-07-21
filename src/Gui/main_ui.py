@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
         self.cb_topic.setItemText(1, "MySQL")
         self.layout_info.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.cb_topic)
         self.lbl_description = QtWidgets.QLabel(self.frame_info)
-        self.lbl_description.setText("<html><head/><body><p>Description/Name:<br/>(Recommended)</p></body></html>")
+        self.lbl_description.setText("Description/Name:<br/>(Recommended)")
         self.lbl_description.setObjectName("lbl_description")
         self.layout_info.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.lbl_description)
         self.txt_description = QtWidgets.QPlainTextEdit(self.frame_info)
@@ -317,12 +317,10 @@ class Ui_MainWindow(object):
         font.setFamily("Roboto")
         self.txt_madewithlove.setFont(font)
         self.txt_madewithlove.setText(
-            '''<html><head/><body><p>
-            <span style="color:blue;">Made with </span><span style="color:red;">❤️ </span>
+            '''<span style="color:blue;">Made with </span><span style="color:red;">❤️ </span>
             <span style="color:blue;">and code by </span>
             <a href="https://cshubhamrao.me">
-            <span style="text-decoration: underline; color:red;">Shubham Rao</span>
-            </a></p></body></html>
+            <span style="text-decoration: underline; color:red;">Shubham Rao</span></a>
             '''
         )
         self.txt_madewithlove.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
