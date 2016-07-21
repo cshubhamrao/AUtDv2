@@ -1,10 +1,17 @@
 from Gui import main_ui
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+import os
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+
+        self.ui = main_ui.Ui_MainWindow()
+        self.ui.setupUi(self)
+
 
 app = QApplication(sys.argv)
-MainWindow = QMainWindow()
-ui = main_ui.Ui_MainWindow()
-ui.setupUi(MainWindow)
-MainWindow.show()
+window = MainWindow()
+window.show()
 sys.exit(app.exec_())
