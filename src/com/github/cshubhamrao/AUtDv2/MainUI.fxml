@@ -19,9 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" fx:controller="com.github.cshubhamrao.AUtDv2.UIController" 
-      xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" 
-      spacing="10.0">
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.UIController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -41,12 +39,9 @@
             <ColumnConstraints halignment="LEFT" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" 
-                            vgrow="NEVER" />
-            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" 
-                            vgrow="SOMETIMES" />
-            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" 
-                            vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="90.0" valignment="TOP" vgrow="ALWAYS" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
         </rowConstraints>
@@ -84,14 +79,12 @@
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
             </ChoiceBox>
-            <Label alignment="CENTER" text="Name/Description:&#10;(Recommended)" textAlignment="RIGHT" 
-                   GridPane.rowIndex="3">
+            <Label alignment="CENTER" text="Name/Description:&#10;(Recommended)" textAlignment="RIGHT" GridPane.rowIndex="3">
                 <GridPane.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
             </Label>
-            <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Enter Name/Description Here..." 
-                      GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Enter Name/Description Here..." GridPane.columnIndex="1" GridPane.rowIndex="3">
                 <GridPane.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
@@ -149,14 +142,12 @@
          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <children>
-         <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" prefHeight="60.0" prefWidth="137.0" 
-                 text="Start NetBeans">
+         <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" prefHeight="60.0" prefWidth="137.0" text="Start NetBeans">
             <GridPane.margin>
                <Insets bottom="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Button>
-         <Button fx:id="btn_MySQL" maxHeight="Infinity" maxWidth="Infinity" prefHeight="70.0" text="Start MySQL" 
-                 GridPane.columnIndex="1">
+         <Button fx:id="btn_MySql" maxHeight="Infinity" maxWidth="Infinity" prefHeight="70.0" text="Start MySQL" GridPane.columnIndex="1">
             <GridPane.margin>
                <Insets bottom="5.0" left="5.0" top="5.0" />
             </GridPane.margin>
