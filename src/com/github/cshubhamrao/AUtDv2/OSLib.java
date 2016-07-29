@@ -23,41 +23,38 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-
 /**
- * FXML Controller class
  *
- * @author shubham
+ * @author Shubham Rao <cshubhamrao@gmail.com>
  */
-public class UIController implements Initializable {
+public class OSLib {
+    static OperatingSystem currentOS;
 
-    @FXML
-    private Button btn_userAction;
+    static {
+        currentOS = currentOS();
+    }
+    
+    enum OperatingSystem {
+        WINDOWS,
+        LINUX,
+        MAC,
+        UNKNOWN
+    }
+    
+    private static OperatingSystem currentOS() {
+        String os = System.getProperty("os.name");
+        if (os.startsWith("Linux")) return OperatingSystem.LINUX;
+        else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
+        else if (os.startsWith("Mac")) return OperatingSystem.WINDOWS;
+        else return OperatingSystem.UNKNOWN;
+    }
 
-    @FXML
-    private ChoiceBox<String> cb_topic;
+    static void runNetBeans() {
+        System.out.println("¯\\_(ツ)_/¯");
+    }
 
-    @FXML
-    private Button btn_NetBeans;
-
-    @FXML
-    private Button btn_MySql;
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
-        btn_NetBeans.setOnAction((e) -> OSLib.runNetBeans());
-        btn_MySql.setOnAction((evt) -> OSLib.runMySql());
+    static void runMySql() {
+        System.out.println("¯\\_(ツ)_/¯");
     }
 
 }
