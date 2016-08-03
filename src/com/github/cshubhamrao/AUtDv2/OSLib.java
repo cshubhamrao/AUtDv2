@@ -28,33 +28,19 @@ package com.github.cshubhamrao.AUtDv2;
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
 public class OSLib {
-    static OperatingSystem currentOS;
 
-    static {
-        currentOS = currentOS();
-    }
-    
     enum OperatingSystem {
         WINDOWS,
         LINUX,
         MAC,
         UNKNOWN
     }
-    
-    private static OperatingSystem currentOS() {
+
+    static OperatingSystem getCurrentOS() {
         String os = System.getProperty("os.name");
         if (os.startsWith("Linux")) return OperatingSystem.LINUX;
         else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
         else if (os.startsWith("Mac")) return OperatingSystem.WINDOWS;
         else return OperatingSystem.UNKNOWN;
+        }
     }
-
-    static void runNetBeans() {
-        System.out.println("¯\\_(ツ)_/¯");
-    }
-
-    static void runMySql() {
-        System.out.println("¯\\_(ツ)_/¯");
-    }
-
-}

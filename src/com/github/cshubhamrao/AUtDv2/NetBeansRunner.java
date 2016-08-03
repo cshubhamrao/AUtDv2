@@ -23,47 +23,35 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * FXML Controller class
  *
- * @author shubham
+ * @author Shubham Rao <cshubhamrao@gmail.com>
  */
-public class UIController implements Initializable {
+class NetBeansRunner extends AppRunner {
 
-    @FXML
-    private Button btn_userAction;
-
-    @FXML
-    private ChoiceBox<String> cb_topic;
-
-    @FXML
-    private Button btn_NetBeans;
-
-    @FXML
-    private Button btn_MySql;
-
-    @FXML
-    private Spinner<Integer> spinner_cwNo;
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
-        cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
-        btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
-//        btn_MySql.setOnAction((evt) -> OSLib.runMySql());
+    public NetBeansRunner() {
+        super();
     }
 
+    @Override
+    String findLocation() {
+        List<String> probableLocations = Arrays.asList(new String[] {
+                                         "/opt/netbeans/"});
+        
+        for (String a : probableLocations)
+        {
+            Path p = Paths.get(a,"bin/netbeans");
+            if(Files.exists(p))
+            {
+                return p.toAbsolutePath().toString();
+            }
+        }
+        return "";
+    }
 }
