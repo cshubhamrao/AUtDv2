@@ -30,6 +30,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 
 /**
  * FXML Controller class
@@ -50,11 +52,15 @@ public class UIController implements Initializable {
     @FXML
     private Button btn_MySql;
 
+    @FXML
+    private Spinner<Integer> spinner_cwNo;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> OSLib.runNetBeans());
         btn_MySql.setOnAction((evt) -> OSLib.runMySql());

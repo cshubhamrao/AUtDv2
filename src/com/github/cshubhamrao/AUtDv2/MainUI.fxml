@@ -52,7 +52,7 @@
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
             </Label>
-            <Spinner maxWidth="Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+            <Spinner fx:id="spinner_cwNo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
                 <GridPane.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
