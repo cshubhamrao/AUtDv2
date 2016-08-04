@@ -36,11 +36,24 @@ public class OSLib {
         UNKNOWN
     }
 
+    enum Architecture {
+        i386,
+        AMD64,
+        UNKNOWN
+    }
+
     static OperatingSystem getCurrentOS() {
         String os = System.getProperty("os.name");
         if (os.startsWith("Linux")) return OperatingSystem.LINUX;
         else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
         else if (os.startsWith("Mac")) return OperatingSystem.WINDOWS;
         else return OperatingSystem.UNKNOWN;
-        }
     }
+
+    static Architecture getCurrentArchitecture() {
+        String arch = System.getProperty("os.arch");
+        if (arch.startsWith("amd64")) return Architecture.AMD64;
+        else if (arch.startsWith("i386")) return Architecture.i386;
+        return Architecture.UNKNOWN;
+    }
+}

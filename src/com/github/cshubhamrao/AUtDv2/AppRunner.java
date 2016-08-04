@@ -37,11 +37,13 @@ abstract class AppRunner {
 
     String location;
     OSLib.OperatingSystem os;
+    OSLib.Architecture arch;
     List<String> args = new ArrayList<>();
 
     AppRunner(String... args) {
         this.os = OSLib.getCurrentOS();
         this.args.addAll(Arrays.asList(args));
+        this.arch = OSLib.getCurrentArchitecture();
     }
 
     AppRunner() {
