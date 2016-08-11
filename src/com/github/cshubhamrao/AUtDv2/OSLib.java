@@ -23,6 +23,11 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
@@ -55,5 +60,28 @@ public class OSLib {
         if (arch.startsWith("amd64")) return Architecture.AMD64;
         else if (arch.startsWith("i386")) return Architecture.i386;
         return Architecture.UNKNOWN;
+    }
+    
+    static List<Path> getProgramDirs() {
+        ArrayList<Path> dirs = new ArrayList(2);
+        if (getCurrentOS() == OperatingSystem.WINDOWS)
+        {
+            switch(getCurrentArchitecture())
+            {
+                case i386:
+                    dirs.add(Paths.get(System.getenv("PROGRAMFILES")));
+                case AMD64:
+                    dirs.add(Paths.get(System.getenv("PROGRAMFILES")));
+                    dirs.add(Paths.get(System.getenv("PROGRAMFILES(x86)")));
+                    break;
+                case UNKNOWN:
+                    break;
+            }
+        }
+        else if (getCurrentOS() == OperatingSystem.LINUX)
+        {
+            System.out.println("NOT IMPLEMENTED");
+        }
+        return dirs;
     }
 }

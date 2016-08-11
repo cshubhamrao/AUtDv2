@@ -35,7 +35,7 @@ import java.util.List;
  */
 abstract class AppRunner {
 
-    String location;
+    private String location;
     OSLib.OperatingSystem os;
     OSLib.Architecture arch;
     List<String> args = new ArrayList<>();

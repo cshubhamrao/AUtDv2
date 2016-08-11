@@ -23,11 +23,14 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  *
@@ -41,17 +44,44 @@ class NetBeansRunner extends AppRunner {
 
     @Override
     String findLocation() {
-        List<String> probableLocations = Arrays.asList(new String[] {
-                                         "/opt/netbeans/"});
-        
-        for (String a : probableLocations)
-        {
-            Path p = Paths.get(a,"bin/netbeans");
-            if(Files.exists(p))
-            {
-                return p.toAbsolutePath().toString();
+        String location = "";
+        switch (os) {
+            case WINDOWS:
+                location = windowsLocation();
+                
+            case MAC:
+            case LINUX:
+            case UNKNOWN:
+                System.err.println("NOT IMPLEMENTED");
+
+        }
+        return location;
+
+    }
+
+    private String windowsLocation() {
+        String location;
+        SortedSet<File> nbLocs = new TreeSet();
+        List<Path> progDirs = OSLib.getProgramDirs();
+
+        for (Path dirs : progDirs) {
+            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
+                subDirs.forEach((pat) -> nbLocs.add(pat.toFile()));
+            }
+            catch (IOException ex) {
+                System.out.println("Error: ");
+                System.out.println(ex);
             }
         }
-        return "";
+        System.out.println(nbLocs.last());
+        location = nbLocs.first().toString();
+        switch (arch) {
+            case AMD64:
+                return location + "\\bin\\netbeans64.exe";
+            case UNKNOWN:
+            case i386:
+                return location + "\\bin\\netbeans.exe";
+        }
+        return location;
     }
 }
