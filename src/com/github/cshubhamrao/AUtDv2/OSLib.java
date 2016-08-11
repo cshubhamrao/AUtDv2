@@ -70,6 +70,7 @@ public class OSLib {
             {
                 case i386:
                     dirs.add(Paths.get(System.getenv("PROGRAMFILES")));
+                    break;
                 case AMD64:
                     dirs.add(Paths.get(System.getenv("PROGRAMFILES")));
                     dirs.add(Paths.get(System.getenv("PROGRAMFILES(x86)")));
@@ -80,7 +81,7 @@ public class OSLib {
         }
         else if (getCurrentOS() == OperatingSystem.LINUX)
         {
-            System.out.println("NOT IMPLEMENTED");
+            System.err.println("NOT IMPLEMENTED");
         }
         return dirs;
     }

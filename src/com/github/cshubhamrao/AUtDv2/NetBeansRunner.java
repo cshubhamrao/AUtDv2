@@ -23,7 +23,6 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -48,7 +47,7 @@ class NetBeansRunner extends AppRunner {
         switch (os) {
             case WINDOWS:
                 location = windowsLocation();
-                
+                break;
             case MAC:
             case LINUX:
             case UNKNOWN:
@@ -60,28 +59,27 @@ class NetBeansRunner extends AppRunner {
     }
 
     private String windowsLocation() {
-        String location;
-        SortedSet<File> nbLocs = new TreeSet();
+        Path location;
+        SortedSet<Path> nbLocs = new TreeSet();
         List<Path> progDirs = OSLib.getProgramDirs();
 
         for (Path dirs : progDirs) {
             try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
-                subDirs.forEach((pat) -> nbLocs.add(pat.toFile()));
+                subDirs.forEach((pat) -> nbLocs.add(pat));
             }
             catch (IOException ex) {
-                System.out.println("Error: ");
-                System.out.println(ex);
+                System.err.println("Error: ");
+                System.err.println(ex);
             }
         }
-        System.out.println(nbLocs.last());
-        location = nbLocs.first().toString();
+        location = nbLocs.last().resolve("bin");
         switch (arch) {
             case AMD64:
-                return location + "\\bin\\netbeans64.exe";
+                return location.resolve("netbeans.exe").toString();
             case UNKNOWN:
             case i386:
-                return location + "\\bin\\netbeans.exe";
+                return location.resolve("netbeans64.exe").toString();
         }
-        return location;
+        return location.toString();
     }
 }
