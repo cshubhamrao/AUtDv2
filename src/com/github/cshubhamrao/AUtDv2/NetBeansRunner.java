@@ -68,8 +68,8 @@ class NetBeansRunner extends AppRunner {
                 subDirs.forEach((pat) -> nbLocs.add(pat));
             }
             catch (IOException ex) {
-                System.out.println("Error: ");
-                System.out.println(ex);
+                System.err.println("Error: ");
+                System.err.println(ex);
             }
         }
         location = nbLocs.last().resolve("bin");

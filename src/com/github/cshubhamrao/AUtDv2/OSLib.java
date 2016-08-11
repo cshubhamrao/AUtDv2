@@ -81,7 +81,7 @@ public class OSLib {
         }
         else if (getCurrentOS() == OperatingSystem.LINUX)
         {
-            System.out.println("NOT IMPLEMENTED");
+            System.err.println("NOT IMPLEMENTED");
         }
         return dirs;
     }
