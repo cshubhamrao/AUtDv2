@@ -23,11 +23,13 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  *
@@ -41,17 +43,43 @@ class NetBeansRunner extends AppRunner {
 
     @Override
     String findLocation() {
-        List<String> probableLocations = Arrays.asList(new String[] {
-                                         "/opt/netbeans/"});
-        
-        for (String a : probableLocations)
-        {
-            Path p = Paths.get(a,"bin/netbeans");
-            if(Files.exists(p))
-            {
-                return p.toAbsolutePath().toString();
+        String location = "";
+        switch (os) {
+            case WINDOWS:
+                location = windowsLocation();
+                break;
+            case MAC:
+            case LINUX:
+            case UNKNOWN:
+                System.err.println("NOT IMPLEMENTED");
+
+        }
+        return location;
+
+    }
+
+    private String windowsLocation() {
+        Path location;
+        SortedSet<Path> nbLocs = new TreeSet();
+        List<Path> progDirs = OSLib.getProgramDirs();
+
+        for (Path dirs : progDirs) {
+            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
+                subDirs.forEach((pat) -> nbLocs.add(pat));
+            }
+            catch (IOException ex) {
+                System.out.println("Error: ");
+                System.out.println(ex);
             }
         }
-        return "";
+        location = nbLocs.last().resolve("bin");
+        switch (arch) {
+            case AMD64:
+                return location.resolve("netbeans.exe").toString();
+            case UNKNOWN:
+            case i386:
+                return location.resolve("netbeans64.exe").toString();
+        }
+        return location.toString();
     }
 }
