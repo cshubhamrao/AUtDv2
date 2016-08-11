@@ -23,11 +23,16 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,17 +46,21 @@ class NetBeansRunner extends AppRunner {
 
     @Override
     String findLocation() {
-        List<String> probableLocations = Arrays.asList(new String[] {
-                                         "/opt/netbeans/"});
-        
-        for (String a : probableLocations)
-        {
-            Path p = Paths.get(a,"bin/netbeans");
-            if(Files.exists(p))
-            {
-                return p.toAbsolutePath().toString();
+        String location = "";
+        SortedSet<File> nbLocs = new TreeSet();
+        List<Path> progDirs = OSLib.getProgramDirs();
+
+        for (Path dirs : progDirs) {
+            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
+                subDirs.forEach((pat) -> nbLocs.add(pat.toFile()));
+            }
+            catch (IOException ex) {
+                System.out.println("Error: ");
+                System.out.println(ex);
             }
         }
-        return "";
+        System.out.println(nbLocs.first());
+        location = nbLocs.first().toString();
+        return location + "\\bin\\netbeans.exe";
     }
 }
