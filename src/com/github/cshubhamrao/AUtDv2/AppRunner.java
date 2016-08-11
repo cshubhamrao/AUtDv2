@@ -62,11 +62,11 @@ abstract class AppRunner {
                 System.out.println("Started running...");
             }
             catch (IOException ex) {
-                System.out.println("Error running");
+                System.err.println("Error running");
             }
         }
         else {
-            System.out.println("Unable to find valid executable to run.");
+            System.err.println("Unable to find valid executable to run.");
         }
     }
 
