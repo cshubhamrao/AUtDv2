@@ -35,7 +35,7 @@ import java.util.List;
  */
 abstract class AppRunner {
 
-    String location;
+    private String location;
     OSLib.OperatingSystem os;
     OSLib.Architecture arch;
     List<String> args = new ArrayList<>();
@@ -62,11 +62,11 @@ abstract class AppRunner {
                 System.out.println("Started running...");
             }
             catch (IOException ex) {
-                System.out.println("Error running");
+                System.err.println("Error running");
             }
         }
         else {
-            System.out.println("Unable to find valid executable to run.");
+            System.err.println("Unable to find valid executable to run.");
         }
     }
 
@@ -74,18 +74,12 @@ abstract class AppRunner {
         String loc = this.findLocation();
         File f = new File(loc);
         boolean exists = f.exists() && f.isFile(),
-                canExec = f.canExecute(),
-                isExec = checkFormat(f);
-        if (exists && canExec && isExec) {
+                canExec = f.canExecute();
+        if (exists && canExec) {
             this.location = loc;
         }
         else {
             location = "";
         }
-    }
-
-    private boolean checkFormat(File file) {
-        //TODO: Implement
-        return true;
     }
 }
