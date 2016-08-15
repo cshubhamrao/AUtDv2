@@ -63,7 +63,7 @@ public class UIController implements Initializable {
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
-//        btn_MySql.setOnAction((evt) -> OSLib.runMySql());
+        btn_MySql.setOnAction((e) -> new MySqlRunner().run());
     }
 
 }
