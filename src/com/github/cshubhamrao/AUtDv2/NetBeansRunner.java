@@ -42,7 +42,7 @@ class NetBeansRunner extends AppRunner {
     }
 
     @Override
-    String findLocation() {
+    void setCommand() {
         String location = "";
         switch (os) {
             case WINDOWS:
@@ -54,7 +54,7 @@ class NetBeansRunner extends AppRunner {
                 System.err.println("NOT IMPLEMENTED");
 
         }
-        return location;
+        this.setCommand(new CommandLine(location));
 
     }
 
