@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 Shubham Rao <cshubhamrao@gmail.com>.
+ * Copyright 2016 "Shubham Rao <cshubhamrao@gmail.com>".
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,42 +25,26 @@ package com.github.cshubhamrao.AUtDv2;
 
 import java.io.IOException;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
+import java.util.logging.Logger;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
 /**
  *
- * @author shubham
+ * @author "Shubham Rao <cshubhamrao@gmail.com>"
  */
-public class MainUI extends Application {
-
-    private static final java.util.logging.Logger logger = Log.logger;
-
-    @Override
-    public void start(Stage primaryStage) {
-        Parent root;
+class Log {
+    static final Logger logger = Logger.getGlobal();
+    static{
         try {
-            root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
-            primaryStage.setScene(new Scene(root));
+            FileHandler fh = new FileHandler("log.txt");
+            fh.setFormatter(new SimpleFormatter());
+            logger.addHandler(fh);
         }
-        catch (IOException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        catch (IOException | SecurityException ex) {
+            System.err.println("Unable to log error in logging :P");
+            System.err.println(ex);
         }
-
-        primaryStage.setTitle("Auto Upload to Drive v2");
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        logger.setLevel(Level.ALL);
     }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        logger.info("LOGGING Started");
-        launch(args);
-    }
-
 }

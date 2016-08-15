@@ -27,12 +27,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
 public class OSLib {
+
+    private static final java.util.logging.Logger logger = Log.logger;
 
     enum OperatingSystem {
         WINDOWS,
@@ -80,7 +83,7 @@ public class OSLib {
         }
         else if (getCurrentOS() == OperatingSystem.LINUX)
         {
-            System.out.println("NOT IMPLEMENTED");
+            logger.log(Level.SEVERE, "Support for linux is unimplemented");
         }
         return dirs;
     }

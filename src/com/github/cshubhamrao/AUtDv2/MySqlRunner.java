@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -41,6 +40,7 @@ import java.util.stream.Stream;
  */
 public class MySqlRunner extends AppRunner {
 
+    private static final java.util.logging.Logger logger = Log.logger;
 
     @Override
     void setCommand() {
@@ -70,12 +70,12 @@ public class MySqlRunner extends AppRunner {
                 command.addArguments("cmd /C", "mysql.exe", "-uroot", "-p");
                 break;
             case MAC:
-                System.err.println("WARN: Mac OS is untesed. Things may not work.");
+                logger.log(Level.WARNING, "Mac OS is untesed. Things may not work.");
             case LINUX:
                 command.setCommandName("mysql");
                 break;
             case UNKNOWN:
-                System.err.println("NOT IMPLEMENTED");
+                logger.log(Level.SEVERE, "UNIMPLEMENTED");
         }
         setCommand(command);
     }
@@ -89,17 +89,17 @@ public class MySqlRunner extends AppRunner {
                 subDirs.forEach((Path p) -> {
                     if (p.toString().contains("MySQL Server")) {
                         mySqlLocs.add(p);
+                        logger.log(Level.INFO, "Added {0} to mySqlLocs", p.toString());
                     }
                 });
             }
-            catch (UncheckedIOException ex) {
-                System.out.println("WARN: " + ex.getMessage());
-            }
-            catch (IOException ex) {
-                System.err.println("ERROR: " + ex.getMessage());
+            catch (UncheckedIOException | IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
             }
         }
+
         location = mySqlLocs.last().resolve("bin");
+        logger.log(Level.INFO, "Using {0} for MySQL", location.toString());
         return location.toString();
     }
 }

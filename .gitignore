@@ -29,3 +29,6 @@ nbactions.xml
 ###Windows###
 Thumbs.db
 ehthumbs.db
+
+###Logs
+log.txt*
