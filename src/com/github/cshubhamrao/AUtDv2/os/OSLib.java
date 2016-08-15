@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.cshubhamrao.AUtDv2;
+package com.github.cshubhamrao.AUtDv2.os;
 
+import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;

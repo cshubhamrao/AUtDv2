@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.cshubhamrao.AUtDv2;
+package com.github.cshubhamrao.AUtDv2.os;
 
+import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -36,7 +37,7 @@ import java.util.logging.Level;
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
-class NetBeansRunner extends AppRunner {
+public class NetBeansRunner extends AppRunner {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
