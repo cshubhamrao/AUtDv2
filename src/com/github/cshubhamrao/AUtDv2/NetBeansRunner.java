@@ -75,10 +75,10 @@ class NetBeansRunner extends AppRunner {
         location = nbLocs.last().resolve("bin");
         switch (arch) {
             case AMD64:
-                return location.resolve("netbeans.exe").toString();
+                return location.resolve("netbeans64.exe").toString();
             case UNKNOWN:
             case i386:
-                return location.resolve("netbeans64.exe").toString();
+                return location.resolve("netbeans.exe").toString();
         }
         return location.toString();
     }
