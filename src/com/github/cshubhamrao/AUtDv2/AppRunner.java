@@ -23,11 +23,12 @@
  */
 package com.github.cshubhamrao.AUtDv2;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,51 +36,104 @@ import java.util.List;
  */
 abstract class AppRunner {
 
-    private String location;
-    OSLib.OperatingSystem os;
-    OSLib.Architecture arch;
-    List<String> args = new ArrayList<>();
-
-    AppRunner(String... args) {
-        this.os = OSLib.getCurrentOS();
-        this.args.addAll(Arrays.asList(args));
-        this.arch = OSLib.getCurrentArchitecture();
+    protected void setCommand(CommandLine command) {
+        this.command = command;
     }
+
+    private CommandLine command;
+
+    public final OSLib.Architecture arch;
+    public final OSLib.OperatingSystem os;
 
     AppRunner() {
-        this((String) null);
+        this.arch = OSLib.getCurrentArchitecture();
+        this.os = OSLib.getCurrentOS();
     }
 
-    abstract String findLocation();
+    abstract void setCommand();
 
-    void run() {
-        validateLocation();
-        if (!location.isEmpty()) {
-            ProcessBuilder pb = new ProcessBuilder();
-            pb.command(location);
-            try {
-                Process p = pb.start();
-                System.out.println("Started running...");
+    CommandLine getCommand() {
+        return command;
+    }
+
+    public void run() {
+        setCommand();
+        ProcessBuilder pb = new ProcessBuilder(command.getFullCommand());
+        System.out.println("DEBUG: CommandLine: " + command);
+        try {
+            Process p = pb.start();
+            System.out.println("INFO: Started Running");
+            new Thread(() -> {
+                try {
+                    System.out.print("INFO: Exit Code: ");
+                    System.out.println(p.waitFor());
+                }
+                catch (InterruptedException ex) {
+                    Logger.getLogger(AppRunner.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            catch (IOException ex) {
-                System.out.println("Error running");
-            }
+            ).start();
         }
-        else {
-            System.out.println("Unable to find valid executable to run.");
+        catch (IOException ex) {
+            Logger.getLogger(AppRunner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void validateLocation() {
-        String loc = this.findLocation();
-        File f = new File(loc);
-        boolean exists = f.exists() && f.isFile(),
-                canExec = f.canExecute();
-        if (exists && canExec) {
-            this.location = loc;
+    protected class CommandLine {
+
+        private String commandName;
+        private ArrayList<String> arguments = new ArrayList();
+
+        private ArrayList<String> fullCommand = new ArrayList();
+
+        CommandLine(ArrayList<String> fullCommand) {
+            this.fullCommand = fullCommand;
+            this.commandName = fullCommand.get(0);
+            ArrayList<String> args = fullCommand;
+            args.remove(0);
+            this.arguments = args;
         }
-        else {
-            location = "";
+
+        CommandLine(String command, String... args) {
+            this.commandName = command;
+            this.arguments.addAll(Arrays.asList(args));
+            this.fullCommand.addAll(Arrays.asList(args));
+            fullCommand.add(0, commandName);
+        }
+
+        CommandLine(String command) {
+            this(command, "");
+        }
+
+        public String getCommandName() {
+            return commandName;
+        }
+
+        public void setCommandName(String commandName) {
+            this.commandName = commandName;
+        }
+
+        public List<String> getArguments() {
+            return arguments;
+        }
+
+        public void setArguments(ArrayList<String> arguments) {
+            this.arguments = arguments;
+        }
+
+        public List<String> getFullCommand() {
+            return fullCommand;
+        }
+
+        public void setFullCommand(ArrayList<String> fullCommand) {
+            this.fullCommand = fullCommand;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder command = new StringBuilder(this.commandName);
+            arguments.forEach((String arg) -> command.append(" " + arg));
+            return command.toString();
         }
     }
 }
