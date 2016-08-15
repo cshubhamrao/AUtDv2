@@ -30,12 +30,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 /**
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
 class NetBeansRunner extends AppRunner {
+
+    private static final java.util.logging.Logger logger = Log.logger;
 
     public NetBeansRunner() {
         super();
@@ -51,7 +54,7 @@ class NetBeansRunner extends AppRunner {
             case MAC:
             case LINUX:
             case UNKNOWN:
-                System.err.println("NOT IMPLEMENTED");
+                logger.log(Level.SEVERE, "UNIMPLEMENTED");
 
         }
         this.setCommand(new CommandLine(location));
@@ -65,11 +68,13 @@ class NetBeansRunner extends AppRunner {
 
         for (Path dirs : progDirs) {
             try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
-                subDirs.forEach((pat) -> nbLocs.add(pat));
+                subDirs.forEach((pat) -> {
+                    nbLocs.add(pat);
+                    logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
+                });
             }
             catch (IOException ex) {
-                System.out.println("Error: ");
-                System.out.println(ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
         location = nbLocs.last().resolve("bin");
@@ -80,6 +85,8 @@ class NetBeansRunner extends AppRunner {
             case i386:
                 return location.resolve("netbeans.exe").toString();
         }
+        
+        logger.log(Level.INFO, "Using {0} as NetBeans path", location);
         return location.toString();
     }
 }

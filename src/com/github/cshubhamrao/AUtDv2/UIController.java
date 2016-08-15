@@ -25,6 +25,7 @@ package com.github.cshubhamrao.AUtDv2;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -39,6 +40,8 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
  * @author shubham
  */
 public class UIController implements Initializable {
+
+    private static final java.util.logging.Logger logger = Log.logger;
 
     @FXML
     private Button btn_userAction;
@@ -60,6 +63,8 @@ public class UIController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        logger.log(Level.INFO, "Initializing Controls");
+
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());

@@ -36,6 +36,8 @@ import java.util.logging.Logger;
  */
 abstract class AppRunner {
 
+    private static final java.util.logging.Logger logger = Log.logger;
+
     protected void setCommand(CommandLine command) {
         this.command = command;
     }
@@ -59,23 +61,21 @@ abstract class AppRunner {
     public void run() {
         setCommand();
         ProcessBuilder pb = new ProcessBuilder(command.getFullCommand());
-        System.out.println("DEBUG: CommandLine: " + command);
         try {
             Process p = pb.start();
-            System.out.println("INFO: Started Running");
+            logger.log(Level.INFO, "Started runnning command");
             new Thread(() -> {
                 try {
-                    System.out.print("INFO: Exit Code: ");
-                    System.out.println(p.waitFor());
+                    logger.log(Level.INFO, "Exit Code: {0} ", p.waitFor());
                 }
                 catch (InterruptedException ex) {
-                    Logger.getLogger(AppRunner.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
             ).start();
         }
         catch (IOException ex) {
-            Logger.getLogger(AppRunner.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -123,7 +123,7 @@ abstract class AppRunner {
         }
 
         public List<String> getFullCommand() {
-            System.out.println("DEBUG: " + fullCommand);
+            logger.log(Level.INFO, "Command: {0}", this.toString());
             return fullCommand;
         }
 
