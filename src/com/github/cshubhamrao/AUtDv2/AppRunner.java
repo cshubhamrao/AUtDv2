@@ -86,19 +86,13 @@ abstract class AppRunner {
 
         private ArrayList<String> fullCommand = new ArrayList();
 
-        CommandLine(ArrayList<String> fullCommand) {
-            this.fullCommand = fullCommand;
-            this.commandName = fullCommand.get(0);
-            ArrayList<String> args = fullCommand;
-            args.remove(0);
-            this.arguments = args;
+        CommandLine() {
+
         }
 
         CommandLine(String command, String... args) {
             this.commandName = command;
-            this.arguments.addAll(Arrays.asList(args));
-            this.fullCommand.addAll(Arrays.asList(args));
-            fullCommand.add(0, commandName);
+            addArguments(args);
         }
 
         CommandLine(String command) {
@@ -111,17 +105,25 @@ abstract class AppRunner {
 
         public void setCommandName(String commandName) {
             this.commandName = commandName;
+            updateFullCommand();
         }
 
         public List<String> getArguments() {
             return arguments;
         }
 
+        public final void addArguments(String... args) {
+            arguments.addAll(Arrays.asList(args));
+            updateFullCommand();
+        }
+
         public void setArguments(ArrayList<String> arguments) {
             this.arguments = arguments;
+            updateFullCommand();
         }
 
         public List<String> getFullCommand() {
+            System.out.println("DEBUG: " + fullCommand);
             return fullCommand;
         }
 
@@ -131,9 +133,15 @@ abstract class AppRunner {
 
         @Override
         public String toString() {
-            StringBuilder command = new StringBuilder(this.commandName);
+            StringBuilder command = new StringBuilder(this.fullCommand.get(0));
             arguments.forEach((String arg) -> command.append(" " + arg));
             return command.toString();
+        }
+
+        private void updateFullCommand() {
+            this.fullCommand.clear();
+            this.fullCommand.add(commandName);
+            this.fullCommand.addAll(arguments);
         }
     }
 }
