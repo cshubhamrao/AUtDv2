@@ -21,54 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.cshubhamrao.AUtDv2;
+package com.github.cshubhamrao.AUtDv2.gui;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import javafx.fxml.Initializable;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import com.github.cshubhamrao.AUtDv2.util.Log;
+import java.io.IOException;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
- * FXML Controller class
  *
  * @author shubham
  */
-public class UIController implements Initializable {
+public class MainUI extends Application {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
-    @FXML
-    private Button btn_userAction;
+    @Override
+    public void start(Stage primaryStage) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
+            primaryStage.setScene(new Scene(root));
+        }
+        catch (IOException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
 
-    @FXML
-    private ChoiceBox<String> cb_topic;
-
-    @FXML
-    private Button btn_NetBeans;
-
-    @FXML
-    private Button btn_MySql;
-
-    @FXML
-    private Spinner<Integer> spinner_cwNo;
+        primaryStage.setTitle("Auto Upload to Drive v2");
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
 
     /**
-     * Initializes the controller class.
+     * @param args the command line arguments
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        logger.log(Level.INFO, "Initializing Controls");
-
-        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
-        cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
-        btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
-        btn_MySql.setOnAction((e) -> new MySqlRunner().run());
+    public static void main(String[] args) {
+        logger.info("LOGGING Started");
+        launch(args);
     }
 
 }
