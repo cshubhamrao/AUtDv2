@@ -29,13 +29,16 @@ import java.util.logging.Logger;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
+
 /**
  *
  * @author "Shubham Rao <cshubhamrao@gmail.com>"
  */
 public class Log {
+
     public static final Logger logger = Logger.getGlobal();
-    static{
+
+    static {
         try {
             FileHandler fh = new FileHandler("log.txt");
             fh.setFormatter(new SimpleFormatter());

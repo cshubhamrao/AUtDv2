@@ -49,10 +49,10 @@ public class MySqlRunner extends AppRunner {
         switch (os) {
             case WINDOWS:
                 /*
-                 Basically we run mysql through a cmd.exe(1) which "starts" another cmd.exe(2) with appropriate title
-                 and command line args for mysql.exe.
-                 cmd.exe(1) exits immediately after running cmd.exe(2), making mysql command prompt run independent of
-                 the program.
+                 Basically we run mysql through a cmd.exe(1) which "starts" another cmd.exe(2) with
+                 appropriate title and command line args for mysql.exe.
+                 cmd.exe(1) exits immediately after running cmd.exe(2), making mysql command prompt
+                 run independent of the program.
 
                  MODIFY AT YOUR OWN RISK
                  Took hours to figure out and "understand" how to make this work as expected.
