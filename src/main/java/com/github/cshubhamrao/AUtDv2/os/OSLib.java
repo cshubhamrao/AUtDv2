@@ -57,7 +57,7 @@ public class OSLib {
         else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
         else if (os.startsWith("Mac")) return OperatingSystem.WINDOWS;
         else return OperatingSystem.UNKNOWN;
-    }
+        }
 
     static Architecture getCurrentArchitecture() {
         String arch = System.getProperty("os.arch");
@@ -65,13 +65,11 @@ public class OSLib {
         else if (arch.startsWith("i386")) return Architecture.i386;
         return Architecture.UNKNOWN;
     }
-    
+
     static List<Path> getProgramDirs() {
         ArrayList<Path> dirs = new ArrayList(2);
-        if (getCurrentOS() == OperatingSystem.WINDOWS)
-        {
-            switch(getCurrentArchitecture())
-            {
+        if (getCurrentOS() == OperatingSystem.WINDOWS) {
+            switch (getCurrentArchitecture()) {
                 case i386:
                     dirs.add(Paths.get(System.getenv("PROGRAMFILES")));
                 case AMD64:
@@ -81,9 +79,7 @@ public class OSLib {
                 case UNKNOWN:
                     break;
             }
-        }
-        else if (getCurrentOS() == OperatingSystem.LINUX)
-        {
+        } else if (getCurrentOS() == OperatingSystem.LINUX) {
             logger.log(Level.SEVERE, "Support for linux is unimplemented");
         }
         return dirs;

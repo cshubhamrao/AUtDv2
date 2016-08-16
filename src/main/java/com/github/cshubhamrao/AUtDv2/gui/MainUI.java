@@ -44,7 +44,7 @@ public class MainUI extends Application {
     public void start(Stage primaryStage) {
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
             primaryStage.setScene(new Scene(root));
         }
         catch (IOException ex) {

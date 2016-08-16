@@ -86,7 +86,7 @@ public class NetBeansRunner extends AppRunner {
             case i386:
                 return location.resolve("netbeans.exe").toString();
         }
-        
+
         logger.log(Level.INFO, "Using {0} as NetBeans path", location);
         return location.toString();
     }
