@@ -23,8 +23,10 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
+import com.github.cshubhamrao.AUtDv2.net.DriveUtils;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.github.cshubhamrao.AUtDv2.os.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -71,6 +73,7 @@ public class UIController implements Initializable {
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
         btn_MySql.setOnAction((e) -> new MySqlRunner().run());
+        btn_userAction.setOnAction((e) -> DriveUtils.upload(new File("log.txt")));
     }
 
 }

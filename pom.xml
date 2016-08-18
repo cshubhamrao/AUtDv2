@@ -129,5 +129,11 @@
             <artifactId>google-api-services-drive</artifactId>
             <version>v3-rev38-1.22.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.22.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>
