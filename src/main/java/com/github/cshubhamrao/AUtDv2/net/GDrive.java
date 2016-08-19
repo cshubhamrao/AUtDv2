@@ -56,14 +56,14 @@ public class GDrive {
 
     private static final Logger logger = Log.logger;
 
-    private final String APP_NAME = "AUtDv2";
-    private final File DATA_DIR = new File(".AUtDv2-creds");
-    private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
-    private FileDataStoreFactory DS_FACTORY;
-    private HttpTransport HTTP_TRANSPORT;
+    private static final String APP_NAME = "AUtDv2";
+    private static final File DATA_DIR = new File(".AUtDv2-creds");
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
+    private static FileDataStoreFactory DS_FACTORY;
+    private static HttpTransport HTTP_TRANSPORT;
 
-    GDrive() {
+    static {
         logger.log(Level.INFO, "Setting up DS Factory & HTTP Transport");
 
         try {
@@ -75,7 +75,7 @@ public class GDrive {
         }
     }
 
-    private Credential authorize() throws IOException {
+    private static Credential authorize() throws IOException {
         logger.log(Level.INFO, "Attempting authorization");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
                 new InputStreamReader(GDrive.class.getResourceAsStream("/net/client_secret.json")));
@@ -93,7 +93,7 @@ public class GDrive {
         return credential;
     }
     
-    public Drive getDriveService() {
+    public static Drive getDriveService() {
         Drive service = null;
         logger.log(Level.INFO, "Attempting to get Drive Service");
         try {

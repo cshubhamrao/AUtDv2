@@ -27,7 +27,6 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,13 +36,12 @@ import java.util.logging.Logger;
  */
 public class DriveUtils {
 
-    private static Drive service;
+    private static final Drive service;
     public static File fileMetadata = new File();
     public static FileContent fileContent;
 
     static {
-        service = new GDrive().getDriveService();
-
+        service = GDrive.getDriveService();
     }
 
     public static void upload(java.io.File localFile) {
@@ -56,6 +54,6 @@ public class DriveUtils {
             catch (IOException ex) {
                 Logger.getLogger(DriveUtils.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }).start();
+        }, "File Upload thread").start();
     }
 }
