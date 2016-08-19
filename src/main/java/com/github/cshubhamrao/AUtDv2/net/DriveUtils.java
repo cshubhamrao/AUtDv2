@@ -23,6 +23,7 @@
  */
 package com.github.cshubhamrao.AUtDv2.net;
 
+import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -35,6 +36,8 @@ import java.util.logging.Logger;
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
 public class DriveUtils {
+
+    private static Logger logger = Log.logger;
 
     private static final Drive service;
     public static File fileMetadata = new File();
@@ -50,9 +53,10 @@ public class DriveUtils {
         new Thread(() -> {
             try {
                 service.files().create(fileMetadata, fileContent).execute();
+                logger.log(Level.INFO,"Upload finished");
             }
             catch (IOException ex) {
-                Logger.getLogger(DriveUtils.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }, "File Upload thread").start();
     }
