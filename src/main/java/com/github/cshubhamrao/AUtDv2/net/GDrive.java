@@ -71,7 +71,7 @@ public class GDrive {
             DS_FACTORY = new FileDataStoreFactory(DATA_DIR);
         }
         catch (GeneralSecurityException | IOException ex) {
-            Logger.getLogger(GDrive.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -89,7 +89,7 @@ public class GDrive {
         LocalServerReceiver receiver = new LocalServerReceiver();
         credential = new AuthorizationCodeInstalledApp(flow, receiver)
                 .authorize("user");
-        logger.log(Level.CONFIG, "Saved credentials to {0}", DATA_DIR.getAbsolutePath());
+        logger.log(Level.CONFIG, "Saved credentials to {0}", DATA_DIR.getPath());
         return credential;
     }
     
@@ -103,7 +103,7 @@ public class GDrive {
                     .build();
         }
         catch (IOException ex) {
-            Logger.getLogger(GDrive.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
         return service;
     }
