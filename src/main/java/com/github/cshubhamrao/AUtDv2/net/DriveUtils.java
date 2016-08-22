@@ -39,12 +39,16 @@ public class DriveUtils {
 
     private static Logger logger = Log.logger;
 
-    private static final Drive service;
+    private static Drive service;
     public static File fileMetadata = new File();
     public static FileContent fileContent;
+    public static Thread t;
 
     static {
-        service = GDrive.getDriveService();
+        t = new Thread(() ->
+        service = GDrive.getDriveService()
+        );
+        t.start();
     }
 
     public static void upload(java.io.File localFile) {
@@ -52,10 +56,24 @@ public class DriveUtils {
         fileContent = new FileContent("text/plain", localFile);
         new Thread(() -> {
             try {
-                service.files().create(fileMetadata, fileContent).execute();
+                File uledFile = new File();
+                uledFile = service.files().create(fileMetadata, fileContent)
+                        .setFields("id").execute();
+                System.out.println(uledFile.getId());
+                uledFile = service.files().get(uledFile.getId()).setFields("webViewLink,mimeType")
+                        .execute();
+                System.out.println(uledFile.getWebViewLink() +"\n"+  uledFile.getMimeType());
                 logger.log(Level.INFO,"Upload finished");
             }
-            catch (IOException ex) {
+            catch (java.net.SocketTimeoutException | java.net.UnknownHostException ex) {
+                try {
+                    logger.log(Level.SEVERE, null, ex.getCause());
+                    Thread.sleep(500);
+                    upload(localFile);
+                } catch (InterruptedException ex1) {
+                    logger.log(Level.SEVERE, null, ex1.getCause());
+                }
+            } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
         }, "File Upload thread").start();
