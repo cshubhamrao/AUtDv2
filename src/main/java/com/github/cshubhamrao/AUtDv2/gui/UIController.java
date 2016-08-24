@@ -25,10 +25,7 @@ package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.github.cshubhamrao.AUtDv2.os.*;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
-import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,7 +38,7 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
  *
  * @author shubham
  */
-public class UIController implements Initializable {
+public class UIController {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
@@ -63,8 +60,8 @@ public class UIController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         logger.log(Level.INFO, "Initializing Controls");
 
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
