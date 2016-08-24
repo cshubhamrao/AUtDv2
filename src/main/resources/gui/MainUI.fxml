@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
+<VBox maxWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -34,26 +34,23 @@
         </padding>
     </FlowPane>
    <TabPane tabClosingPolicy="UNAVAILABLE">
-      <tabs>
-         <Tab text="NetBeans">
+     <tabs>
+         <Tab closable="false" text="NetBeans">
             <content>
-                <GridPane style="-fx-border-color: grey;">
+                <GridPane>
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" />
+                        <ColumnConstraints halignment="RIGHT" percentWidth="50.0" />
                         <ColumnConstraints halignment="LEFT" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="90.0" valignment="TOP" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="NEVER" />
                     </rowConstraints>
-                    <opaqueInsets>
-                        <Insets bottom="5.0" top="5.0" />
-                    </opaqueInsets>
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="176.0" text="C.W. / Period Number:">
+                        <Label alignment="CENTER_RIGHT" text="C.W. / Period Number:">
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
@@ -88,7 +85,7 @@
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Enter Name/Description Here..." GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <TextArea prefHeight="60.0" promptText="Enter Name/Description Here..." GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
@@ -98,14 +95,14 @@
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <HBox maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <children>
-                                <TextField prefHeight="26.0" prefWidth="100.0">
+                                <TextField maxHeight="Infinity" maxWidth="Infinity">
                                     <HBox.margin>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </HBox.margin>
                                 </TextField>
-                                <Button prefHeight="26.0" prefWidth="71.0" text="Browse">
+                                <Button maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
                                     <HBox.margin>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </HBox.margin>
@@ -119,23 +116,20 @@
                 </GridPane>
             </content>
          </Tab>
-         <Tab text="MySQL">
+         <Tab closable="false" text="MySQL">
             <content>
-               <GridPane style="-fx-border-color: grey;">
+               <GridPane>
                   <columnConstraints>
-                     <ColumnConstraints halignment="RIGHT" />
-                     <ColumnConstraints halignment="LEFT" />
+                     <ColumnConstraints halignment="RIGHT" percentWidth="50.0" />
+                     <ColumnConstraints halignment="LEFT" percentWidth="50.0" />
                   </columnConstraints>
                   <rowConstraints>
-                     <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                     <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
                   </rowConstraints>
-                  <opaqueInsets>
-                     <Insets bottom="5.0" top="5.0" />
-                  </opaqueInsets>
                   <children>
-                     <Label alignment="CENTER_RIGHT" prefWidth="176.0" text="DB Name to Backup:">
+                     <Label alignment="CENTER_RIGHT" text="DB Name to Backup:">
                         <GridPane.margin>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
@@ -172,7 +166,7 @@
                </GridPane>
             </content>
          </Tab>
-      </tabs>
+     </tabs>
    </TabPane>
    <GridPane>
       <columnConstraints>
@@ -183,7 +177,7 @@
          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <children>
-         <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" prefHeight="45.0" prefWidth="137.0" text="Start NetBeans">
+         <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" text="Start NetBeans">
             <GridPane.margin>
                <Insets bottom="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
