@@ -25,6 +25,9 @@ package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.github.cshubhamrao.AUtDv2.os.*;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -76,6 +79,7 @@ public class UIController {
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
         btn_MySql.setOnAction((e) -> new MySqlRunner().run());
         btn_backup.setOnAction(this::btn_backup_handler);
+        btn_restore.setOnAction(this::btn_restore_handler);
     }
 
     private void btn_backup_handler(ActionEvent e) {
@@ -88,4 +92,22 @@ public class UIController {
         }
     }
 
+    private void btn_restore_handler(ActionEvent e) {
+        String dbName = txt_dbRestore.getText().trim();
+        File sqlFile = Paths.get(dbName + ".sql").toFile();
+        if (dbName.isEmpty() || dbName.contains(" ")) {
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database").showAndWait();
+            return;
+        }
+        if (sqlFile.exists() && sqlFile.canRead()) {
+            new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName).run();
+        } else {
+            new Alert(Alert.AlertType.ERROR,
+                    ".sql file containing backup of Database \"" + dbName + "\" not found.\n"
+                    + "Tip: To restore to another Database, rename the .sql file to desired "
+                    + "Database's name.\n"
+                    + "File name: " + sqlFile.getAbsolutePath())
+                    .showAndWait();
+        }
+    }
 }
