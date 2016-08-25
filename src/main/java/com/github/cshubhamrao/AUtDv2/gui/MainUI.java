@@ -25,7 +25,6 @@ package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,8 +32,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
+ * Main GUI class for application. This class loads the {@code MainUI.fxml} file and displays the
+ * rendered GUI.
  *
- * @author shubham
+ * @see UIController
+ * @author Shubham Rao
  */
 public class MainUI extends Application {
 

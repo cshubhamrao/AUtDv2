@@ -34,16 +34,13 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 
 /**
+ * Finds and runs NetBeans
  *
- * @author Shubham Rao <cshubhamrao@gmail.com>
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class NetBeansRunner extends AppRunner {
 
     private static final java.util.logging.Logger logger = Log.logger;
-
-    public NetBeansRunner() {
-        super();
-    }
 
     @Override
     void setCommand() {
@@ -73,8 +70,7 @@ public class NetBeansRunner extends AppRunner {
                     nbLocs.add(pat);
                     logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
                 });
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
         }

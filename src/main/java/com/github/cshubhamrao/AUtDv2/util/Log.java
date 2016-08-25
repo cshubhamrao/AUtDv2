@@ -24,15 +24,14 @@
 package com.github.cshubhamrao.AUtDv2.util;
 
 import java.io.IOException;
-
-import java.util.logging.Logger;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
  *
- * @author "Shubham Rao <cshubhamrao@gmail.com>"
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class Log {
 

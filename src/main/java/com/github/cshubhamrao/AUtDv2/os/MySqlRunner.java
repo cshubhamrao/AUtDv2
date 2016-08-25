@@ -36,8 +36,9 @@ import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
+ * Finds and runs the mysql Command Line
  *
- * @author "Shubham Rao <cshubhamrao@gmail.com>"
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class MySqlRunner extends AppRunner {
 

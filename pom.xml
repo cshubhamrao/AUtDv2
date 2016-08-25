@@ -9,7 +9,7 @@
     <groupId>com.github.cshubhamrao</groupId>
     <artifactId>AUtDv2</artifactId>
     <name>Auto Upload to Drive v2</name>
-    <description>An application to automatically backup your NetBeans Projects and MySQL screenshots to Google Drive.</description>
+    <description>An application to automatically backup your NetBeans Projects, MySQL screenshots, and MySQL databases to Google Drive.</description>
         <organization>
         <name>Shubham Rao</name>
     </organization>
@@ -20,6 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mainClass>com.github.cshubhamrao.AUtDv2.gui.MainUI</mainClass>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
