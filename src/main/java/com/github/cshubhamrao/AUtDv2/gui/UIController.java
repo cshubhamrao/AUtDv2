@@ -27,16 +27,19 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.github.cshubhamrao.AUtDv2.os.*;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  *
- * @author shubham
+ * @author Shubham Rao
  */
 public class UIController {
 
@@ -44,18 +47,22 @@ public class UIController {
 
     @FXML
     private Button btn_userAction;
-
     @FXML
     private ChoiceBox<String> cb_topic;
-
     @FXML
     private Button btn_NetBeans;
-
     @FXML
     private Button btn_MySql;
-
     @FXML
     private Spinner<Integer> spinner_cwNo;
+    @FXML
+    private Button btn_backup;
+    @FXML
+    private Button btn_restore;
+    @FXML
+    private TextField txt_dbBackup;
+    @FXML
+    private TextField txt_dbRestore;
 
     /**
      * Initializes the controller class.
@@ -68,6 +75,17 @@ public class UIController {
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
         btn_MySql.setOnAction((e) -> new MySqlRunner().run());
+        btn_backup.setOnAction(this::btn_backup_handler);
+    }
+
+    private void btn_backup_handler(ActionEvent e) {
+        String dbName = txt_dbBackup.getText().trim();
+        if (dbName.isEmpty() || dbName.contains(" ")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid name for Database");
+            alert.showAndWait();
+        } else {
+            new MySqlDumpRunner(dbName).run();
+        }
     }
 
 }
