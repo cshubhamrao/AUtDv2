@@ -23,10 +23,9 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
-import com.github.cshubhamrao.AUtDv2.util.Log;
 import com.github.cshubhamrao.AUtDv2.os.*;
+import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
@@ -73,6 +72,17 @@ public class UIController {
     @FXML
     public void initialize() {
         logger.log(Level.INFO, "Initializing Controls");
+
+        if (OSLib.getCurrentArchitecture() == OSLib.Architecture.UNKNOWN
+                || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
+            new Alert(Alert.AlertType.ERROR, "Unable to determine current OS and/or System "
+                    + "Architecture. Any OS-dependent functionality will not work").showAndWait();
+            logger.log(Level.SEVERE, "Unable to detect OS and/or architecture reliably");
+            btn_NetBeans.setDisable(true);
+            btn_MySql.setDisable(true);
+            btn_backup.setDisable(true);
+            btn_restore.setDisable(true);
+        }
 
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
