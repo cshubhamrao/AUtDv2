@@ -62,7 +62,29 @@ public class OSLib {
     static Architecture getCurrentArchitecture() {
         String arch = System.getProperty("os.arch");
         if (arch.startsWith("amd64")) return Architecture.AMD64;
-        else if (arch.startsWith("i386")) return Architecture.i386;
+        /*
+        ¯\_(?)_/¯
+        STORY TIME: with a brave warrior tester [REDACTED], a troubled developer, a [baby-like]app 
+        and a [sluggish]PC
+        Once upon a time (24/08/2016, 22:54 + ~00:20:00), a troubled developer (no points for 
+        guessing who) was in conversation about the pre-alpha build of his app. As with everything,
+        things did not work(tm). Our brave warrior, [REDACTED] battled through strange errors (with 
+        no error info) about JVM creation; then updating JRE version; then inconsistent behaviour of
+        GUI vs CMD... all on the (mobile)phone. Finally the GUI window opens, our warrior tester, 
+        [REDACTED] clicks "Run NetBeans", lo and behold, *nothing* happens. [REDACTED] tries again, 
+        and the app... does nothing. "What went wrong?" That is the answer to the question.
+        "Check the Logs"... The logs are searched, the logs are scoured and our warrior finds...
+        *NOTHING*, literally. The logs have no mention of anything, let alone mention of *something*
+        going wrong.
+        So what went wrong? 
+        Our warrior tester used 32-bit Windows, a platform our baby app is not accustomed to.
+        Guardian Java does little to intim[id]ate the app. Wrong architecture detection, thanks to 
+        Java and app thinks the architecture is UNKNOWN. Java please be consistent. Return my 12 
+        hours...
+        */
+        
+        //      JAVA, Y U MAKE ME DO DIS?   ???????????????????    
+        else if (arch.startsWith("i386") || arch.contains("86")) return Architecture.i386;
         return Architecture.UNKNOWN;
     }
 
