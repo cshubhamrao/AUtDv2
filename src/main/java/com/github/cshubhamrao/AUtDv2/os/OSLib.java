@@ -63,7 +63,7 @@ public class OSLib {
         String arch = System.getProperty("os.arch");
         if (arch.startsWith("amd64")) return Architecture.AMD64;
         /*
-        �\_(?)_/�
+        ¯\_(ツ)_/¯
         STORY TIME: with a brave warrior tester [REDACTED], a troubled developer, a [baby-like]app 
         and a [sluggish]PC
         Once upon a time (24/08/2016, 22:54 + ~00:20:00), a troubled developer (no points for 
@@ -83,7 +83,7 @@ public class OSLib {
         hours...
         */
         
-        //      JAVA, Y U MAKE ME DO DIS?   ???????????????????    
+        //      JAVA, Y U MAKE ME DO DIS?   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓    
         else if (arch.startsWith("i386") || arch.contains("86")) return Architecture.i386;
         return Architecture.UNKNOWN;
     }
