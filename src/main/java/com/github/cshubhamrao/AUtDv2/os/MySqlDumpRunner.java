@@ -24,7 +24,6 @@
 package com.github.cshubhamrao.AUtDv2.os;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -38,14 +37,20 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
+ * Runs mysqldump to create DB dumps. The dumps are stored as {@code dbName.sql} in the current
+ * directory. The database is assumed to exist.
  *
- * @author Shubham Rao
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class MySqlDumpRunner extends AppRunner {
 
     private static final Logger logger = Log.logger;
     private final String dbName;
 
+    /**
+     *
+     * @param dbName name of database to dump
+     */
     public MySqlDumpRunner(String dbName) {
         this.dbName = dbName;
     }

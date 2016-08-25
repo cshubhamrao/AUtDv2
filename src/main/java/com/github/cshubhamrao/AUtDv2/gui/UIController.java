@@ -39,7 +39,7 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 
 /**
- * FXML Controller class
+ * FXML Controller class. for {@code MainUI.fxml}
  *
  * @author Shubham Rao
  */

@@ -39,8 +39,9 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
+ * Finds and runs mysql to restore DBs from backup
  *
- * @author "Shubham Rao <cshubhamrao@gmail.com>"
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class MySqlImportRunner extends AppRunner {
 
@@ -48,6 +49,11 @@ public class MySqlImportRunner extends AppRunner {
     private final String sqlFile;
     private final String dbName;
 
+    /**
+     *
+     * @param sqlFile Path to .sql file containing DB Dump.
+     * @param dbName Name of database to create.
+     */
     public MySqlImportRunner(String sqlFile, String dbName) {
         this.sqlFile = sqlFile;
         this.dbName = dbName;
@@ -61,7 +67,7 @@ public class MySqlImportRunner extends AppRunner {
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
                 command.setCommandName(cmd);
                 command.addArguments("/C");
-                command.addArguments("start", "\"Creating MySQL Dump\"");
+                command.addArguments("start", "\"Importing from MySQL Dump\"");
                 command.addArguments("/D", windowsLocation());
                 command.addArguments("cmd /K", "mysql.exe");
                 command.addArguments("--user=root", "--password", "--verbose");

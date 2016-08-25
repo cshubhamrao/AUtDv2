@@ -31,20 +31,44 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
+ * An interface to allow running programs from the OS. Implementations have to set the
+ * {@link CommandLine} for the application to be executed, by overriding the
+ * {@link AppRunner#setCommand()} and calling {@link AppRunner#setCommand(CommandLine)} inside the
+ * method.
  *
- * @author Shubham Rao <cshubhamrao@gmail.com>
+ * @see OSLib
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
-abstract class AppRunner {
+public abstract class AppRunner {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
+    /**
+     * Sets the {@link CommandLine} to execute.
+     *
+     * This function must be called by implementations inside {@link AppRunner#setCommand()} when it
+     * is overridden.
+     *
+     * @param command command to execute
+     */
     protected void setCommand(CommandLine command) {
         this.command = command;
     }
 
     private CommandLine command;
 
+    /**
+     * Current Architecture
+     *
+     * @see OSLib#getCurrentArchitecture()
+     */
     public final OSLib.Architecture arch;
+
+    /**
+     * Current Operating System
+     *
+     * @see OSLib#getCurrentOS()
+     */
     public final OSLib.OperatingSystem os;
 
     AppRunner() {
@@ -58,6 +82,10 @@ abstract class AppRunner {
         return command;
     }
 
+    /**
+     * Runs the OS specific Command. Exit code is logged.
+     *
+     */
     public void run() {
         setCommand();
         ProcessBuilder pb = new ProcessBuilder(command.getFullCommand());
@@ -67,18 +95,22 @@ abstract class AppRunner {
             new Thread(() -> {
                 try {
                     logger.log(Level.INFO, "Exit Code: {0} ", p.waitFor());
-                }
-                catch (InterruptedException ex) {
-                    logger.log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    logger.log(Level.SEVERE, "Error getting exit code", ex);
                 }
             }
             ).start();
-        }
-        catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error in running program.", ex);
         }
     }
 
+    /**
+     * Class representing a Command along with its arguments.
+     *
+     * Encapsulates an OS dependent Command, with executable's name and its arguments.
+     * @author Shubham Rao (cshubhamrao@gmail.com)
+     */
     protected class CommandLine {
 
         private String commandName;
@@ -99,38 +131,83 @@ abstract class AppRunner {
             this(command, "");
         }
 
+        /**
+         * Gets the name of executable.
+         *
+         * @return name of executable
+         */
         public String getCommandName() {
             return commandName;
         }
 
+        /**
+         * Sets the name of executable.
+         *
+         * @param commandName name of executable
+         */
         public void setCommandName(String commandName) {
             this.commandName = commandName;
             updateFullCommand();
         }
 
+        /**
+         * Gets the arguments
+         *
+         * @return arguments
+         */
         public List<String> getArguments() {
             return arguments;
         }
 
+        /**
+         * Adds arguments to the command.
+         *
+         * @param args arguments
+         */
         public final void addArguments(String... args) {
             arguments.addAll(Arrays.asList(args));
             updateFullCommand();
         }
 
+        /**
+         * Replaces arguments of the command.
+         *
+         * @param arguments list containing arguments
+         */
         public void setArguments(ArrayList<String> arguments) {
             this.arguments = arguments;
             updateFullCommand();
         }
 
+        /**
+         * Returns the command name along with its arguments.
+         *
+         * First element is the command name, remaining elements are its arguments.
+         *
+         * @return command with arguments included.
+         */
         public List<String> getFullCommand() {
             logger.log(Level.INFO, "Command: {0}", this.toString());
             return fullCommand;
         }
 
+        /**
+         * Sets the command name along with its arguments.
+         *
+         * First element must be the command name,
+         * remaining elements, its arguments.
+         *
+         * @param fullCommand command along with arguments
+         */
         public void setFullCommand(ArrayList<String> fullCommand) {
             this.fullCommand = fullCommand;
         }
 
+        /**
+         * Returns command and its arguments as a String.
+         *
+         * @return command and its arguments as String
+         */
         @Override
         public String toString() {
             StringBuilder command = new StringBuilder(this.fullCommand.get(0));
