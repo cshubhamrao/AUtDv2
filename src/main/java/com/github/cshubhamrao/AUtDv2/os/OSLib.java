@@ -38,20 +38,20 @@ public class OSLib {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
-    enum OperatingSystem {
+    public enum OperatingSystem {
         WINDOWS,
         LINUX,
         MAC,
         UNKNOWN
     }
 
-    enum Architecture {
+    public enum Architecture {
         i386,
         AMD64,
         UNKNOWN
     }
 
-    static OperatingSystem getCurrentOS() {
+    public static OperatingSystem getCurrentOS() {
         String os = System.getProperty("os.name");
         if (os.startsWith("Linux")) return OperatingSystem.LINUX;
         else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
@@ -59,7 +59,7 @@ public class OSLib {
         else return OperatingSystem.UNKNOWN;
         }
 
-    static Architecture getCurrentArchitecture() {
+    public static Architecture getCurrentArchitecture() {
         String arch = System.getProperty("os.arch");
         if (arch.startsWith("amd64")) return Architecture.AMD64;
         /*
@@ -88,7 +88,7 @@ public class OSLib {
         return Architecture.UNKNOWN;
     }
 
-    static List<Path> getProgramDirs() {
+    protected static List<Path> getProgramDirs() {
         ArrayList<Path> dirs = new ArrayList(2);
         if (getCurrentOS() == OperatingSystem.WINDOWS) {
             switch (getCurrentArchitecture()) {
