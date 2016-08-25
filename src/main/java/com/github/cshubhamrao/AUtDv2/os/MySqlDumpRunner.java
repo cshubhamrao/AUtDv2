@@ -58,13 +58,17 @@ public class MySqlDumpRunner extends AppRunner {
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
                 command.setCommandName(cmd);
                 command.addArguments("/C");
-                command.addArguments("start", "\"Creating MySQL Dump\"");
+                command.addArguments("start", "\"Creating MySQL Dump... Close Window Manually\"");
                 command.addArguments("/D", windowsLocation());
-                command.addArguments("cmd /K", "mysqldump.exe", "-uroot", "-proot");
-                command.addArguments(dbName, "-r" , 
-                        Paths.get("", dbName+".sql").toAbsolutePath().toString());
+                command.addArguments("cmd /K", "mysqldump.exe");
+                command.addArguments("--user=root", "--password");
+                command.addArguments("--verbose");
+                command.addArguments("--hex-blob");
+                command.addArguments("--result-file="
+                        + Paths.get("", dbName + ".sql").toAbsolutePath().toString());
+                command.addArguments(dbName);
         }
-        logger.log(Level.INFO,"Dumping {0}", dbName);
+        logger.log(Level.INFO, "Dumping {0}", dbName);
         setCommand(command);
     }
 
