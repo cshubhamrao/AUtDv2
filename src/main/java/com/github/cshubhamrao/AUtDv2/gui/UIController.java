@@ -23,6 +23,12 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
+import com.github.cshubhamrao.AUtDv2.net.DriveUtils;
+import com.github.cshubhamrao.AUtDv2.util.Log;
+import com.github.cshubhamrao.AUtDv2.os.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 import com.github.cshubhamrao.AUtDv2.os.*;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
@@ -88,6 +94,7 @@ public class UIController {
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
         btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
         btn_MySql.setOnAction((e) -> new MySqlRunner().run());
+        btn_userAction.setOnAction((e) -> DriveUtils.upload(new File("log.txt")));
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
     }
