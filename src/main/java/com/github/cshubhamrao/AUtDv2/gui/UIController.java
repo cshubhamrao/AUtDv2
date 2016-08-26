@@ -24,11 +24,6 @@
 package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.net.DriveUtils;
-import com.github.cshubhamrao.AUtDv2.util.Log;
-import com.github.cshubhamrao.AUtDv2.os.*;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import com.github.cshubhamrao.AUtDv2.os.*;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
