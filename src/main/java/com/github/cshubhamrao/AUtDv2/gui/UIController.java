@@ -23,7 +23,7 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
-import com.github.cshubhamrao.AUtDv2.net.DriveUtils;
+import com.github.cshubhamrao.AUtDv2.net.GoogleDriver;
 import com.github.cshubhamrao.AUtDv2.os.*;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
@@ -71,6 +71,8 @@ public class UIController {
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
+    private GoogleDriver drive = new GoogleDriver();
+
     /**
      * Initializes the controller class.
      */
@@ -91,7 +93,6 @@ public class UIController {
 
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
-        btn_userAction.setOnAction((e) -> DriveUtils.upload(new File("log.txt")));
 
         btn_NetBeans.setOnAction((e)
                 -> executor.execute(new NetBeansRunner()));
@@ -99,6 +100,10 @@ public class UIController {
         btn_MySql.setOnAction((e)
                 -> executor.execute(new MySqlRunner()));
 
+        btn_userAction.setOnAction((e) -> {
+            drive.authorize();
+            drive.upload(new File("log.txt"));
+        });
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
     }
@@ -109,8 +114,10 @@ public class UIController {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid name for Database");
             alert.showAndWait();
         } else {
-            new MySqlDumpRunner(dbName).run();
             executor.execute(new MySqlDumpRunner(dbName));
+            drive.authorize();
+            String fileId = drive.upload(new File(dbName + ".sql"));
+            System.out.println(fileId);
         }
     }
 
