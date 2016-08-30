@@ -35,3 +35,4 @@ target/
 
 ####
 .AUtDv2-creds
+*.sql
