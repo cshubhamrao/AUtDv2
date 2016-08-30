@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
-public class GDrive {
+class GDrive {
 
     private static final Logger logger = Log.logger;
 
