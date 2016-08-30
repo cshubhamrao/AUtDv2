@@ -24,7 +24,6 @@
 package com.github.cshubhamrao.AUtDv2.net;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -35,10 +34,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -56,14 +53,14 @@ public class GDrive {
 
     private static final Logger logger = Log.logger;
 
-    private static final String APP_NAME = "AUtDv2";
-    private static final File DATA_DIR = new File(".AUtDv2-creds");
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
-    private static FileDataStoreFactory DS_FACTORY;
-    private static HttpTransport HTTP_TRANSPORT;
+    private final String APP_NAME = "AUtDv2";
+    private final File DATA_DIR = new File(".AUtDv2-creds");
+    private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
+    private FileDataStoreFactory DS_FACTORY;
+    private HttpTransport HTTP_TRANSPORT;
 
-    static {
+    GDrive() {
         logger.log(Level.INFO, "Setting up DS Factory & HTTP Transport");
 
         try {
@@ -75,11 +72,11 @@ public class GDrive {
         }
     }
 
-    private static Credential authorize() throws IOException {
+    private Credential authorize() throws IOException {
         logger.log(Level.INFO, "Attempting authorization");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
                 new InputStreamReader(GDrive.class.getResourceAsStream("/net/client_secret.json")));
-        GoogleAuthorizationCodeFlow flow = 
+        GoogleAuthorizationCodeFlow flow =
                 new GoogleAuthorizationCodeFlow.Builder
                                                (HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(DS_FACTORY)
@@ -92,8 +89,8 @@ public class GDrive {
         logger.log(Level.CONFIG, "Saved credentials to {0}", DATA_DIR.getPath());
         return credential;
     }
-    
-    public static Drive getDriveService() {
+
+    public Drive getDriveService() {
         Drive service = null;
         logger.log(Level.INFO, "Attempting to get Drive Service");
         try {
