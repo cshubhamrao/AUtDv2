@@ -82,9 +82,15 @@ public class UIController {
 
         if (OSLib.getCurrentArchitecture() == OSLib.Architecture.UNKNOWN
                 || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
-            new Alert(Alert.AlertType.ERROR, "Unable to determine current OS and/or System "
-                    + "Architecture. Any OS-dependent functionality will not work").showAndWait();
+
+            new Alert(Alert.AlertType.ERROR,
+                    "Unable to determine current OS and/or System "
+                    + "Architecture. Any OS-dependent functionality will not work")
+                    .showAndWait();
             logger.log(Level.SEVERE, "Unable to detect OS and/or architecture reliably");
+            logger.log(Level.CONFIG, OSLib.getCurrentArchitecture().toString());
+            logger.log(Level.CONFIG, OSLib.getCurrentOS().toString());
+
             btn_NetBeans.setDisable(true);
             btn_MySql.setDisable(true);
             btn_backup.setDisable(true);
