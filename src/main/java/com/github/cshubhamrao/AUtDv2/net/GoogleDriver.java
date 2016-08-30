@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * A "Driver" for all the Google Drive Stuff.
  *
  * @author Shubham Rao <cshubhamrao@gmail.com>
  */
@@ -46,10 +47,22 @@ public class GoogleDriver {
 
     private Credential creds;
 
+    /**
+     * Spawns a new thread to undertake user authorization.
+     *
+     */
     public void authorize() {
         new Thread(() -> service = new GDrive().getDriveService()).start();
     }
 
+    /**
+     * Uploads the file to Google Drive.
+     *
+     * MESSY CODE. FIX THIS.
+     *
+     * @param localFile File to upload
+     * @return
+     */
     public String upload(java.io.File localFile) {
         try {
             if (localFile.length() == 0) {
