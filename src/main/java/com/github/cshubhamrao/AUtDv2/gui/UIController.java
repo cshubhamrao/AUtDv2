@@ -28,6 +28,8 @@ import com.github.cshubhamrao.AUtDv2.os.*;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -67,6 +69,8 @@ public class UIController {
     @FXML
     private TextField txt_dbRestore;
 
+    private ExecutorService executor = Executors.newCachedThreadPool();
+
     /**
      * Initializes the controller class.
      */
@@ -87,9 +91,14 @@ public class UIController {
 
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
-        btn_NetBeans.setOnAction((e) -> new NetBeansRunner().run());
-        btn_MySql.setOnAction((e) -> new MySqlRunner().run());
         btn_userAction.setOnAction((e) -> DriveUtils.upload(new File("log.txt")));
+
+        btn_NetBeans.setOnAction((e)
+                -> executor.execute(new NetBeansRunner()));
+
+        btn_MySql.setOnAction((e)
+                -> executor.execute(new MySqlRunner()));
+
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
     }
@@ -101,6 +110,7 @@ public class UIController {
             alert.showAndWait();
         } else {
             new MySqlDumpRunner(dbName).run();
+            executor.execute(new MySqlDumpRunner(dbName));
         }
     }
 
@@ -112,7 +122,7 @@ public class UIController {
             return;
         }
         if (sqlFile.exists() && sqlFile.canRead()) {
-            new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName).run();
+            executor.execute(new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName));
         } else {
             new Alert(Alert.AlertType.ERROR,
                     ".sql file containing backup of Database \"" + dbName + "\" not found.\n"
