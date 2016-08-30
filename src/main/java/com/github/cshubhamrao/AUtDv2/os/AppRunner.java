@@ -39,7 +39,7 @@ import java.util.logging.Level;
  * @see OSLib
  * @author Shubham Rao (cshubhamrao@gmail.com)
  */
-public abstract class AppRunner {
+public abstract class AppRunner implements Runnable {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
@@ -86,6 +86,7 @@ public abstract class AppRunner {
      * Runs the OS specific Command. Exit code is logged.
      *
      */
+    @Override
     public void run() {
         setCommand();
         ProcessBuilder pb = new ProcessBuilder(command.getFullCommand());
@@ -101,6 +102,8 @@ public abstract class AppRunner {
             }
             ).start();
         } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error in running program.", ex);
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "Error in running program.", ex);
         }
     }
