@@ -48,6 +48,7 @@ public class MySqlImportRunner extends AppRunner {
     private static final Logger logger = Log.logger;
     private final String sqlFile;
     private final String dbName;
+    private final String password;
 
     /**
      *
@@ -55,8 +56,19 @@ public class MySqlImportRunner extends AppRunner {
      * @param dbName Name of database to create.
      */
     public MySqlImportRunner(String sqlFile, String dbName) {
+        this(sqlFile, dbName, "root");
+    }
+
+    /**
+     *
+     * @param sqlFile Path to .sql file containing DB Dump.
+     * @param dbName Name of database to create.
+     * @param password Password to use with MySQL
+     */
+    public MySqlImportRunner(String sqlFile, String dbName, String password) {
         this.sqlFile = sqlFile;
         this.dbName = dbName;
+        this.password = password;
     }
 
     @Override
@@ -64,13 +76,14 @@ public class MySqlImportRunner extends AppRunner {
         CommandLine command = new CommandLine();
         switch (os) {
             case WINDOWS:
-                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
-                command.setCommandName(cmd);
-                command.addArguments("/C");
-                command.addArguments("start", "\"Importing from MySQL Dump\"");
-                command.addArguments("/D", windowsLocation());
-                command.addArguments("cmd /K", "mysql.exe");
-                command.addArguments("--user=root", "--password", "--verbose");
+//                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
+//                command.setCommandName(cmd);
+//                command.addArguments("/C");
+//                command.addArguments("start", "\"Importing from MySQL Dump\"");
+//                command.addArguments("/D", windowsLocation());
+//                command.addArguments("cmd /K", "mysql.exe");
+                command.setCommandName(Paths.get(windowsLocation(), "mysql.exe").toString());
+                command.addArguments("--user=root", "--password=" + password, "--verbose");
                 command.addArguments("-e");
                 command.addArguments("\"source " + tempSqlFile() + "\"");
         }

@@ -37,6 +37,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
@@ -68,6 +69,8 @@ public class UIController {
     private TextField txt_dbBackup;
     @FXML
     private TextField txt_dbRestore;
+    @FXML
+    private PasswordField txt_mySqlPass;
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -110,17 +113,25 @@ public class UIController {
             drive.authorize();
             drive.upload(new File("log.txt"));
         });
+
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
+
+        // Default Password, just in case
+        txt_mySqlPass.setText("root");
     }
 
     private void btn_backup_handler(ActionEvent e) {
         String dbName = txt_dbBackup.getText().trim();
+        String password = txt_mySqlPass.getText();
+        if (password.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
+        }
         if (dbName.isEmpty() || dbName.contains(" ")) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid name for Database");
             alert.showAndWait();
         } else {
-            executor.execute(new MySqlDumpRunner(dbName));
+            executor.execute(new MySqlDumpRunner(dbName, password));
             drive.authorize();
             String fileId = drive.upload(new File(dbName + ".sql"));
             System.out.println(fileId);
@@ -129,13 +140,17 @@ public class UIController {
 
     private void btn_restore_handler(ActionEvent e) {
         String dbName = txt_dbRestore.getText().trim();
+        String password = txt_mySqlPass.getText();
+        if (password.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
+        }
         File sqlFile = Paths.get(dbName + ".sql").toFile();
         if (dbName.isEmpty() || dbName.contains(" ")) {
             new Alert(Alert.AlertType.WARNING, "Invalid name for Database").showAndWait();
             return;
         }
         if (sqlFile.exists() && sqlFile.canRead()) {
-            executor.execute(new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName));
+            executor.execute(new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName, password));
         } else {
             new Alert(Alert.AlertType.ERROR,
                     ".sql file containing backup of Database \"" + dbName + "\" not found.\n"

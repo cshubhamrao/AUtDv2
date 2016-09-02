@@ -46,13 +46,24 @@ public class MySqlDumpRunner extends AppRunner {
 
     private static final Logger logger = Log.logger;
     private final String dbName;
+    private final String password;
 
     /**
      *
      * @param dbName name of database to dump
      */
     public MySqlDumpRunner(String dbName) {
+        this(dbName, "root");
+    }
+
+    /**
+     *
+     * @param dbName name of database to dump
+     * @param password password to use with MySQL
+     */
+    public MySqlDumpRunner(String dbName, String password) {
         this.dbName = dbName;
+        this.password = password;
     }
 
     @Override
@@ -61,13 +72,14 @@ public class MySqlDumpRunner extends AppRunner {
         switch(os) {
             case WINDOWS:
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
-                command.setCommandName(cmd);
-                command.addArguments("/C");
-                command.addArguments("start", "\"Creating MySQL Dump... Close Window Manually\"");
-                command.addArguments("/D", windowsLocation());
-                command.addArguments("cmd /K", "mysqldump.exe");
-                command.addArguments("--user=root", "--password");
-                command.addArguments("--verbose");
+//                command.setCommandName(cmd);
+//                command.addArguments("/C");
+//                command.addArguments("start", "\"Creating MySQL Dump... Close Window Manually\"");
+//                command.addArguments("/D", windowsLocation());
+//                command.addArguments("cmd /K", "mysqldump.exe");
+                command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());
+                command.addArguments("--user=root", "--password=" + password);
+//                command.addArguments("--verbose");
                 command.addArguments("--hex-blob");
                 command.addArguments("--result-file="
                         + Paths.get("", dbName + ".sql").toAbsolutePath().toString());
