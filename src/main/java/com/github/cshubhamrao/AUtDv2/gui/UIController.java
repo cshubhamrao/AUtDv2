@@ -142,14 +142,16 @@ public class UIController {
     }
 
     private void checkSuccess(Future<String> resp) {
-        try {
-            if (resp.get() == null) {
-                new Alert(Alert.AlertType.ERROR, "Authorization Failed. Please try again")
-                        .showAndWait();
+        new Thread(() -> {
+            try {
+                if (resp.get() == null) {
+                    new Alert(Alert.AlertType.ERROR, "Authorization Failed. Please try again")
+                            .showAndWait();
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error checking for success", ex);
             }
-        } catch (InterruptedException | ExecutionException ex) {
-            logger.log(Level.SEVERE, "Error checking for success", ex);
-        }
+        }, "Result Check Thread").start();
     }
 
     private void btn_restore_handler(ActionEvent e) {
