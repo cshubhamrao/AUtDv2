@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
+<VBox maxWidth="425.0" prefWidth="425.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -136,7 +136,7 @@
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
                      </Label>
-                     <Label text="DB name to Restore:" GridPane.rowIndex="1">
+                     <Label text="DB Name to Restore:" GridPane.rowIndex="1">
                         <GridPane.margin>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
