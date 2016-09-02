@@ -49,8 +49,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Class for handling various Google Drive related tasks.
  *
- * @author "Shubham Rao <cshubhamrao@gmail.com>"
+ * @author Shubham Rao (cshubhamrao@gmail.com)
  */
 public class GoogleDriveTask {
 
@@ -120,20 +121,41 @@ public class GoogleDriveTask {
         }
     }
 
+    /**
+     * An "Upload" to Google Drive task.
+     *
+     * Uploads a localFile to GoogleDrive
+     */
     public class UploadTask implements Callable<String> {
 
         private final java.io.File localFile;
         private final String description;
 
+        /**
+         * Creates an UploadTask to upload {@code localFile}
+         *
+         * @param localFile file to upload.
+         * @param description file description
+         */
         public UploadTask(java.io.File localFile, String description) {
             this.localFile = localFile;
             this.description = description;
         }
 
+        /**
+         * Creates an UploadTask to upload {@code localFile} with description.
+         *
+         * @param localFile
+         */
         public UploadTask(java.io.File localFile) {
             this(localFile, "");
         }
 
+        /**
+         *
+         * @return fileId of file uploaded, null if authorization fails.
+         * @throws Exception
+         */
         @Override
         public String call() throws Exception {
             String fileId = "";
@@ -184,8 +206,17 @@ public class GoogleDriveTask {
         }
     }
 
+    /**
+     * A "Download" task.
+     *
+     * NOT YET IMPLEMENTED.
+     */
     public class DownloadTask implements Callable<String> {
 
+        /**
+         *
+         * @return @throws Exception
+         */
         @Override
         public String call() throws Exception {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

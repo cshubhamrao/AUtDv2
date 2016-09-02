@@ -93,17 +93,10 @@ public abstract class AppRunner implements Runnable {
         try {
             Process p = pb.start();
             logger.log(Level.INFO, "Started runnning command");
-//            new Thread(() -> {
-//                try {
             int exit = p.waitFor();
-//            if (exit != 0) {
-                logger.log(Level.INFO, "Exit Code: {0} ", exit);
-//            }
+            logger.log(Level.INFO, "Exit Code: {0} ", exit);
         } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, "Error getting exit code", ex);
-//                }
-//            }
-//            ).start();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error in running program.", ex);
         } catch (Exception ex) {

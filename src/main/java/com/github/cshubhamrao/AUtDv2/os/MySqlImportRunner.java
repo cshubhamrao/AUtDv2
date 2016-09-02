@@ -76,15 +76,8 @@ public class MySqlImportRunner extends AppRunner {
         CommandLine command = new CommandLine();
         switch (os) {
             case WINDOWS:
-//                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
-//                command.setCommandName(cmd);
-//                command.addArguments("/C");
-//                command.addArguments("start", "\"Importing from MySQL Dump\"");
-//                command.addArguments("/D", windowsLocation());
-//                command.addArguments("cmd /K", "mysql.exe");
                 command.setCommandName(Paths.get(windowsLocation(), "mysql.exe").toString());
                 command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
-                command.addArguments("--verbose");
                 command.addArguments("-e");
                 command.addArguments("\"source " + tempSqlFile() + "\"");
         }
