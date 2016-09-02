@@ -23,13 +23,15 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
-import com.github.cshubhamrao.AUtDv2.net.GoogleDriver;
+import com.github.cshubhamrao.AUtDv2.net.GoogleDriveTask;
 import com.github.cshubhamrao.AUtDv2.os.*;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -74,7 +76,7 @@ public class UIController {
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
-    private GoogleDriver drive = new GoogleDriver();
+    private final GoogleDriveTask gDriveTask = new GoogleDriveTask();
 
     /**
      * Initializes the controller class.
@@ -110,8 +112,9 @@ public class UIController {
                 -> executor.execute(new MySqlRunner()));
 
         btn_userAction.setOnAction((e) -> {
-            drive.authorize();
-            drive.upload(new File("log.txt"));
+            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"));
+            Future<String> resp = executor.submit(task);
+            checkSuccess(resp);
         });
 
         btn_backup.setOnAction(this::btn_backup_handler);
@@ -132,9 +135,20 @@ public class UIController {
             alert.showAndWait();
         } else {
             executor.execute(new MySqlDumpRunner(dbName, password));
-            drive.authorize();
-            String fileId = drive.upload(new File(dbName + ".sql"));
-            System.out.println(fileId);
+            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File(dbName + ".sql"));
+            Future<String> resp = executor.submit(task);
+            checkSuccess(resp);
+        }
+    }
+
+    private void checkSuccess(Future<String> resp) {
+        try {
+            if (resp.get() == null) {
+                new Alert(Alert.AlertType.ERROR, "Authorization Failed. Please try again")
+                        .showAndWait();
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            logger.log(Level.SEVERE, "Error checking for success", ex);
         }
     }
 
