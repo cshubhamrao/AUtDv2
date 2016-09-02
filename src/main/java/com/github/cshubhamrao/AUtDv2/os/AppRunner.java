@@ -93,14 +93,17 @@ public abstract class AppRunner implements Runnable {
         try {
             Process p = pb.start();
             logger.log(Level.INFO, "Started runnning command");
-            new Thread(() -> {
-                try {
-                    logger.log(Level.INFO, "Exit Code: {0} ", p.waitFor());
-                } catch (InterruptedException ex) {
-                    logger.log(Level.SEVERE, "Error getting exit code", ex);
-                }
-            }
-            ).start();
+//            new Thread(() -> {
+//                try {
+            int exit = p.waitFor();
+//            if (exit != 0) {
+                logger.log(Level.INFO, "Exit Code: {0} ", exit);
+//            }
+        } catch (InterruptedException ex) {
+            logger.log(Level.SEVERE, "Error getting exit code", ex);
+//                }
+//            }
+//            ).start();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error in running program.", ex);
         } catch (Exception ex) {
@@ -197,8 +200,7 @@ public abstract class AppRunner implements Runnable {
         /**
          * Sets the command name along with its arguments.
          *
-         * First element must be the command name,
-         * remaining elements, its arguments.
+         * First element must be the command name, remaining elements, its arguments.
          *
          * @param fullCommand command along with arguments
          */
