@@ -83,7 +83,8 @@ public class MySqlImportRunner extends AppRunner {
 //                command.addArguments("/D", windowsLocation());
 //                command.addArguments("cmd /K", "mysql.exe");
                 command.setCommandName(Paths.get(windowsLocation(), "mysql.exe").toString());
-                command.addArguments("--user=root", "--password=" + password, "--verbose");
+                command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
+                command.addArguments("--verbose");
                 command.addArguments("-e");
                 command.addArguments("\"source " + tempSqlFile() + "\"");
         }
