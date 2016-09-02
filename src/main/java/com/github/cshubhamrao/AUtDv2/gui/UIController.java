@@ -112,7 +112,8 @@ public class UIController {
                 -> executor.execute(new MySqlRunner()));
 
         btn_userAction.setOnAction((e) -> {
-            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"));
+            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
+                    "Log File created by AUtDv2");
             Future<String> resp = executor.submit(task);
             checkSuccess(resp);
         });
@@ -135,7 +136,8 @@ public class UIController {
             alert.showAndWait();
         } else {
             executor.execute(new MySqlDumpRunner(dbName, password));
-            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File(dbName + ".sql"));
+            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File(dbName + ".sql"),
+                    "Backup of Database: " + dbName);
             Future<String> resp = executor.submit(task);
             checkSuccess(resp);
         }
