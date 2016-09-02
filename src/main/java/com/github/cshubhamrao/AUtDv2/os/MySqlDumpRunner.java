@@ -83,7 +83,7 @@ public class MySqlDumpRunner extends AppRunner {
                 command.addArguments("--hex-blob");
                 command.addArguments("--result-file="
                         + Paths.get("", dbName + ".sql").toAbsolutePath().toString());
-                command.addArguments(dbName);
+                command.addArguments("\"" + dbName + "\"");
         }
         logger.log(Level.INFO, "Dumping {0}", dbName);
         setCommand(command);
