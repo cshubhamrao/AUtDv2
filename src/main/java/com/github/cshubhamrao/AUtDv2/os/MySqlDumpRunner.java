@@ -78,7 +78,7 @@ public class MySqlDumpRunner extends AppRunner {
 //                command.addArguments("/D", windowsLocation());
 //                command.addArguments("cmd /K", "mysqldump.exe");
                 command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());
-                command.addArguments("--user=root", "--password=" + password);
+                command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
 //                command.addArguments("--verbose");
                 command.addArguments("--hex-blob");
                 command.addArguments("--result-file="
