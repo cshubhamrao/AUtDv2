@@ -120,7 +120,8 @@ public class MySqlImportRunner extends AppRunner {
                 + "source " + sqlFile;
         Path tmpFile;
         try {
-            tmpFile = Files.createTempFile("AUtDv2_sqlFile", null);
+            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", null);
+            tmpFile.toFile().deleteOnExit();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error creating temporary file", ex);
             return "";
