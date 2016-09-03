@@ -77,6 +77,8 @@ public class UIController {
     private TextField txt_dbRestore;
     @FXML
     private PasswordField txt_mySqlPass;
+    @FXML
+    private Button btn_browse;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -124,9 +126,6 @@ public class UIController {
 
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
-
-        // Default Password, just in case
-        txt_mySqlPass.setText("root");
     }
 
     private void btn_backup_handler(ActionEvent e) {
