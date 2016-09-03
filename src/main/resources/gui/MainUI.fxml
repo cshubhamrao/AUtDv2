@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxWidth="425.0" prefWidth="425.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
+<VBox prefWidth="350.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cshubhamrao.AUtDv2.gui.UIController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -36,7 +36,7 @@
     </FlowPane>
    <TabPane tabClosingPolicy="UNAVAILABLE">
      <tabs>
-         <Tab closable="false" text="NetBeans">
+         <Tab closable="false" text="Class Work">
             <content>
                 <GridPane>
                     <columnConstraints>
@@ -48,7 +48,6 @@
                         <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
                         <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
                         <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" vgrow="NEVER" />
                     </rowConstraints>
                     <children>
                         <Label alignment="CENTER_RIGHT" text="C.W. / Period Number:">
@@ -76,7 +75,7 @@
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <ChoiceBox fx:id="cb_topic" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <ChoiceBox fx:id="cb_topic" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
@@ -86,30 +85,11 @@
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextArea prefHeight="60.0" promptText="Enter Name/Description Here..." GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
+                        <TextArea prefColumnCount="5" prefRowCount="3" promptText="Enter Name/Description Here..." wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </TextArea>
-                        <Label text="Project Location:" GridPane.rowIndex="4">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
-                        <HBox maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                            <children>
-                                <TextField maxHeight="Infinity" maxWidth="Infinity">
-                                    <HBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </HBox.margin>
-                                </TextField>
-                                <Button maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
-                                    <HBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </HBox.margin>
-                                </Button>
-                            </children>
-                        </HBox>
                     </children>
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -141,12 +121,12 @@
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
                      </Label>
-                     <TextField fx:id="txt_dbBackup" prefHeight="25.0" prefWidth="215.0" GridPane.columnIndex="1">
+                     <TextField fx:id="txt_dbBackup" GridPane.columnIndex="1">
                         <GridPane.margin>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
                      </TextField>
-                     <TextField fx:id="txt_dbRestore" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <TextField fx:id="txt_dbRestore" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <GridPane.margin>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </GridPane.margin>
@@ -175,6 +155,39 @@
                   <padding>
                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
+               </GridPane>
+            </content>
+         </Tab>
+         <Tab closable="false" text="NetBeans">
+            <content>
+               <GridPane>
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" percentWidth="50.0" />
+                     <ColumnConstraints halignment="LEFT" percentWidth="50.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                  </rowConstraints>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+                  <children>
+                     <Label text="Project Location:" />
+                     <HBox maxWidth="Infinity" GridPane.columnIndex="1">
+                        <children>
+                           <TextField>
+                              <HBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </HBox.margin>
+                           </TextField>
+                           <Button fx:id="btn_browse" maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
+                              <HBox.margin>
+                                 <Insets bottom="5.0" left="5.0" top="5.0" />
+                              </HBox.margin>
+                           </Button>
+                        </children>
+                     </HBox>
+                  </children>
                </GridPane>
             </content>
          </Tab>
