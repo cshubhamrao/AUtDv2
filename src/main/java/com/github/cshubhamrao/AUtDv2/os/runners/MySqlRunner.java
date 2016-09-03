@@ -95,8 +95,7 @@ public class MySqlRunner extends AppRunner {
                         logger.log(Level.INFO, "Added {0} to mySqlLocs", p.toString());
                     }
                 });
-            }
-            catch (UncheckedIOException | IOException ex) {
+            } catch (UncheckedIOException | IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
         }

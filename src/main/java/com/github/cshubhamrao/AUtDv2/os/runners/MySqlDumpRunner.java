@@ -70,7 +70,7 @@ public class MySqlDumpRunner extends AppRunner {
     @Override
     void setCommand() {
         CommandLine command = new CommandLine();
-        switch(os) {
+        switch (os) {
             case WINDOWS:
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
                 command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());

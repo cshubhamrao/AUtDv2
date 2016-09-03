@@ -34,185 +34,185 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
     </FlowPane>
-   <TabPane tabClosingPolicy="UNAVAILABLE">
-     <tabs>
-         <Tab closable="false" text="Class Work">
-            <content>
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
-                        <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                        <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Label alignment="CENTER_RIGHT" text="C.W. / Period&#10;Number:" textAlignment="CENTER">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
-                        <Spinner fx:id="spinner_cwNo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="BASELINE">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Spinner>
-                        <Label text="Date:" textAlignment="RIGHT" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
-                        <DatePicker maxWidth="Infinity" promptText="Select Date..." GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </DatePicker>
-                        <Label text="Topic:" textAlignment="RIGHT" GridPane.rowIndex="2">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
-                        <ChoiceBox fx:id="cb_topic" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </ChoiceBox>
-                        <Label alignment="CENTER" text="Name/Description:&#10;(Recommended)" textAlignment="CENTER" GridPane.rowIndex="3">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
-                        <TextArea prefColumnCount="5" prefRowCount="3" promptText="Enter Name/Description Here..." wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </TextArea>
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </padding>
-                </GridPane>
-            </content>
-         </Tab>
-         <Tab closable="false" text="MySQL">
-            <content>
-               <GridPane>
-                  <columnConstraints>
-                     <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
-                     <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                  </rowConstraints>
-                  <children>
-                     <Label alignment="CENTER_RIGHT" text="Backup:">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </Label>
-                     <Label text="Restore:" GridPane.rowIndex="1">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </Label>
-                     <TextField fx:id="txt_dbBackup" promptText="Enter Database name..." GridPane.columnIndex="1">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </TextField>
-                     <TextField fx:id="txt_dbRestore" promptText="Enter Database name..." GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </TextField>
-                     <Button fx:id="btn_backup" mnemonicParsing="false" text="Backup" GridPane.rowIndex="3">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </Button>
-                     <Button fx:id="btn_restore" mnemonicParsing="false" text="Restore" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </Button>
-                     <PasswordField fx:id="txt_mySqlPass" text="root" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </PasswordField>
-                     <Label text="MySQL Password:" GridPane.rowIndex="2">
-                        <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </GridPane.margin>
-                     </Label>
-                  </children>
-                  <padding>
-                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                  </padding>
-               </GridPane>
-            </content>
-         </Tab>
-         <Tab closable="false" text="NetBeans">
-            <content>
-               <GridPane>
-                  <columnConstraints>
-                     <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
-                     <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                     <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
-                  </rowConstraints>
-                  <padding>
-                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                  </padding>
-                  <children>
-                     <Label text="Project Location:" />
-                     <HBox maxWidth="Infinity" GridPane.columnIndex="1">
+    <TabPane tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab closable="false" text="Class Work">
+                <content>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
+                            <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
+                        </rowConstraints>
                         <children>
-                           <TextField editable="false" promptText="Path to Project...">
-                              <HBox.margin>
-                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                              </HBox.margin>
-                           </TextField>
-                           <Button fx:id="btn_browse" maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
-                              <HBox.margin>
-                                 <Insets bottom="5.0" left="5.0" top="5.0" />
-                              </HBox.margin>
-                           </Button>
+                            <Label alignment="CENTER_RIGHT" text="C.W. / Period&#10;Number:" textAlignment="CENTER">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <Spinner fx:id="spinner_cwNo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="BASELINE">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Spinner>
+                            <Label text="Date:" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <DatePicker maxWidth="Infinity" promptText="Select Date..." GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </DatePicker>
+                            <Label text="Topic:" textAlignment="RIGHT" GridPane.rowIndex="2">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <ChoiceBox fx:id="cb_topic" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </ChoiceBox>
+                            <Label alignment="CENTER" text="Name/Description:&#10;(Recommended)" textAlignment="CENTER" GridPane.rowIndex="3">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <TextArea prefColumnCount="5" prefRowCount="3" promptText="Enter Name/Description Here..." wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </TextArea>
                         </children>
-                     </HBox>
-                  </children>
-               </GridPane>
-            </content>
-         </Tab>
-     </tabs>
-   </TabPane>
-   <GridPane>
-      <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
-         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      </rowConstraints>
-      <children>
-         <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" text="Start NetBeans">
-            <GridPane.margin>
-               <Insets bottom="5.0" right="5.0" top="5.0" />
-            </GridPane.margin>
-         </Button>
-         <Button fx:id="btn_MySql" maxHeight="Infinity" maxWidth="Infinity" prefHeight="45.0" text="Start MySQL" GridPane.columnIndex="1">
-            <GridPane.margin>
-               <Insets bottom="5.0" left="5.0" top="5.0" />
-            </GridPane.margin>
-         </Button>
-      </children>
-   </GridPane>
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                    </GridPane>
+                </content>
+            </Tab>
+            <Tab closable="false" text="MySQL">
+                <content>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
+                            <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                        </rowConstraints>
+                        <children>
+                            <Label alignment="CENTER_RIGHT" text="Backup:">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <Label text="Restore:" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <TextField fx:id="txt_dbBackup" promptText="Enter Database name..." GridPane.columnIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </TextField>
+                            <TextField fx:id="txt_dbRestore" promptText="Enter Database name..." GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </TextField>
+                            <Button fx:id="btn_backup" mnemonicParsing="false" text="Backup" GridPane.rowIndex="3">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Button>
+                            <Button fx:id="btn_restore" mnemonicParsing="false" text="Restore" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Button>
+                            <PasswordField fx:id="txt_mySqlPass" text="root" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </PasswordField>
+                            <Label text="MySQL Password:" GridPane.rowIndex="2">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                            </Label>
+                        </children>
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                    </GridPane>
+                </content>
+            </Tab>
+            <Tab closable="false" text="NetBeans">
+                <content>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" percentWidth="40.0" />
+                            <ColumnConstraints halignment="LEFT" percentWidth="60.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+                        </rowConstraints>
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                        <children>
+                            <Label text="Project Location:" />
+                            <HBox maxWidth="Infinity" GridPane.columnIndex="1">
+                                <children>
+                                    <TextField editable="false" promptText="Path to Project...">
+                                        <HBox.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </HBox.margin>
+                                    </TextField>
+                                    <Button fx:id="btn_browse" maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
+                                        <HBox.margin>
+                                            <Insets bottom="5.0" left="5.0" top="5.0" />
+                                        </HBox.margin>
+                                    </Button>
+                                </children>
+                            </HBox>
+                        </children>
+                    </GridPane>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <children>
+            <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" text="Start NetBeans">
+                <GridPane.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                </GridPane.margin>
+            </Button>
+            <Button fx:id="btn_MySql" maxHeight="Infinity" maxWidth="Infinity" prefHeight="45.0" text="Start MySQL" GridPane.columnIndex="1">
+                <GridPane.margin>
+                    <Insets bottom="5.0" left="5.0" top="5.0" />
+                </GridPane.margin>
+            </Button>
+        </children>
+    </GridPane>
     <Label text="Made by @cshubhamrao" />
 </VBox>
