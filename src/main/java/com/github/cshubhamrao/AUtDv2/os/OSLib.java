@@ -135,7 +135,7 @@ public class OSLib {
      *
      * @return List of paths where programs can be installed.
      */
-    protected static List<Path> getProgramDirs() {
+    public static List<Path> getProgramDirs() {
         ArrayList<Path> dirs = new ArrayList(2);
         if (getCurrentOS() == OperatingSystem.WINDOWS) {
             switch (getCurrentArchitecture()) {

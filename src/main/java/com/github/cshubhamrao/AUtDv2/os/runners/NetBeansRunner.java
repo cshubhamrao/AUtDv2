@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.cshubhamrao.AUtDv2.os;
+package com.github.cshubhamrao.AUtDv2.os.runners;
 
+import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
