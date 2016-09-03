@@ -1,4 +1,4 @@
- /*
+/*
  * The MIT License
  *
  * Copyright 2016 Shubham Rao <cshubhamrao@gmail.com>.
@@ -48,8 +48,7 @@ public class MainUI extends Application {
         try {
             root = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
             primaryStage.setScene(new Scene(root));
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
 

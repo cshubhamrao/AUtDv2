@@ -109,6 +109,7 @@ public abstract class AppRunner implements Runnable {
      * Class representing a Command along with its arguments.
      *
      * Encapsulates an OS dependent Command, with executable's name and its arguments.
+     *
      * @author Shubham Rao (cshubhamrao@gmail.com)
      */
     protected class CommandLine {
