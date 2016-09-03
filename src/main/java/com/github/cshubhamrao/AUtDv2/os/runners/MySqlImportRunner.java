@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.cshubhamrao.AUtDv2.os;
+package com.github.cshubhamrao.AUtDv2.os.runners;
 
+import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,31 +40,34 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
- * Runs mysqldump to create DB dumps. The dumps are stored as {@code dbName.sql} in the current
- * directory. The database is assumed to exist.
+ * Finds and runs mysql to restore DBs from backup
  *
  * @author Shubham Rao (cshubhamrao@gmail.com)
  */
-public class MySqlDumpRunner extends AppRunner {
+public class MySqlImportRunner extends AppRunner {
 
     private static final Logger logger = Log.logger;
+    private final String sqlFile;
     private final String dbName;
     private final String password;
 
     /**
      *
-     * @param dbName name of database to dump
+     * @param sqlFile Path to .sql file containing DB Dump.
+     * @param dbName Name of database to create.
      */
-    public MySqlDumpRunner(String dbName) {
-        this(dbName, "root");
+    public MySqlImportRunner(String sqlFile, String dbName) {
+        this(sqlFile, dbName, "root");
     }
 
     /**
      *
-     * @param dbName name of database to dump
-     * @param password password to use with MySQL
+     * @param sqlFile Path to .sql file containing DB Dump.
+     * @param dbName Name of database to create.
+     * @param password Password to use with MySQL
      */
-    public MySqlDumpRunner(String dbName, String password) {
+    public MySqlImportRunner(String sqlFile, String dbName, String password) {
+        this.sqlFile = sqlFile;
         this.dbName = dbName;
         this.password = password;
     }
@@ -69,17 +75,14 @@ public class MySqlDumpRunner extends AppRunner {
     @Override
     void setCommand() {
         CommandLine command = new CommandLine();
-        switch(os) {
+        switch (os) {
             case WINDOWS:
-                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
-                command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());
+                command.setCommandName(Paths.get(windowsLocation(), "mysql.exe").toString());
                 command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
-                command.addArguments("--hex-blob");
-                command.addArguments("--result-file="
-                        + Paths.get("", dbName + ".sql").toAbsolutePath().toString());
-                command.addArguments("\"" + dbName + "\"");
+                command.addArguments("-e");
+                command.addArguments("\"source " + tempSqlFile() + "\"");
         }
-        logger.log(Level.INFO, "Dumping {0}", dbName);
+        logger.log(Level.INFO, "Importing {0}", dbName);
         setCommand(command);
     }
 
@@ -103,5 +106,27 @@ public class MySqlDumpRunner extends AppRunner {
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());
         return location.toString();
+    }
+
+    private String tempSqlFile() {
+        String commands = "DROP DATABASE IF EXISTS " + dbName + ";\n"
+                + "CREATE DATABASE " + dbName + ";\n"
+                + "USE " + dbName + ";\n"
+                + "source " + sqlFile;
+        Path tmpFile;
+        try {
+            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", null);
+            tmpFile.toFile().deleteOnExit();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error creating temporary file", ex);
+            return "";
+        }
+        try (BufferedWriter bw = Files.newBufferedWriter(tmpFile, Charset.defaultCharset())) {
+            bw.write(commands);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error writing to temporary sql file", ex);
+            return "";
+        }
+        return tmpFile.toString();
     }
 }
