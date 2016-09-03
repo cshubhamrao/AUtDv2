@@ -77,6 +77,8 @@ public class UIController {
     private TextField txt_dbRestore;
     @FXML
     private PasswordField txt_mySqlPass;
+    @FXML
+    private Button btn_browse;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
