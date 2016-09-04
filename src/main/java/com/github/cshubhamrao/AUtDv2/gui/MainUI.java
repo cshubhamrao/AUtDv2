@@ -49,7 +49,7 @@ public class MainUI extends Application {
             root = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
             primaryStage.setScene(new Scene(root));
         } catch (IOException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            logger.log(java.util.logging.Level.SEVERE, "Error in loading main FXML", ex);
         }
 
         primaryStage.setTitle("Auto Upload to Drive v2");
