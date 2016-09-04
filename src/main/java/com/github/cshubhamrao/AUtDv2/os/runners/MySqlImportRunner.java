@@ -28,7 +28,6 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -115,13 +114,13 @@ public class MySqlImportRunner extends AppRunner {
                 + "source " + sqlFile;
         Path tmpFile;
         try {
-            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", null);
+            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", ".sql");
             tmpFile.toFile().deleteOnExit();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error creating temporary file", ex);
             return "";
         }
-        try (BufferedWriter bw = Files.newBufferedWriter(tmpFile, Charset.defaultCharset())) {
+        try (BufferedWriter bw = Files.newBufferedWriter(tmpFile)) {
             bw.write(commands);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error writing to temporary sql file", ex);
