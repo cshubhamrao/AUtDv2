@@ -97,7 +97,7 @@ public class MySqlDumpRunner extends AppRunner {
                     }
                 });
             } catch (UncheckedIOException | IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "Error locating MySQL", ex);
             }
         }
 
