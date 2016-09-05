@@ -175,7 +175,7 @@
                             <Label text="Project Location:" />
                             <HBox maxWidth="Infinity" GridPane.columnIndex="1">
                                 <children>
-                                    <TextField editable="false" promptText="Path to Project...">
+                                    <TextField fx:id="txt_location" editable="false" promptText="Path to Project...">
                                         <HBox.margin>
                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                         </HBox.margin>
