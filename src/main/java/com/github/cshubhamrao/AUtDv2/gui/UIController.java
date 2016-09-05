@@ -115,13 +115,11 @@ public class UIController {
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
 
-        btn_NetBeans.setOnAction((e)
-                -> executor.execute(new NetBeansRunner()));
+        btn_NetBeans.setOnAction(e -> executor.execute(new NetBeansRunner()));
 
-        btn_MySql.setOnAction((e)
-                -> executor.execute(new MySqlRunner()));
+        btn_MySql.setOnAction(e -> executor.execute(new MySqlRunner()));
 
-        btn_userAction.setOnAction((e) -> {
+        btn_userAction.setOnAction(e -> {
             GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
                     "Log File created by AUtDv2");
             Future<String> resp = executor.submit(task);
