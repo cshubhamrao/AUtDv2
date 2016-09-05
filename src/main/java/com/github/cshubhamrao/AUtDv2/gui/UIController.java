@@ -24,6 +24,7 @@
 package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.net.GoogleDriveTask;
+import com.github.cshubhamrao.AUtDv2.os.CreateZipTask;
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlDumpRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlImportRunner;
@@ -47,6 +48,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 
 /**
  * FXML Controller class. for {@code MainUI.fxml}
@@ -79,6 +81,8 @@ public class UIController {
     private PasswordField txt_mySqlPass;
     @FXML
     private Button btn_browse;
+    @FXML
+    private TextField txt_location;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -126,6 +130,9 @@ public class UIController {
 
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
+
+        btn_browse.setOnAction(this::btn_browse_handler);
+
     }
 
     private void btn_backup_handler(ActionEvent e) {
@@ -180,5 +187,12 @@ public class UIController {
                     + "File name: " + sqlFile.getAbsolutePath())
                     .showAndWait();
         }
+    }
+
+    private void btn_browse_handler(ActionEvent e) {
+        DirectoryChooser dir = new DirectoryChooser();
+        File f = dir.showDialog(null);
+        txt_location.setText(f.toString());
+        executor.submit(new CreateZipTask(f));
     }
 }
