@@ -28,7 +28,6 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,6 +36,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -92,16 +92,17 @@ public class MySqlImportRunner extends AppRunner {
         SortedSet<Path> mySqlLocs = new TreeSet();
         for (Path dir : progDirs) {
             try (Stream<Path> subDirs = Files.walk(dir, 2)) {
-                subDirs.forEach((Path p) -> {
-                    if (p.toString().contains("MySQL Server")) {
-                        mySqlLocs.add(p);
-                        logger.log(Level.INFO, "Added {0} to mySqlLocs", p.toString());
-                    }
-                });
+                mySqlLocs.addAll(
+                        subDirs.filter(p -> p.toString().contains("MySQL Server"))
+                        .collect(Collectors.toList())
+                );
             } catch (UncheckedIOException | IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "Error locating MySQL", ex);
             }
         }
+
+        mySqlLocs.forEach(path
+                -> logger.log(Level.INFO, "Adding MySQL Location: {0}", path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());
@@ -115,13 +116,13 @@ public class MySqlImportRunner extends AppRunner {
                 + "source " + sqlFile;
         Path tmpFile;
         try {
-            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", null);
+            tmpFile = Files.createTempFile("AUtDv2_sqlFile_", ".sql");
             tmpFile.toFile().deleteOnExit();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error creating temporary file", ex);
             return "";
         }
-        try (BufferedWriter bw = Files.newBufferedWriter(tmpFile, Charset.defaultCharset())) {
+        try (BufferedWriter bw = Files.newBufferedWriter(tmpFile)) {
             bw.write(commands);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error writing to temporary sql file", ex);

@@ -23,12 +23,13 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
-import com.github.cshubhamrao.AUtDv2.os.runners.MySqlRunner;
-import com.github.cshubhamrao.AUtDv2.os.runners.NetBeansRunner;
+import com.github.cshubhamrao.AUtDv2.net.GoogleDriveTask;
+import com.github.cshubhamrao.AUtDv2.os.CreateZipTask;
+import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlDumpRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlImportRunner;
-import com.github.cshubhamrao.AUtDv2.net.GoogleDriveTask;
-import com.github.cshubhamrao.AUtDv2.os.OSLib;
+import com.github.cshubhamrao.AUtDv2.os.runners.MySqlRunner;
+import com.github.cshubhamrao.AUtDv2.os.runners.NetBeansRunner;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
 import java.nio.file.Paths;
@@ -47,6 +48,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 
 /**
  * FXML Controller class. for {@code MainUI.fxml}
@@ -79,6 +81,8 @@ public class UIController {
     private PasswordField txt_mySqlPass;
     @FXML
     private Button btn_browse;
+    @FXML
+    private TextField txt_location;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -111,13 +115,11 @@ public class UIController {
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
 
-        btn_NetBeans.setOnAction((e)
-                -> executor.execute(new NetBeansRunner()));
+        btn_NetBeans.setOnAction(e -> executor.execute(new NetBeansRunner()));
 
-        btn_MySql.setOnAction((e)
-                -> executor.execute(new MySqlRunner()));
+        btn_MySql.setOnAction(e -> executor.execute(new MySqlRunner()));
 
-        btn_userAction.setOnAction((e) -> {
+        btn_userAction.setOnAction(e -> {
             GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
                     "Log File created by AUtDv2");
             Future<String> resp = executor.submit(task);
@@ -127,8 +129,8 @@ public class UIController {
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
 
-        // Default Password, just in case
-        txt_mySqlPass.setText("root");
+        btn_browse.setOnAction(this::btn_browse_handler);
+
     }
 
     private void btn_backup_handler(ActionEvent e) {
@@ -183,5 +185,12 @@ public class UIController {
                     + "File name: " + sqlFile.getAbsolutePath())
                     .showAndWait();
         }
+    }
+
+    private void btn_browse_handler(ActionEvent e) {
+        DirectoryChooser dir = new DirectoryChooser();
+        File f = dir.showDialog(null);
+        txt_location.setText(f.toString());
+        executor.submit(new CreateZipTask(f));
     }
 }
