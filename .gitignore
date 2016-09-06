@@ -36,3 +36,4 @@ target/
 ####
 .AUtDv2-creds
 *.sql
+*.zip

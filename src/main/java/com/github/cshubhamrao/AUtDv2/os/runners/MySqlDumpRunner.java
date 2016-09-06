@@ -35,6 +35,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -70,7 +71,7 @@ public class MySqlDumpRunner extends AppRunner {
     @Override
     void setCommand() {
         CommandLine command = new CommandLine();
-        switch(os) {
+        switch (os) {
             case WINDOWS:
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
                 command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());
@@ -90,16 +91,17 @@ public class MySqlDumpRunner extends AppRunner {
         SortedSet<Path> mySqlLocs = new TreeSet();
         for (Path dir : progDirs) {
             try (Stream<Path> subDirs = Files.walk(dir, 2)) {
-                subDirs.forEach((Path p) -> {
-                    if (p.toString().contains("MySQL Server")) {
-                        mySqlLocs.add(p);
-                        logger.log(Level.INFO, "Added {0} to mySqlLocs", p.toString());
-                    }
-                });
+                mySqlLocs.addAll(
+                        subDirs.filter(p -> p.toString().contains("MySQL Server"))
+                        .collect(Collectors.toList())
+                );
             } catch (UncheckedIOException | IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "Error locating MySQL", ex);
             }
         }
+
+        mySqlLocs.forEach(path
+                -> logger.log(Level.INFO, "Adding MySQL Location: {0}", path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());

@@ -72,7 +72,7 @@ public class NetBeansRunner extends AppRunner {
                     logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
                 });
             } catch (IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "Error locating NetBeans", ex);
             }
         }
         location = nbLocs.last().resolve("bin");

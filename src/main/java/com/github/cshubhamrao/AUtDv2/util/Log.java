@@ -42,8 +42,7 @@ public class Log {
             FileHandler fh = new FileHandler("log.txt");
             fh.setFormatter(new SimpleFormatter());
             logger.addHandler(fh);
-        }
-        catch (IOException | SecurityException ex) {
+        } catch (IOException | SecurityException ex) {
             System.err.println("Unable to log error in logging :P");
             System.err.println(ex);
         }
