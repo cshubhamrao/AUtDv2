@@ -32,6 +32,7 @@ import com.github.cshubhamrao.AUtDv2.os.runners.MySqlRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.NetBeansRunner;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -123,7 +124,7 @@ public class UIController {
             GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
                     "Log File created by AUtDv2");
             Future<String> resp = executor.submit(task);
-            checkSuccess(resp);
+            checkAuthResponse(resp);
         });
 
         btn_backup.setOnAction(this::btn_backup_handler);
@@ -147,11 +148,11 @@ public class UIController {
             GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File(dbName + ".sql"),
                     "Backup of Database: " + dbName);
             Future<String> resp = executor.submit(task);
-            checkSuccess(resp);
+            checkAuthResponse(resp);
         }
     }
 
-    private void checkSuccess(Future<String> resp) {
+    private void checkAuthResponse(Future<String> resp) {
         new Thread(() -> {
             try {
                 if (resp.get() == null) {
@@ -191,6 +192,28 @@ public class UIController {
         DirectoryChooser dir = new DirectoryChooser();
         File f = dir.showDialog(null);
         txt_location.setText(f.toString());
-        executor.submit(new CreateZipTask(f));
+        Future<Path> result = executor.submit(new CreateZipTask(f));
+        uploadZip(result);
+    }
+
+    private void uploadZip(Future<Path> resp) {
+        new Thread(() -> {
+            try {
+                File f = resp.get().toFile();
+                if (f.exists()) {
+                    GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(f,
+                            "Project Backup created by AUtDv2");
+                    Future<String> res = executor.submit(task);
+                    checkAuthResponse(res);
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Creating zip file failed. Please try again")
+                            .showAndWait();
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error checking for success", ex);
+            }
+        },
+                "Result Check Thread").
+                start();
     }
 }
