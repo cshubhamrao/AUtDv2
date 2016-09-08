@@ -31,7 +31,11 @@ import com.github.cshubhamrao.AUtDv2.os.runners.MySqlImportRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.NetBeansRunner;
 import com.github.cshubhamrao.AUtDv2.util.Log;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -116,15 +121,15 @@ public class UIController {
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
 
-        btn_NetBeans.setOnAction(e -> executor.execute(new NetBeansRunner()));
+        btn_NetBeans.setOnAction(e -> executor.submit(new NetBeansRunner()));
 
-        btn_MySql.setOnAction(e -> executor.execute(new MySqlRunner()));
+        btn_MySql.setOnAction(e -> executor.submit(new MySqlRunner()));
 
         btn_userAction.setOnAction(e -> {
             GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
                     "Log File created by AUtDv2");
             Future<String> resp = executor.submit(task);
-            checkAuthResponse(resp);
+            checkDriveSuccess(resp);
         });
 
         btn_backup.setOnAction(this::btn_backup_handler);
@@ -144,25 +149,34 @@ public class UIController {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid name for Database");
             alert.showAndWait();
         } else {
-            executor.execute(new MySqlDumpRunner(dbName, password));
-            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File(dbName + ".sql"),
-                    "Backup of Database: " + dbName);
-            Future<String> resp = executor.submit(task);
-            checkAuthResponse(resp);
+            Future<Integer> resp = executor.submit(new MySqlDumpRunner(dbName, password));
+            uploadSql(resp, dbName);
         }
     }
 
-    private void checkAuthResponse(Future<String> resp) {
+    private void checkDriveSuccess(Future<String> resp) {
         new Thread(() -> {
             try {
-                if (resp.get() == null) {
-                    new Alert(Alert.AlertType.ERROR, "Authorization Failed. Please try again")
+                String fileId = resp.get();
+                if (fileId == null) {
+                    new Alert(Alert.AlertType.ERROR,
+                            "Upload to Google Drive failed. Please try again")
                             .showAndWait();
+                } // DEBUG:
+                else {
+                    URI driveURI = new URI("https://drive.google.com/file/d/" + fileId + "/view");
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION, "File Uploaded\n"
+                                    + "Opening the file in browser...").show());
+                    Desktop.getDesktop().browse(driveURI);
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);
+                //DEBUG
+            } catch (URISyntaxException | IOException ex) {
+                logger.log(Level.SEVERE, "Error in oprning URL", ex);
             }
-        }, "Result Check Thread").start();
+        }, "Upload Check Thread").start();
     }
 
     private void btn_restore_handler(ActionEvent e) {
@@ -177,7 +191,9 @@ public class UIController {
             return;
         }
         if (sqlFile.exists() && sqlFile.canRead()) {
-            executor.execute(new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName, password));
+            Future<Integer> resp = executor.submit(
+                    new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName, password));
+            checkImportSuccess(resp);
         } else {
             new Alert(Alert.AlertType.ERROR,
                     ".sql file containing backup of Database \"" + dbName + "\" not found.\n"
@@ -204,16 +220,58 @@ public class UIController {
                     GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(f,
                             "Project Backup created by AUtDv2");
                     Future<String> res = executor.submit(task);
-                    checkAuthResponse(res);
+                    checkDriveSuccess(res);
                 } else {
-                    new Alert(Alert.AlertType.ERROR, "Creating zip file failed. Please try again")
-                            .showAndWait();
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR, "Creating zip file failed. "
+                                    + "Please try again").showAndWait());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);
             }
-        },
-                "Result Check Thread").
-                start();
+        }, "Upload Zip Thread").start();
+    }
+
+    private void uploadSql(Future<Integer> resp, String dbName) {
+        new Thread(() -> {
+            try {
+                int exit = resp.get();
+                if (exit == 0) {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION, "Database backup created")
+                            .show());
+                    GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(
+                            new File(dbName + ".sql"),
+                            "Backup of Database: " + dbName);
+                    Future<String> authResp = executor.submit(task);
+                    checkDriveSuccess(authResp);
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                    "Unable to create Backup of database").show());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error in sql backup", ex);
+            }
+        }, "Sql upload thread").start();
+    }
+
+    private void checkImportSuccess(Future<Integer> resp) {
+        new Thread(() -> {
+            try {
+                int exitCode = resp.get();
+                if (exitCode == 0) {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                    "Database successfully restored").show());
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                    "Database restore unsuccessful").show());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error importing DB", ex);
+            }
+        }, "Import DB thread").start();
     }
 }
