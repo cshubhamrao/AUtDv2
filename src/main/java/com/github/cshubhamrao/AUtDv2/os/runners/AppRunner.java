@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 /**
@@ -40,7 +41,7 @@ import java.util.logging.Level;
  * @see OSLib
  * @author Shubham Rao (cshubhamrao@gmail.com)
  */
-public abstract class AppRunner implements Runnable {
+public abstract class AppRunner implements Callable<Integer> {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
@@ -86,23 +87,22 @@ public abstract class AppRunner implements Runnable {
     /**
      * Runs the OS specific Command. Exit code is logged.
      *
+     * @throws java.io.IOException
      */
     @Override
-    public void run() {
+    public Integer call() throws IOException {
         setCommand();
         ProcessBuilder pb = new ProcessBuilder(command.getFullCommand());
+        int exit = -1;
         try {
             Process p = pb.start();
             logger.log(Level.INFO, "Started runnning command");
-            int exit = p.waitFor();
+            exit = p.waitFor();
             logger.log(Level.INFO, "Exit Code: {0} ", exit);
         } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, "Error getting exit code", ex);
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Error in running program.", ex);
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, "Error in running program.", ex);
-        }
+        } 
+        return exit;
     }
 
     /**
