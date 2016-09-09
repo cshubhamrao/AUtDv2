@@ -28,16 +28,19 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Finds and runs mysql to restore DBs from backup
@@ -91,11 +94,25 @@ public class MySqlImportRunner extends AppRunner {
         List<Path> progDirs = OSLib.getProgramDirs();
         SortedSet<Path> mySqlLocs = new TreeSet();
         for (Path dir : progDirs) {
-            try (Stream<Path> subDirs = Files.walk(dir, 2)) {
-                mySqlLocs.addAll(
-                        subDirs.filter(p -> p.toString().contains("MySQL Server"))
-                        .collect(Collectors.toList())
-                );
+            System.out.println(dir);
+            try {
+                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class), 3,
+                        new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(Path p,
+                            BasicFileAttributes bfa) throws IOException {
+                        if (p.getFileName().toString().contains("MySQL Server")) {
+                            mySqlLocs.add(p);
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(Path t, IOException ioe)
+                            throws IOException {
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
             } catch (UncheckedIOException | IOException ex) {
                 logger.log(Level.SEVERE, "Error locating MySQL", ex);
             }
