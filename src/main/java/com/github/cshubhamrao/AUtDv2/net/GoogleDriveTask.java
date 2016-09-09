@@ -35,6 +35,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
@@ -65,16 +66,13 @@ public class GoogleDriveTask {
     static private final String APP_NAME = "AUtDv2";
 
     static private HttpTransport HTTP_TRANSPORT;
-    static private FileDataStoreFactory DS_FACTORY;
-    static private final java.io.File DATA_DIR = new java.io.File(".AUtDv2-creds");
+    static private MemoryDataStoreFactory DS_FACTORY;
+//    static private final java.io.File DATA_DIR = new java.io.File(".AUtDv2-creds");
 
     static private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     private static void init() {
         try {
-            DATA_DIR.deleteOnExit();
-            DATA_DIR.setReadable(true, true);
-            DATA_DIR.setWritable(true, true);
         } catch (SecurityException ex) {
             logger.log(Level.WARNING, "Error in setting up credential store", ex);
         }
@@ -83,7 +81,7 @@ public class GoogleDriveTask {
 
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            DS_FACTORY = new FileDataStoreFactory(DATA_DIR);
+            DS_FACTORY = new MemoryDataStoreFactory();
         } catch (GeneralSecurityException | IOException ex) {
             logger.log(Level.SEVERE, "Error in initialization", ex);
         }
