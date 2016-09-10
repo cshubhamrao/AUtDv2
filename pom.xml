@@ -10,7 +10,7 @@
     <artifactId>AUtDv2</artifactId>
     <name>Auto Upload to Drive v2</name>
     <description>An application to automatically backup your NetBeans Projects, MySQL screenshots, and MySQL databases to Google Drive.</description>
-        <organization>
+    <organization>
         <name>Shubham Rao</name>
     </organization>
     <packaging>jar</packaging>
