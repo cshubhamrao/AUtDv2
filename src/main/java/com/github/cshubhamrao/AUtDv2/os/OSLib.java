@@ -90,11 +90,16 @@ public class OSLib {
      */
     public static OperatingSystem getCurrentOS() {
         String os = System.getProperty("os.name");
-        if (os.startsWith("Linux")) return OperatingSystem.LINUX;
-        else if (os.startsWith("Windows")) return OperatingSystem.WINDOWS;
-        else if (os.startsWith("Mac")) return OperatingSystem.WINDOWS;
-        else return OperatingSystem.UNKNOWN;
+        if (os.startsWith("Linux")) {
+            return OperatingSystem.LINUX;
+        } else if (os.startsWith("Windows")) {
+            return OperatingSystem.WINDOWS;
+        } else if (os.startsWith("Mac")) {
+            return OperatingSystem.WINDOWS;
+        } else {
+            return OperatingSystem.UNKNOWN;
         }
+    }
 
     /**
      * Gets the current Architecture where JVM is executing.
@@ -103,7 +108,9 @@ public class OSLib {
      */
     public static Architecture getCurrentArchitecture() {
         String arch = System.getProperty("os.arch");
-        if (arch.startsWith("amd64")) return Architecture.AMD64;
+        if (arch.startsWith("amd64")) {
+            return Architecture.AMD64;
+        }
         /*
         ¯\_(ツ)_/¯
         STORY TIME: with a brave warrior tester [REDACTED], a troubled developer, a [baby-like]app
@@ -123,10 +130,12 @@ public class OSLib {
         Guardian Java does little to intim[id]ate the app. Wrong architecture detection, thanks to
         Java and app thinks the architecture is UNKNOWN. Java please be consistent. Return my 12
         hours...
-        */
+         */
 
         //      JAVA, Y U MAKE ME DO DIS?   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-        else if (arch.startsWith("i386") || arch.contains("86")) return Architecture.i386;
+        else if (arch.startsWith("i386") || arch.contains("86")) {
+            return Architecture.i386;
+        }
         return Architecture.UNKNOWN;
     }
 

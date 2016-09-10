@@ -108,8 +108,8 @@ public class UIController {
                 || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
 
             new Alert(Alert.AlertType.ERROR,
-                    "Unable to determine current OS and/or System "
-                    + "Architecture. Any OS-dependent functionality will not work")
+                    "Unable to determine current OS and/or System Architecture. "
+                    + "Any OS-dependent functionality will not work")
                     .showAndWait();
             logger.log(Level.SEVERE, "Unable to detect OS and/or architecture reliably");
             logger.log(Level.CONFIG, OSLib.getCurrentArchitecture().toString());
@@ -139,7 +139,6 @@ public class UIController {
         btn_restore.setOnAction(this::btn_restore_handler);
 
         btn_browse.setOnAction(this::btn_browse_handler);
-
     }
 
     private void btn_backup_handler(ActionEvent e) {
@@ -149,37 +148,11 @@ public class UIController {
             new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
         }
         if (dbName.isEmpty() || dbName.contains(" ")) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid name for Database");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database").showAndWait();
         } else {
             Future<Integer> resp = executor.submit(new MySqlDumpRunner(dbName, password));
             uploadSql(resp, dbName);
         }
-    }
-
-    private void checkDriveSuccess(Future<String> resp) {
-        new Thread(() -> {
-            try {
-                String fileId = resp.get();
-                if (fileId == null) {
-                    new Alert(Alert.AlertType.ERROR,
-                            "Upload to Google Drive failed. Please try again")
-                            .showAndWait();
-                } // DEBUG:
-                else {
-                    URI driveURI = new URI("https://drive.google.com/file/d/" + fileId + "/view");
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION, "File Uploaded\n"
-                                    + "Opening the file in browser...").show());
-                    Desktop.getDesktop().browse(driveURI);
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.log(Level.SEVERE, "Error checking for success", ex);
-                //DEBUG
-            } catch (URISyntaxException | IOException ex) {
-                logger.log(Level.SEVERE, "Error in oprning URL", ex);
-            }
-        }, "Upload Check Thread").start();
     }
 
     private void btn_restore_handler(ActionEvent e) {
@@ -232,7 +205,7 @@ public class UIController {
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);
             }
-        }, "Upload Zip Thread").start();
+        }, "Upload zip Thread").start();
     }
 
     private void uploadSql(Future<Integer> resp, String dbName) {
@@ -256,7 +229,7 @@ public class UIController {
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error in sql backup", ex);
             }
-        }, "Sql upload thread").start();
+        }, "DB Upload Thread").start();
     }
 
     private void checkImportSuccess(Future<Integer> resp) {
@@ -276,5 +249,30 @@ public class UIController {
                 logger.log(Level.SEVERE, "Error importing DB", ex);
             }
         }, "Import DB thread").start();
+    }
+
+    private void checkDriveSuccess(Future<String> resp) {
+        new Thread(() -> {
+            try {
+                String fileId = resp.get();
+                if (fileId == null) {
+                    new Alert(Alert.AlertType.ERROR,
+                            "Upload to Google Drive failed. Please try again")
+                            .showAndWait();
+                } // DEBUG:
+                else {
+                    URI driveURI = new URI("https://drive.google.com/file/d/" + fileId + "/view");
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION, "File Uploaded\n"
+                                    + "Opening the file in browser...").show());
+                    Desktop.getDesktop().browse(driveURI);
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error checking for success", ex);
+                //DEBUG
+            } catch (URISyntaxException | IOException ex) {
+                logger.log(Level.SEVERE, "Error in oprning URL", ex);
+            }
+        }, "Upload Check Thread").start();
     }
 }

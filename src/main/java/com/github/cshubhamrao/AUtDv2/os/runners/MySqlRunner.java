@@ -107,6 +107,7 @@ public class MySqlRunner extends AppRunner {
                         }
                         return FileVisitResult.CONTINUE;
                     }
+
                     @Override
                     public FileVisitResult visitFileFailed(Path t, IOException ioe)
                             throws IOException {

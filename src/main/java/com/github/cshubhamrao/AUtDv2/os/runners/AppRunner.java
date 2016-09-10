@@ -103,7 +103,7 @@ public abstract class AppRunner implements Callable<Integer> {
             logger.log(Level.INFO, "Exit Code: {0} ", exit);
         } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, "Error getting exit code", ex);
-        } 
+        }
         return exit;
     }
 
