@@ -95,7 +95,7 @@ public class MySqlDumpRunner extends AppRunner {
         Path location;
         List<Path> progDirs = OSLib.getProgramDirs();
         SortedSet<Path> mySqlLocs = new TreeSet();
-                for (Path dir : progDirs) {
+        for (Path dir : progDirs) {
             System.out.println(dir);
             try {
                 Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class), 3,
