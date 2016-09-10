@@ -28,9 +28,11 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
@@ -52,6 +54,9 @@ public class MainUI extends Application {
             primaryStage.setScene(new Scene(root));
         } catch (IOException ex) {
             logger.log(java.util.logging.Level.SEVERE, "Error in loading main FXML", ex);
+            new Alert(Alert.AlertType.ERROR, "Fatal Error in loading GUI. Exiting...")
+                    .showAndWait();
+            Platform.exit();
         }
 
         primaryStage.setTitle("Auto Upload to Drive v2");
