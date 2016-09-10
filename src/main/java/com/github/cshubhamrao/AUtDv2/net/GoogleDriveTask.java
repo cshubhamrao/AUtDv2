@@ -179,9 +179,7 @@ public class GoogleDriveTask {
             try {
                 File uploadedFile = service.files().create(fileMetadata, content)
                         .setUseContentAsIndexableText(Boolean.FALSE)
-                        .setFields("id")
-                        .execute();
-                uploadedFile = service.files().get(uploadedFile.getId()).setFields("webViewLink,id")
+                        .setFields("id,webViewLink")
                         .execute();
                 logger.log(Level.INFO, "File {0} available at link {1}",
                         new String[]{uploadedFile.getId(), uploadedFile.getWebViewLink()});
@@ -219,7 +217,7 @@ public class GoogleDriveTask {
          */
         @Override
         public String call() throws Exception {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
     }
