@@ -50,9 +50,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -61,7 +58,6 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class. for {@code MainUI.fxml}
@@ -132,35 +128,17 @@ public class UIController {
 
         btn_MySql.setOnAction(e -> executor.submit(new MySqlRunner()));
 
-//        btn_userAction.setOnAction(e -> {
-//            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
-//                    "Log File created by AUtDv2");
-//            Future<String> resp = executor.submit(task);
-//            checkDriveSuccess(resp);
-//        });
-        btn_userAction.setOnAction(this::mySqlUI);
+        btn_userAction.setOnAction(e -> {
+            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
+                    "Log File created by AUtDv2");
+            Future<String> resp = executor.submit(task);
+            checkDriveSuccess(resp);
+        });
 
         btn_backup.setOnAction(this::btn_backup_handler);
         btn_restore.setOnAction(this::btn_restore_handler);
 
         btn_browse.setOnAction(this::btn_browse_handler);
-    }
-
-    private void mySqlUI(ActionEvent e) {
-        Stage primaryStage = new Stage();
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/gui/MySqlScreenshotsUI.fxml"));
-            primaryStage.setScene(new Scene(root));
-        } catch (IOException ex) {
-            logger.log(java.util.logging.Level.SEVERE, "Error in loading main FXML", ex);
-            new Alert(Alert.AlertType.ERROR, "Fatal Error in loading GUI. Exiting...")
-                    .showAndWait();
-            Platform.exit();
-        }
-
-        primaryStage.setTitle("Auto Upload to Drive v2");
-        primaryStage.setResizable(false);
-        primaryStage.show();
     }
 
     private void btn_backup_handler(ActionEvent e) {
