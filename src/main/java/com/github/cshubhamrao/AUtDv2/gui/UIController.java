@@ -23,7 +23,12 @@
  */
 package com.github.cshubhamrao.AUtDv2.gui;
 
-import com.github.cshubhamrao.AUtDv2.net.GoogleDriveTask;
+import com.github.cshubhamrao.AUtDv2.db.DatabaseTasks;
+import com.github.cshubhamrao.AUtDv2.models.ClassWork;
+import com.github.cshubhamrao.AUtDv2.models.ClassWork.Topic;
+import com.github.cshubhamrao.AUtDv2.net.GoogleDrive;
+import com.github.cshubhamrao.AUtDv2.net.UploadTask;
+import com.github.cshubhamrao.AUtDv2.net.UserInfoTask;
 import com.github.cshubhamrao.AUtDv2.os.CreateZipTask;
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlDumpRunner;
@@ -31,21 +36,17 @@ import com.github.cshubhamrao.AUtDv2.os.runners.MySqlImportRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.MySqlRunner;
 import com.github.cshubhamrao.AUtDv2.os.runners.NetBeansRunner;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
-import java.awt.Desktop;
-
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -53,10 +54,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -69,6 +75,10 @@ public class UIController {
     private static final java.util.logging.Logger logger = Log.logger;
 
     @FXML
+    private ImageView img_user;
+    @FXML
+    private Label txt_welcome;
+    @FXML
     private Button btn_userAction;
     @FXML
     private ChoiceBox<String> cb_topic;
@@ -79,9 +89,13 @@ public class UIController {
     @FXML
     private Spinner<Integer> spinner_cwNo;
     @FXML
-    private Button btn_backup;
+    private Button btn_m_backup;
     @FXML
-    private Button btn_restore;
+    private Button btn_n_backup;
+    @FXML
+    private Button btn_m_restore;
+    @FXML
+    private TextField txt_projName;
     @FXML
     private TextField txt_dbBackup;
     @FXML
@@ -92,15 +106,20 @@ public class UIController {
     private Button btn_browse;
     @FXML
     private TextField txt_location;
+    @FXML
+    private Button btn_cwSave;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private TextArea txt_desc;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
-
-    private final GoogleDriveTask gDriveTask = new GoogleDriveTask();
+    private DatabaseTasks db;
+    private boolean signedIn = false;
 
     /**
      * Initializes the controller class.
      */
-    @FXML
     public void initialize() {
         logger.log(Level.INFO, "Initializing Controls");
 
@@ -118,8 +137,8 @@ public class UIController {
 
             btn_NetBeans.setDisable(true);
             btn_MySql.setDisable(true);
-            btn_backup.setDisable(true);
-            btn_restore.setDisable(true);
+            btn_m_backup.setDisable(true);
+            btn_m_restore.setDisable(true);
         }
 
         spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
@@ -129,17 +148,74 @@ public class UIController {
 
         btn_MySql.setOnAction(e -> executor.submit(new MySqlRunner()));
 
-        btn_userAction.setOnAction(e -> {
-            GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(new File("log.txt"),
-                    "Log File created by AUtDv2");
-            Future<String> resp = executor.submit(task);
-            checkDriveSuccess(resp);
+        btn_userAction.setOnAction(this::setUserInfo);
+
+        btn_m_backup.setOnAction(this::btn_backup_handler);
+        btn_m_restore.setOnAction(this::btn_restore_handler);
+
+        btn_browse.setOnAction((e) -> {
+            DirectoryChooser dir = new DirectoryChooser();
+            File f = dir.showDialog(null);
+            txt_location.setText(f.toString());
         });
+        btn_n_backup.setOnAction(this::btn_n_backup_handler);
 
-        btn_backup.setOnAction(this::btn_backup_handler);
-        btn_restore.setOnAction(this::btn_restore_handler);
+        btn_cwSave.setOnAction(this::btn_cwSave_handler);
+    }
 
-        btn_browse.setOnAction(this::btn_browse_handler);
+    private void btn_cwSave_handler(ActionEvent e) {
+        int cw = spinner_cwNo.getValue();
+        LocalDate date = datePicker.getValue();
+        ClassWork.Topic topic = null;
+        switch (cb_topic.getValue()) {
+            case "Java":
+                topic = Topic.JAVA;
+                break;
+            case "MySQL":
+                topic = Topic.MYSQL;
+                break;
+        }
+        String desc = txt_desc.getText();
+
+        ClassWork clswrk = new ClassWork(cw, date, topic, desc);
+
+        try {
+            db = new DatabaseTasks();
+            db.writeCW(clswrk);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Database Error", ex);
+        }
+    }
+
+    private void setUserInfo(ActionEvent e) {
+        if (signedIn) {
+            GoogleDrive.invalidate();
+            btn_userAction.setText("Sign In");
+            img_user.setImage(null);
+            txt_welcome.setText("Welcome! Click 'Sign In' to backup to "
+                    + "Google Drive");
+            signedIn = false;
+        } else {
+            signedIn = true;
+            btn_userAction.setText("Sign Out");
+            logger.log(Level.INFO, "Gathering user info");
+            Future<List<String>> resp = executor.submit(new UserInfoTask());
+
+            new Thread(() -> {
+                List<String> info;
+                try {
+                    info = resp.get();
+                    Platform.runLater(() -> {
+                        txt_welcome.setText("Welcome " + info.get(0) + "! "
+                                + "Have a nice Day.");
+                        img_user.setImage(new Image(info.get(1),
+                                64, 64, true, true, true));
+                    });
+                } catch (InterruptedException | ExecutionException ex) {
+                    logger.log(Level.SEVERE, "Error getting user info", ex);
+                }
+            }, "User info thread").start();
+        }
     }
 
     private void btn_backup_handler(ActionEvent e) {
