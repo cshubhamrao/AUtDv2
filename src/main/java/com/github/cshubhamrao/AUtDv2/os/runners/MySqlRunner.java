@@ -25,10 +25,8 @@ package com.github.cshubhamrao.AUtDv2.os.runners;
 
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -36,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.SortedSet;
@@ -58,18 +55,25 @@ public class MySqlRunner extends AppRunner {
         switch (os) {
             case WINDOWS:
                 /*
-                 Basically we run mysql through a cmd.exe(1) which "starts" another cmd.exe(2) with
-                 appropriate title and command line args for mysql.exe.
-                 cmd.exe(1) exits immediately after running cmd.exe(2), making mysql command prompt
-                 run independent of the program.
+                Basically we run mysql through a cmd.exe(1) which "starts"
+                another cmd.exe(2) with appropriate title and command line args
+                for mysql.exe.
 
-                 MODIFY AT YOUR OWN RISK
-                 Took hours to figure out and "understand" how to make this work as expected.
+                cmd.exe(1) exits immediately after running cmd.exe(2), making
+                mysql command prompt run independent of the program.
+
+                MODIFY AT YOUR OWN RISK
+                Took hours to figure out and "understand" how to make this work
+                as expected.
                  */
-                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
+                String cmd = Paths.get(System.getenv("WINDIR"), "system32",
+                        "cmd.exe").toString();
                 command.setCommandName(cmd);
 
-                // Makes cmd.exe(1) accept a "command" and exit immediately after execution.
+                /*
+                Makes cmd.exe(1) accept a "command" and exit immediately
+                after execution.
+                */
                 command.addArguments("/C");
 
                 // "command" for cmd.exe(1) is "start"
@@ -80,7 +84,8 @@ public class MySqlRunner extends AppRunner {
                 command.addArguments("cmd /C", "mysql.exe", "-uroot", "-p");
                 break;
             case MAC:
-                logger.log(Level.WARNING, "Mac OS is untesed. Things may not work.");
+                logger.log(Level.WARNING,
+                        "Mac OS is untesed. Things may not work.");
             case LINUX:
                 command.setCommandName("mysql");
                 break;
@@ -120,7 +125,8 @@ public class MySqlRunner extends AppRunner {
         }
 
         mySqlLocs.forEach(path
-                -> logger.log(Level.INFO, "Adding MySQL Location: {0}", path.toString()));
+                -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
+                        path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());

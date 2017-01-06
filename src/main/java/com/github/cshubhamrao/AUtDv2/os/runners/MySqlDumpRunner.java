@@ -25,10 +25,8 @@ package com.github.cshubhamrao.AUtDv2.os.runners;
 
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -36,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.SortedSet;
@@ -45,8 +42,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Runs mysqldump to create DB dumps. The dumps are stored as {@code dbName.sql} in the current
- * directory. The database is assumed to exist.
+ * Runs mysqldump to create DB dumps. The dumps are stored as {@code dbName.sql}
+ * in the current directory. The database is assumed to exist.
  *
  * @author Shubham Rao (cshubhamrao@gmail.com)
  */
@@ -79,12 +76,16 @@ public class MySqlDumpRunner extends AppRunner {
         CommandLine command = new CommandLine();
         switch (os) {
             case WINDOWS:
-                String cmd = Paths.get(System.getenv("WINDIR"), "system32", "cmd.exe").toString();
-                command.setCommandName(Paths.get(windowsLocation(), "mysqldump.exe").toString());
-                command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
+                String cmd = Paths.get(System.getenv("WINDIR"), "system32",
+                        "cmd.exe").toString();
+                command.setCommandName(Paths.get(windowsLocation(),
+                        "mysqldump.exe").toString());
+                command.addArguments("--user=root",
+                        "--password=" + "\"" + password + "\"");
                 command.addArguments("--hex-blob");
                 command.addArguments("--result-file="
-                        + Paths.get("", dbName + ".sql").toAbsolutePath().toString());
+                        + Paths.get("", dbName + ".sql")
+                                .toAbsolutePath().toString());
                 command.addArguments("\"" + dbName + "\"");
         }
         logger.log(Level.INFO, "Dumping {0}", dbName);
@@ -98,19 +99,21 @@ public class MySqlDumpRunner extends AppRunner {
         for (Path dir : progDirs) {
             System.out.println(dir);
             try {
-                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class), 3,
-                        new SimpleFileVisitor<Path>() {
+                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class),
+                        3, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path p,
                             BasicFileAttributes bfa) throws IOException {
-                        if (p.getFileName().toString().contains("MySQL Server")) {
-                            mySqlLocs.add(p);
+                        if (p.getFileName().toString()
+                                .contains("MySQL Server")) {
+                             mySqlLocs.add(p);
                         }
                         return FileVisitResult.CONTINUE;
                     }
 
                     @Override
-                    public FileVisitResult visitFileFailed(Path t, IOException ioe)
+                    public FileVisitResult visitFileFailed(Path t,
+                            IOException ioe)
                             throws IOException {
                         return FileVisitResult.CONTINUE;
                     }
@@ -121,7 +124,8 @@ public class MySqlDumpRunner extends AppRunner {
         }
 
         mySqlLocs.forEach(path
-                -> logger.log(Level.INFO, "Adding MySQL Location: {0}", path.toString()));
+                -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
+                        path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());

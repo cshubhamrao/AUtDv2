@@ -24,9 +24,7 @@
 package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +34,8 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
- * Main GUI class for application. This class loads the {@code MainUI.fxml} file and displays the
- * rendered GUI.
+ * Main GUI class for application. This class loads the {@code MainUI.fxml} file
+ * and displays the rendered GUI.
  *
  * @see UIController
  * @author Shubham Rao
@@ -53,9 +51,10 @@ public class MainUI extends Application {
             root = FXMLLoader.load(getClass().getResource("/gui/MainUI.fxml"));
             primaryStage.setScene(new Scene(root));
         } catch (IOException ex) {
-            logger.log(java.util.logging.Level.SEVERE, "Error in loading main FXML", ex);
-            new Alert(Alert.AlertType.ERROR, "Fatal Error in loading GUI. Exiting...")
-                    .showAndWait();
+            logger.log(java.util.logging.Level.SEVERE,
+                    "Error in loading main FXML", ex);
+            new Alert(Alert.AlertType.ERROR,
+                    "Fatal Error in loading GUI. Exiting...").showAndWait();
             Platform.exit();
         }
 

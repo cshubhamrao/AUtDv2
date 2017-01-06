@@ -24,10 +24,8 @@
 package com.github.cshubhamrao.AUtDv2.os;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -113,23 +111,26 @@ public class OSLib {
         }
         /*
         ¯\_(ツ)_/¯
-        STORY TIME: with a brave warrior tester [REDACTED], a troubled developer, a [baby-like]app
-        and a [sluggish]PC
-        Once upon a time (24/08/2016, 22:54 + ~00:20:00), a troubled developer (no points for
-        guessing who) was in conversation about the pre-alpha build of his app. As with everything,
-        things did not work(tm). Our brave warrior, [REDACTED] battled through strange errors (with
-        no error info) about JVM creation; then updating JRE version; then inconsistent behaviour of
-        GUI vs CMD... all on the (mobile)phone. Finally the GUI window opens, our warrior tester,
-        [REDACTED] clicks "Run NetBeans", lo and behold, *nothing* happens. [REDACTED] tries again,
-        and the app... does nothing. "What went wrong?" That is the answer to the question.
-        "Check the Logs"... The logs are searched, the logs are scoured and our warrior finds...
-        *NOTHING*, literally. The logs have no mention of anything, let alone mention of *something*
-        going wrong.
+        STORY TIME: with a brave warrior tester named [REDACTED], a troubled
+        developer, a [baby-like]app and a [sluggish]PC.
+        Once upon a time (24/08/2016, 22:54 + ~00:20:00), a troubled developer
+        (no points for guessing who) was in conversation about the pre-alpha
+        build of his app. As with everything things did not work(as always). Our
+        brave warrior, [REDACTED] battled through strange errors (with actual,
+        useful error info) about JVM creation; then updating JRE version; then
+        inconsistent behaviour of results on GUI vs CMD... all while talking on
+        the (mobile)phone. Finally the GUI window opens, our warrior tester,
+        [REDACTED] clicks "Run NetBeans", lo and behold, *nothing* happens.
+        [REDACTED] tries again, and the app... does nothing. "What went wrong?"
+        That is the answer to the question. "Check the Logs"... The logs are
+        searched, the logs are scoured and our warrior finds... *NOTHING*,
+        literally. The logs have no mention of anything, let alone mention of
+        *something* going wrong.
         So what went wrong?
-        Our warrior tester used 32-bit Windows, a platform our baby app is not accustomed to.
-        Guardian Java does little to intim[id]ate the app. Wrong architecture detection, thanks to
-        Java and app thinks the architecture is UNKNOWN. Java please be consistent. Return my 12
-        hours...
+        Our warrior tester used 32-bit Windows, a platform our baby app is not
+        accustomed to. Guardian Java does little to intim[id]ate the app. Wrong
+        architecture detection, thanks to Java and app thinks the architecture
+        is UNKNOWN. Java please be consistent. Return my 12 hours...
          */
 
         //      JAVA, Y U MAKE ME DO DIS?   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -142,7 +143,8 @@ public class OSLib {
     /**
      * Returns directories where installed programs *can* be found.
      *
-     * Current support is only for Windows, where it returns the "Program Files" directory.
+     * Current support is only for Windows, where it returns the "Program Files"
+     * directory.
      *
      * @return List of paths where programs can be installed.
      */
