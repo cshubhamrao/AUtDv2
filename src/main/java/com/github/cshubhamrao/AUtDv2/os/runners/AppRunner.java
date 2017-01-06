@@ -25,20 +25,18 @@ package com.github.cshubhamrao.AUtDv2.os.runners;
 
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 /**
- * An interface to allow running programs from the OS. Implementations have to set the
- * {@link CommandLine} for the application to be executed, by overriding the
- * {@link AppRunner#setCommand()} and calling {@link AppRunner#setCommand(CommandLine)} inside the
- * method.
+ * An interface to allow running programs from the OS. Implementations have to
+ * set the {@link CommandLine} for the application to be executed, by overriding
+ * the {@link AppRunner#setCommand()} and calling
+ * {@link AppRunner#setCommand(CommandLine)} inside the method.
  *
  * @see OSLib
  * @author Shubham Rao (cshubhamrao@gmail.com)
@@ -50,8 +48,8 @@ public abstract class AppRunner implements Callable<Integer> {
     /**
      * Sets the {@link CommandLine} to execute.
      *
-     * This function must be called by implementations inside {@link AppRunner#setCommand()} when it
-     * is overridden.
+     * This function must be called by implementations inside
+     * {@link AppRunner#setCommand()} when it is overridden.
      *
      * @param command command to execute
      */
@@ -110,7 +108,8 @@ public abstract class AppRunner implements Callable<Integer> {
     /**
      * Class representing a Command along with its arguments.
      *
-     * Encapsulates an OS dependent Command, with executable's name and its arguments.
+     * Encapsulates an OS dependent Command, with executable's name and its
+     * arguments.
      *
      * @author Shubham Rao (cshubhamrao@gmail.com)
      */
@@ -185,7 +184,8 @@ public abstract class AppRunner implements Callable<Integer> {
         /**
          * Returns the command name along with its arguments.
          *
-         * First element is the command name, remaining elements are its arguments.
+         * First element is the command name, remaining elements are its
+         * arguments.
          *
          * @return command with arguments included.
          */
@@ -197,7 +197,8 @@ public abstract class AppRunner implements Callable<Integer> {
         /**
          * Sets the command name along with its arguments.
          *
-         * First element must be the command name, remaining elements, its arguments.
+         * First element must be the command name, remaining elements, its
+         * arguments.
          *
          * @param fullCommand command along with arguments
          */
