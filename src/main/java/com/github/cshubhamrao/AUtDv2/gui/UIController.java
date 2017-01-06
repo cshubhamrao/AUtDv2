@@ -198,7 +198,7 @@ public class UIController {
             try {
                 File f = resp.get().toFile();
                 if (f.exists()) {
-                    GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(f,
+                    UploadTask task = new UploadTask(f,
                             "Project Backup created by AUtDv2");
                     Future<String> res = executor.submit(task);
                     checkDriveSuccess(res);
@@ -223,7 +223,7 @@ public class UIController {
                             -> new Alert(Alert.AlertType.INFORMATION,
                                     "Database backup created")
                             .show());
-                    GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(
+                    UploadTask task = new UploadTask(
                             new File(dbName + ".sql"),
                             "Backup of Database: " + dbName);
                     Future<String> authResp = executor.submit(task);
