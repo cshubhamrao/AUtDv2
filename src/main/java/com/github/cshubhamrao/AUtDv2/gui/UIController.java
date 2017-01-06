@@ -108,10 +108,11 @@ public class UIController {
                 || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
 
             new Alert(Alert.AlertType.ERROR,
-                    "Unable to determine current OS and/or System Architecture. "
-                    + "Any OS-dependent functionality will not work")
+                    "Unable to determine current OS and/or System Architecture."
+                    + " Any OS-dependent functionality will not work")
                     .showAndWait();
-            logger.log(Level.SEVERE, "Unable to detect OS and/or architecture reliably");
+            logger.log(Level.SEVERE, "Unable to detect OS and/or architecture"
+                    + " reliably");
             logger.log(Level.CONFIG, OSLib.getCurrentArchitecture().toString());
             logger.log(Level.CONFIG, OSLib.getCurrentOS().toString());
 
@@ -148,9 +149,11 @@ public class UIController {
             new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
         }
         if (dbName.isEmpty() || dbName.contains(" ")) {
-            new Alert(Alert.AlertType.WARNING, "Invalid name for Database").showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
+                    .showAndWait();
         } else {
-            Future<Integer> resp = executor.submit(new MySqlDumpRunner(dbName, password));
+            Future<Integer> resp = executor.submit(new MySqlDumpRunner(dbName,
+                    password));
             uploadSql(resp, dbName);
         }
     }
@@ -163,27 +166,29 @@ public class UIController {
         }
         File sqlFile = Paths.get(dbName + ".sql").toFile();
         if (dbName.isEmpty() || dbName.contains(" ")) {
-            new Alert(Alert.AlertType.WARNING, "Invalid name for Database").showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
+                    .showAndWait();
             return;
         }
         if (sqlFile.exists() && sqlFile.canRead()) {
             Future<Integer> resp = executor.submit(
-                    new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName, password));
+                    new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName,
+                            password));
             checkImportSuccess(resp);
         } else {
             new Alert(Alert.AlertType.ERROR,
-                    ".sql file containing backup of Database \"" + dbName + "\" not found.\n"
-                    + "Tip: To restore to another Database, rename the .sql file to desired "
+                    ".sql file containing backup of Database \"" + dbName
+                    + "\" not found.\n"
+                    + "Tip: To restore to another Database, rename the .sql"
+                    + " file to desired "
                     + "Database's name.\n"
                     + "File name: " + sqlFile.getAbsolutePath())
                     .showAndWait();
         }
     }
 
-    private void btn_browse_handler(ActionEvent e) {
-        DirectoryChooser dir = new DirectoryChooser();
-        File f = dir.showDialog(null);
-        txt_location.setText(f.toString());
+    private void btn_n_backup_handler(ActionEvent e) {
+        File f = new File(txt_location.getText());
         Future<Path> result = executor.submit(new CreateZipTask(f));
         uploadZip(result);
     }
@@ -199,7 +204,8 @@ public class UIController {
                     checkDriveSuccess(res);
                 } else {
                     Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR, "Creating zip file failed. "
+                            -> new Alert(Alert.AlertType.ERROR,
+                                    "Creating zip file failed. "
                                     + "Please try again").showAndWait());
                 }
             } catch (InterruptedException | ExecutionException ex) {
@@ -214,7 +220,8 @@ public class UIController {
                 int exit = resp.get();
                 if (exit == 0) {
                     Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION, "Database backup created")
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                    "Database backup created")
                             .show());
                     GoogleDriveTask.UploadTask task = gDriveTask.new UploadTask(
                             new File(dbName + ".sql"),
@@ -224,7 +231,8 @@ public class UIController {
                 } else {
                     Platform.runLater(()
                             -> new Alert(Alert.AlertType.ERROR,
-                                    "Unable to create Backup of database").show());
+                                    "Unable to create Backup of database")
+                            .show());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error in sql backup", ex);

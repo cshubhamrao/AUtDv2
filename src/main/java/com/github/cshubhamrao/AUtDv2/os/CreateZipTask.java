@@ -24,10 +24,8 @@
 package com.github.cshubhamrao.AUtDv2.os;
 
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +33,6 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -46,7 +43,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Creates a .zip of the "Path" passed.
  *
- * @author "Shubham Rao <cshubhamrao@gmail.com>"
+ * @author "Shubham Rao (cshubhamrao@gmail.com)"
  */
 public class CreateZipTask implements Callable<Path> {
 
@@ -69,13 +66,15 @@ public class CreateZipTask implements Callable<Path> {
 
         long time = System.currentTimeMillis();
 
-        try (ZipOutputStream zipStream = new ZipOutputStream(Files.newOutputStream(
-                zipFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
+        try (ZipOutputStream zipStream = new ZipOutputStream(
+                Files.newOutputStream(zipFile, StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING))) {
             Files.walkFileTree(folder, new ZipperVisitor(zipStream, folder));
         }
-
         long newTime = System.currentTimeMillis();
-        logger.log(Level.INFO, "Took {0} ms to create zip file", (newTime - time));
+
+        logger.log(Level.INFO, "Took {0} ms to create zip file",
+                (newTime - time));
         return zipFile;
     }
 
@@ -84,14 +83,16 @@ public class CreateZipTask implements Callable<Path> {
         private final ZipOutputStream zipStream;
         private final Path rootDir;
 
-        private ZipperVisitor(ZipOutputStream zipStream, Path rootDir) throws IOException {
+        private ZipperVisitor(ZipOutputStream zipStream, Path rootDir)
+                throws IOException {
             this.rootDir = rootDir;
             this.zipStream = zipStream;
             zipStream.setLevel(6);
         }
 
         @Override
-        public FileVisitResult preVisitDirectory(Path p, BasicFileAttributes bfa) throws IOException {
+        public FileVisitResult preVisitDirectory(Path p, BasicFileAttributes bfa)
+                throws IOException {
             List<String> ignoredDirs = Arrays.asList(new String[]{
                 ".git",
                 "build",
@@ -105,7 +106,8 @@ public class CreateZipTask implements Callable<Path> {
         }
 
         @Override
-        public FileVisitResult visitFile(Path p, BasicFileAttributes bfa) throws IOException {
+        public FileVisitResult visitFile(Path p, BasicFileAttributes bfa)
+                throws IOException {
             String relativeEntry = rootDir.getParent().relativize(p).toString();
             relativeEntry = relativeEntry.replaceAll("\\\\", "/");
             zipStream.putNextEntry(new ZipEntry(relativeEntry));

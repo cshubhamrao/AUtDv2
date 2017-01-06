@@ -25,11 +25,9 @@ package com.github.cshubhamrao.AUtDv2.os.runners;
 
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -37,7 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.SortedSet;
@@ -83,8 +80,10 @@ public class MySqlImportRunner extends AppRunner {
         CommandLine command = new CommandLine();
         switch (os) {
             case WINDOWS:
-                command.setCommandName(Paths.get(windowsLocation(), "mysql.exe").toString());
-                command.addArguments("--user=root", "--password=" + "\"" + password + "\"");
+                command.setCommandName(Paths.get(windowsLocation(),
+                        "mysql.exe").toString());
+                command.addArguments("--user=root",
+                        "--password=" + "\"" + password + "\"");
                 command.addArguments("-e");
                 command.addArguments("\"source " + tempSqlFile() + "\"");
         }
@@ -99,8 +98,8 @@ public class MySqlImportRunner extends AppRunner {
         for (Path dir : progDirs) {
             System.out.println(dir);
             try {
-                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class), 3,
-                        new SimpleFileVisitor<Path>() {
+                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class),
+                        3, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path p,
                             BasicFileAttributes bfa) throws IOException {
@@ -122,7 +121,8 @@ public class MySqlImportRunner extends AppRunner {
         }
 
         mySqlLocs.forEach(path
-                -> logger.log(Level.INFO, "Adding MySQL Location: {0}", path.toString()));
+                -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
+                        path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());

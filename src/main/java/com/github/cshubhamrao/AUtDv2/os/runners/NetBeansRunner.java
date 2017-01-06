@@ -25,13 +25,10 @@ package com.github.cshubhamrao.AUtDv2.os.runners;
 
 import com.github.cshubhamrao.AUtDv2.os.OSLib;
 import com.github.cshubhamrao.AUtDv2.util.Log;
-
 import java.io.IOException;
-
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -69,7 +66,8 @@ public class NetBeansRunner extends AppRunner {
         List<Path> progDirs = OSLib.getProgramDirs();
 
         for (Path dirs : progDirs) {
-            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs, "NetBeans*")) {
+            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs,
+                    "NetBeans*")) {
                 subDirs.forEach((pat) -> {
                     nbLocs.add(pat);
                     logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
