@@ -264,22 +264,17 @@ public class UIController {
             try {
                 String fileId = resp.get();
                 if (fileId == null) {
-                    new Alert(Alert.AlertType.ERROR,
-                            "Upload to Google Drive failed. Please try again")
-                            .showAndWait();
-                } // DEBUG:
-                else {
-                    URI driveURI = new URI("https://drive.google.com/file/d/" + fileId + "/view");
                     Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION, "File Uploaded\n"
-                                    + "Opening the file in browser...").show());
-                    Desktop.getDesktop().browse(driveURI);
+                            -> new Alert(Alert.AlertType.ERROR,
+                                    "Upload to Google Drive failed. "
+                                    + "Please try again").showAndWait());
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                    "File Uploaded").show());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);
-                //DEBUG
-            } catch (URISyntaxException | IOException ex) {
-                logger.log(Level.SEVERE, "Error in oprning URL", ex);
             }
         }, "Upload Check Thread").start();
     }
