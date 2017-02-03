@@ -73,8 +73,7 @@ SOFTWARE.
               <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
               <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
               <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
-              <RowConstraints minHeight="10.0" 
-                              prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+              <RowConstraints minHeight="10.0" valignment="TOP" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
               <Label alignment="CENTER_RIGHT" text="C.W. / Period&#10;Number:" 
@@ -83,8 +82,7 @@ SOFTWARE.
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
               </Label>
-              <Spinner fx:id="spinner_cwNo" maxWidth="Infinity" GridPane.columnIndex="1" 
-                       GridPane.hgrow="ALWAYS" GridPane.valignment="BASELINE">
+              <Spinner fx:id="spinner_cwNo" editable="true" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="BASELINE">
                 <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
@@ -125,8 +123,15 @@ SOFTWARE.
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
               </TextArea>
-              <Button fx:id="btn_cwSave" mnemonicParsing="false" text="Save to DB" 
-                      GridPane.rowIndex="4" />
+              <Button fx:id="btn_cwInsert" mnemonicParsing="false" text="Save New CW" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <GridPane.margin>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </GridPane.margin></Button>
+                     <Button fx:id="btn_cwUpdate" mnemonicParsing="false" text="Update CW" GridPane.rowIndex="4">
+                        <GridPane.margin>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </GridPane.margin>
+                     </Button>
             </children>
             <padding>
               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

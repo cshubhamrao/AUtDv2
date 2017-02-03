@@ -29,7 +29,7 @@ import java.time.LocalDate;
  *
  * @author "Shubham Rao (cshubhamrao@gmail.com)"
  */
-public class ClassWork {
+public class Classwork {
 
     private int rowID;
     public static final String tblName = "ClassWork";
@@ -40,7 +40,7 @@ public class ClassWork {
     private Topic topic;
     private String description;
 
-    public ClassWork(int cwNo, LocalDate date, Topic topic, String desc) {
+    public Classwork(int cwNo, LocalDate date, Topic topic, String desc) {
         cw_number = cwNo;
         this.date = date;
         this.topic = topic;
@@ -74,6 +74,14 @@ public class ClassWork {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getRowID() {
+        return rowID;
+    }
+
+    public void setRowID(int rowID) {
+        this.rowID = rowID;
     }
 
     public enum Topic {
