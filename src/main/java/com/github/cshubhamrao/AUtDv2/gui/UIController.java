@@ -24,8 +24,8 @@
 package com.github.cshubhamrao.AUtDv2.gui;
 
 import com.github.cshubhamrao.AUtDv2.db.DatabaseTasks;
-import com.github.cshubhamrao.AUtDv2.models.ClassWork;
-import com.github.cshubhamrao.AUtDv2.models.ClassWork.Topic;
+import com.github.cshubhamrao.AUtDv2.models.Classwork;
+import com.github.cshubhamrao.AUtDv2.models.Classwork.Topic;
 import com.github.cshubhamrao.AUtDv2.net.GoogleDrive;
 import com.github.cshubhamrao.AUtDv2.net.UploadTask;
 import com.github.cshubhamrao.AUtDv2.net.UserInfoTask;
@@ -39,7 +39,6 @@ import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -48,6 +47,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,12 +58,15 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class. for {@code MainUI.fxml}
@@ -107,7 +110,9 @@ public class UIController {
     @FXML
     private TextField txt_location;
     @FXML
-    private Button btn_cwSave;
+    private Button btn_cwInsert;
+    @FXML
+    private Button btn_cwUpdate;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -116,6 +121,7 @@ public class UIController {
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private DatabaseTasks db;
     private boolean signedIn = false;
+    private int presentRow = 0;
 
     /**
      * Initializes the controller class.
@@ -140,8 +146,15 @@ public class UIController {
             btn_m_backup.setDisable(true);
             btn_m_restore.setDisable(true);
         }
-
-        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
+        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(1,
+                Integer.MAX_VALUE);
+        TextFormatter formatter = new TextFormatter(factory.getConverter(),
+                factory.getValue());
+        spinner_cwNo.getEditor().setTextFormatter(formatter);
+        factory.valueProperty().bindBidirectional(formatter.valueProperty());
+        spinner_cwNo.setValueFactory(factory);
+        spinner_cwNo.getValueFactory().setValue(0);
+//        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
         cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
 
         btn_NetBeans.setOnAction(e -> executor.submit(new NetBeansRunner()));
@@ -160,13 +173,16 @@ public class UIController {
         });
         btn_n_backup.setOnAction(this::btn_n_backup_handler);
 
-        btn_cwSave.setOnAction(this::btn_cwSave_handler);
+        btn_cwUpdate.setDisable(true);
+        btn_cwInsert.setOnAction(this::btn_cwInsert_handler);
+        btn_cwUpdate.setOnAction(this::btn_cwUpdate_handler);
+        spinner_cwNo.valueProperty().addListener(this::fetchClasswork);
     }
 
-    private void btn_cwSave_handler(ActionEvent e) {
-        int cw = spinner_cwNo.getValue();
+    private Classwork getCw() {
+        int cwno = spinner_cwNo.getValue();
         LocalDate date = datePicker.getValue();
-        ClassWork.Topic topic = null;
+        Classwork.Topic topic = null;
         switch (cb_topic.getValue()) {
             case "Java":
                 topic = Topic.JAVA;
@@ -176,15 +192,58 @@ public class UIController {
                 break;
         }
         String desc = txt_desc.getText();
+        Classwork cw = new Classwork(cwno, date, topic, desc);
+        return cw;
+    }
 
-        ClassWork clswrk = new ClassWork(cw, date, topic, desc);
+    private void btn_cwInsert_handler(ActionEvent e) {
+        new Thread(() -> {
+            presentRow = DatabaseTasks.writeCW(getCw());
+            if (presentRow == 0) {
+                Platform.runLater(()
+                        -> new Alert(Alert.AlertType.ERROR,
+                                "Error Writing to DB").show());
+            } else {
+                Platform.runLater(() -> {
+                    btn_cwUpdate.setDisable(false);
+                    btn_cwInsert.setDisable(true);
+                });
+            }
+        }).start();
+    }
 
-        try {
-            db = new DatabaseTasks();
-            db.writeCW(clswrk);
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Database Error", ex);
-        }
+    private void btn_cwUpdate_handler(ActionEvent e) {
+        new Thread(() -> {
+            DatabaseTasks.updateCW(presentRow, getCw());
+            if (presentRow == 0) {
+                Platform.runLater(()
+                        -> new Alert(Alert.AlertType.ERROR,
+                                "Error Writing to DB").show());
+            }
+        }).start();
+    }
+
+    private void fetchClasswork(ObservableValue obs, int old, int newVal) {
+        new Thread(() -> {
+            Classwork cw = DatabaseTasks.fetchCW(newVal);
+
+            Platform.runLater(() -> {
+                if (cw != null) {
+                    datePicker.setValue(cw.getDate());
+                    cb_topic.setValue(cw.getTopic());
+                    txt_desc.setText(cw.getDescription());
+                    presentRow = cw.getRowID();
+                    btn_cwInsert.setDisable(true);
+                    btn_cwUpdate.setDisable(false);
+                } else {
+                    btn_cwUpdate.setDisable(true);
+                    btn_cwInsert.setDisable(false);
+                    datePicker.setValue(LocalDate.now());
+                    cb_topic.setValue("Java");
+                    txt_desc.setText("");
+                }
+            });
+        }).start();
     }
 
     private void setUserInfo(ActionEvent e) {
@@ -354,4 +413,20 @@ public class UIController {
             }
         }, "Upload Check Thread").start();
     }
+
+    private <T> void commitEditorText(Spinner<T> spinner) {
+        if (!spinner.isEditable()) {
+            return;
+        }
+        String text = spinner.getEditor().getText();
+        SpinnerValueFactory<T> valueFactory = spinner.getValueFactory();
+        if (valueFactory != null) {
+            StringConverter<T> converter = valueFactory.getConverter();
+            if (converter != null) {
+                T value = converter.fromString(text);
+                valueFactory.setValue(value);
+            }
+        }
+    }
+
 }
