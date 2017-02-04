@@ -78,21 +78,21 @@ public class UIController {
     private static final java.util.logging.Logger logger = Log.logger;
 
     @FXML
-    private Button btn_MySql;
+    private Button btn_runMySql;
     @FXML
-    private Button btn_NetBeans;
+    private Button btn_runNetBeans;
     @FXML
-    private Button btn_browse;
+    private Button btn_nbBrowse;
     @FXML
     private Button btn_cwInsert;
     @FXML
     private Button btn_cwUpdate;
     @FXML
-    private Button btn_m_backup;
+    private Button btn_dbBackup;
     @FXML
-    private Button btn_m_restore;
+    private Button btn_dbRestore;
     @FXML
-    private Button btn_n_backup;
+    private Button btn_nbBackup;
     @FXML
     private Button btn_userAction;
     @FXML
@@ -159,33 +159,33 @@ public class UIController {
             logger.log(Level.CONFIG, OSLib.getCurrentArchitecture().toString());
             logger.log(Level.CONFIG, OSLib.getCurrentOS().toString());
 
-            btn_NetBeans.setDisable(true);
-            btn_MySql.setDisable(true);
-            btn_m_backup.setDisable(true);
-            btn_m_restore.setDisable(true);
+            btn_runNetBeans.setDisable(true);
+            btn_runMySql.setDisable(true);
+            btn_dbBackup.setDisable(true);
+            btn_dbRestore.setDisable(true);
         }
     }
 
     private void setHandlers() {
-        btn_NetBeans.setOnAction(e -> executor.submit(new NetBeansRunner()));
-        btn_MySql.setOnAction(e -> executor.submit(new MySqlRunner()));
+        btn_runNetBeans.setOnAction(e -> executor.submit(new NetBeansRunner()));
+        btn_runMySql.setOnAction(e -> executor.submit(new MySqlRunner()));
 
-        btn_browse.setOnAction(e -> {
+        btn_nbBrowse.setOnAction(e -> {
             DirectoryChooser dir = new DirectoryChooser();
             File f = dir.showDialog(null);
             txt_location.setText(f.toString());
         });
 
-        btn_userAction.setOnAction(this::setUserInfo);
-        btn_m_backup.setOnAction(this::btn_sqlBackup_handler);
-        btn_m_restore.setOnAction(this::btn_restore_handler);
-        btn_n_backup.setOnAction(this::btn_n_backup_handler);
+        btn_userAction.setOnAction(this::btn_userAction_handler);
+        btn_dbBackup.setOnAction(this::btn_dbBackup_handler);
+        btn_dbRestore.setOnAction(this::btn_dbRestore_handler);
+        btn_nbBackup.setOnAction(this::btn_nbBackup_handler);
         btn_cwInsert.setOnAction(this::btn_cwInsert_handler);
         btn_cwUpdate.setOnAction(this::btn_cwUpdate_handler);
         spinner_cwNo.valueProperty().addListener(this::fetchClasswork);
     }
 
-    private void btn_sqlBackup_handler(ActionEvent e) {
+    private void btn_dbBackup_handler(ActionEvent e) {
         String dbName = txt_dbBackup.getText().trim();
         String password = txt_mySqlPass.getText();
         if (password.isEmpty()) {
@@ -229,13 +229,13 @@ public class UIController {
         }).start();
     }
 
-    private void btn_n_backup_handler(ActionEvent e) {
+    private void btn_nbBackup_handler(ActionEvent e) {
         File f = new File(txt_location.getText());
         Future<Path> result = executor.submit(new CreateZipTask(f));
         uploadZip(result);
     }
 
-    private void btn_restore_handler(ActionEvent e) {
+    private void btn_dbRestore_handler(ActionEvent e) {
         String dbName = txt_dbRestore.getText().trim();
         String password = txt_mySqlPass.getText();
         if (password.isEmpty()) {
@@ -358,7 +358,7 @@ public class UIController {
         return cw;
     }
 
-    private void setUserInfo(ActionEvent e) {
+    private void btn_userAction_handler(ActionEvent e) {
         if (signedIn) {
             GoogleDrive.invalidate();
             btn_userAction.setText("Sign In");
