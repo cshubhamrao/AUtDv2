@@ -81,9 +81,9 @@ public class MySqlImportRunner extends AppRunner {
         switch (os) {
             case WINDOWS:
                 command.setCommandName(Paths.get(windowsLocation(),
-                        "mysql.exe").toString());
+                                                 "mysql.exe").toString());
                 command.addArguments("--user=root",
-                        "--password=" + "\"" + password + "\"");
+                                     "--password=" + "\"" + password + "\"");
                 command.addArguments("-e");
                 command.addArguments("\"source " + tempSqlFile() + "\"");
         }
@@ -99,22 +99,24 @@ public class MySqlImportRunner extends AppRunner {
             System.out.println(dir);
             try {
                 Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class),
-                        3, new SimpleFileVisitor<Path>() {
-                    @Override
-                    public FileVisitResult preVisitDirectory(Path p,
-                            BasicFileAttributes bfa) throws IOException {
-                        if (p.getFileName().toString().contains("MySQL Server")) {
-                            mySqlLocs.add(p);
+                                   3, new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult preVisitDirectory(Path p,
+                                   BasicFileAttributes bfa) throws IOException {
+                            if (p.getFileName().toString()
+                                    .contains("MySQL Server")) {
+                                mySqlLocs.add(p);
+                            }
+                            return FileVisitResult.CONTINUE;
                         }
-                        return FileVisitResult.CONTINUE;
-                    }
 
-                    @Override
-                    public FileVisitResult visitFileFailed(Path t, IOException ioe)
-                            throws IOException {
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
+                        @Override
+                        public FileVisitResult visitFileFailed(Path t,
+                                                               IOException ioe)
+                                throws IOException {
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
                 if (mySqlLocs.isEmpty()){
                     throw new IOException("No valid loaction found");
                 }
@@ -125,7 +127,7 @@ public class MySqlImportRunner extends AppRunner {
 
         mySqlLocs.forEach(path
                 -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
-                        path.toString()));
+                              path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());
@@ -134,9 +136,9 @@ public class MySqlImportRunner extends AppRunner {
 
     private String tempSqlFile() {
         String commands = "DROP DATABASE IF EXISTS " + dbName + ";\n"
-                + "CREATE DATABASE " + dbName + ";\n"
-                + "USE " + dbName + ";\n"
-                + "source " + sqlFile;
+                          + "CREATE DATABASE " + dbName + ";\n"
+                          + "USE " + dbName + ";\n"
+                          + "source " + sqlFile;
         Path tmpFile;
         try {
             tmpFile = Files.createTempFile("AUtDv2_sqlFile_", ".sql");

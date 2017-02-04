@@ -68,13 +68,13 @@ public class CreateZipTask implements Callable<Path> {
 
         try (ZipOutputStream zipStream = new ZipOutputStream(
                 Files.newOutputStream(zipFile, StandardOpenOption.CREATE,
-                        StandardOpenOption.TRUNCATE_EXISTING))) {
+                                      StandardOpenOption.TRUNCATE_EXISTING))) {
             Files.walkFileTree(folder, new ZipperVisitor(zipStream, folder));
         }
         long newTime = System.currentTimeMillis();
 
         logger.log(Level.INFO, "Took {0} ms to create zip file",
-                (newTime - time));
+                   (newTime - time));
         return zipFile;
     }
 

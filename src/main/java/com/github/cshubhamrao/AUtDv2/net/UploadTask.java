@@ -89,7 +89,7 @@ public class UploadTask extends GoogleDrive implements Callable<String> {
         fileMetadata.setName(localFile.getName());
         fileMetadata.setDescription(description);
         content = new FileContent(Files.probeContentType(localFile.toPath()),
-                localFile);
+                                  localFile);
         try {
             logger.log(Level.INFO, "Begin upload");
             long then = System.currentTimeMillis();
@@ -99,10 +99,10 @@ public class UploadTask extends GoogleDrive implements Callable<String> {
                     .execute();
             long now = System.currentTimeMillis();
             logger.log(Level.INFO, "File {0} available at link {1}",
-                    new String[]{uploadedFile.getId(),
-                        uploadedFile.getWebViewLink()});
+                       new String[]{uploadedFile.getId(),
+                                    uploadedFile.getWebViewLink()});
             logger.log(Level.INFO, "Upload finished, took {0}s",
-                    (now - then) / 1.0e3);
+                       (now - then) / 1.0e3);
             fileId = uploadedFile.getId();
         } catch (java.net.SocketTimeoutException |
                  java.net.UnknownHostException ex) {

@@ -32,13 +32,13 @@ import java.time.LocalDate;
 public class Classwork {
 
     public static final String FIELD_LIST = "cw_no, date, topic, desc";
-    public static final String TABLE_NAME = "ClassWork";
+    public static final String TABLE_NAME = "Classwork";
 
     private int rowID;
-    private int cw_number;
-    private LocalDate date;
-    private Topic topic;
-    private String description;
+    private final int cw_number;
+    private final LocalDate date;
+    private final Topic topic;
+    private final String description;
 
     public Classwork(int cwNo, LocalDate date, Topic topic, String desc) {
         cw_number = cwNo;
@@ -50,8 +50,8 @@ public class Classwork {
     public static String getSchema() {
         String query;
         query = "CREATE TABLE IF NOT EXISTS "
-                + "ClassWork "
-                + "(rowId INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TABLE_NAME
+                + " (rowId INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "cw_no INT, "
                 + "date DATE NOT NULL, "
                 + "topic TEXT CHECK (topic IN('Java', 'MySQL')), "
