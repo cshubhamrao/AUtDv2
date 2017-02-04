@@ -58,7 +58,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -66,7 +65,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class. for {@code MainUI.fxml}
@@ -185,6 +183,37 @@ public class UIController {
         spinner_cwNo.valueProperty().addListener(this::fetchClasswork);
     }
 
+    private void btn_userAction_handler(ActionEvent e) {
+        if (signedIn) {
+            GoogleDrive.invalidate();
+            btn_userAction.setText("Sign In");
+            img_user.setImage(null);
+            txt_welcome.setText("Welcome! Click 'Sign In' to backup to "
+                                + "Google Drive");
+            signedIn = false;
+        } else {
+            signedIn = true;
+            btn_userAction.setText("Sign Out");
+            logger.log(Level.INFO, "Gathering user info");
+            Future<List<String>> resp = executor.submit(new UserInfoTask());
+
+            new Thread(() -> {
+                List<String> info;
+                try {
+                    info = resp.get();
+                    Platform.runLater(() -> {
+                        txt_welcome.setText("Welcome " + info.get(0) + "! "
+                                            + "Have a nice Day.");
+                        img_user.setImage(new Image(info.get(1),
+                                                    64, 64, true, true, true));
+                    });
+                } catch (InterruptedException | ExecutionException ex) {
+                    logger.log(Level.SEVERE, "Error getting user info", ex);
+                }
+            }, "User info thread").start();
+        }
+    }
+
     private void btn_dbBackup_handler(ActionEvent e) {
         String dbName = txt_dbBackup.getText().trim();
         String password = txt_mySqlPass.getText();
@@ -200,39 +229,6 @@ public class UIController {
             );
             uploadSql(resp, dbName);
         }
-    }
-
-    private void btn_cwInsert_handler(ActionEvent e) {
-        new Thread(() -> {
-            presentRow = DatabaseTasks.writeCW(getCw());
-            if (presentRow == 0) {
-                Platform.runLater(()
-                        -> new Alert(Alert.AlertType.ERROR,
-                                     "Error Writing to DB").show());
-            } else {
-                Platform.runLater(() -> {
-                    btn_cwUpdate.setDisable(false);
-                    btn_cwInsert.setDisable(true);
-                });
-            }
-        }).start();
-    }
-
-    private void btn_cwUpdate_handler(ActionEvent e) {
-        new Thread(() -> {
-            DatabaseTasks.updateCW(presentRow, getCw());
-            if (presentRow == 0) {
-                Platform.runLater(()
-                        -> new Alert(Alert.AlertType.ERROR,
-                                     "Error Writing to DB").show());
-            }
-        }).start();
-    }
-
-    private void btn_nbBackup_handler(ActionEvent e) {
-        File f = new File(txt_location.getText());
-        Future<Path> result = executor.submit(new CreateZipTask(f));
-        uploadZip(result);
     }
 
     private void btn_dbRestore_handler(ActionEvent e) {
@@ -264,24 +260,36 @@ public class UIController {
         }
     }
 
-    private void checkDriveSuccess(Future<String> resp) {
+    private void btn_nbBackup_handler(ActionEvent e) {
+        File f = new File(txt_location.getText());
+        Future<Path> result = executor.submit(new CreateZipTask(f));
+        uploadZip(result);
+    }
+
+    private void uploadSql(Future<Integer> dbResp, String dbName) {
         new Thread(() -> {
             try {
-                String fileId = resp.get();
-                if (fileId == null) {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                         "Upload to Google Drive failed. "
-                                         + "Please try again").showAndWait());
-                } else {
+                int exit = dbResp.get();
+                if (exit == 0) {
                     Platform.runLater(()
                             -> new Alert(Alert.AlertType.INFORMATION,
-                                         "File Uploaded").show());
+                                         "Database backup created")
+                            .show());
+                    UploadTask task = new UploadTask(
+                            new File(dbName + ".sql"),
+                            "Backup of Database: " + dbName);
+                    Future<String> driveResp = executor.submit(task);
+                    checkDriveSuccess(driveResp);
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                         "Unable to create Backup of database")
+                            .show());
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                logger.log(Level.SEVERE, "Error checking for success", ex);
+                logger.log(Level.SEVERE, "Error in sql backup", ex);
             }
-        }, "Upload Check Thread").start();
+        }, "DB Upload Thread").start();
     }
 
     private void checkImportSuccess(Future<Integer> resp) {
@@ -303,19 +311,51 @@ public class UIController {
         }, "Import DB thread").start();
     }
 
-    private <T> void commitEditorText(Spinner<T> spinner) {
-        if (!spinner.isEditable()) {
-            return;
-        }
-        String text = spinner.getEditor().getText();
-        SpinnerValueFactory<T> valueFactory = spinner.getValueFactory();
-        if (valueFactory != null) {
-            StringConverter<T> converter = valueFactory.getConverter();
-            if (converter != null) {
-                T value = converter.fromString(text);
-                valueFactory.setValue(value);
+    private void checkDriveSuccess(Future<String> resp) {
+        new Thread(() -> {
+            try {
+                String fileId = resp.get();
+                if (fileId == null) {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                         "Upload to Google Drive failed. "
+                                         + "Please try again").showAndWait());
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                         "File Uploaded").show());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error checking for success", ex);
             }
-        }
+        }, "Upload Check Thread").start();
+    }
+
+    private void btn_cwInsert_handler(ActionEvent e) {
+        new Thread(() -> {
+            presentRow = DatabaseTasks.writeCW(getCw());
+            if (presentRow == 0) {
+                Platform.runLater(()
+                        -> new Alert(Alert.AlertType.ERROR,
+                                     "Error Writing to DB").show());
+            } else {
+                Platform.runLater(() -> {
+                    btn_cwUpdate.setDisable(false);
+                    btn_cwInsert.setDisable(true);
+                });
+            }
+        }).start();
+    }
+
+    private void btn_cwUpdate_handler(ActionEvent e) {
+        new Thread(() -> {
+            DatabaseTasks.updateCW(presentRow, getCw());
+            if (presentRow == 0) {
+                Platform.runLater(()
+                        -> new Alert(Alert.AlertType.ERROR,
+                                     "Error Writing to DB").show());
+            }
+        }).start();
     }
 
     private void fetchClasswork(ObservableValue obs, int old, int newVal) {
@@ -356,63 +396,6 @@ public class UIController {
         String desc = txt_desc.getText();
         Classwork cw = new Classwork(cwno, date, topic, desc);
         return cw;
-    }
-
-    private void btn_userAction_handler(ActionEvent e) {
-        if (signedIn) {
-            GoogleDrive.invalidate();
-            btn_userAction.setText("Sign In");
-            img_user.setImage(null);
-            txt_welcome.setText("Welcome! Click 'Sign In' to backup to "
-                                + "Google Drive");
-            signedIn = false;
-        } else {
-            signedIn = true;
-            btn_userAction.setText("Sign Out");
-            logger.log(Level.INFO, "Gathering user info");
-            Future<List<String>> resp = executor.submit(new UserInfoTask());
-
-            new Thread(() -> {
-                List<String> info;
-                try {
-                    info = resp.get();
-                    Platform.runLater(() -> {
-                        txt_welcome.setText("Welcome " + info.get(0) + "! "
-                                            + "Have a nice Day.");
-                        img_user.setImage(new Image(info.get(1),
-                                                    64, 64, true, true, true));
-                    });
-                } catch (InterruptedException | ExecutionException ex) {
-                    logger.log(Level.SEVERE, "Error getting user info", ex);
-                }
-            }, "User info thread").start();
-        }
-    }
-
-    private void uploadSql(Future<Integer> resp, String dbName) {
-        new Thread(() -> {
-            try {
-                int exit = resp.get();
-                if (exit == 0) {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION,
-                                         "Database backup created")
-                            .show());
-                    UploadTask task = new UploadTask(
-                            new File(dbName + ".sql"),
-                            "Backup of Database: " + dbName);
-                    Future<String> authResp = executor.submit(task);
-                    checkDriveSuccess(authResp);
-                } else {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                         "Unable to create Backup of database")
-                            .show());
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.log(Level.SEVERE, "Error in sql backup", ex);
-            }
-        }, "DB Upload Thread").start();
     }
 
     private void uploadZip(Future<Path> resp) {
