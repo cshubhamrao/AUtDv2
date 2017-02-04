@@ -175,14 +175,12 @@ SOFTWARE.
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
               </TextField>
-              <Button fx:id="btn_m_backup" mnemonicParsing="false" text="Backup" 
-                      GridPane.rowIndex="3">
+              <Button fx:id="btn_dbBackup" mnemonicParsing="false" text="Backup" GridPane.rowIndex="3">
                 <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
               </Button>
-              <Button fx:id="btn_m_restore" mnemonicParsing="false" text="Restore" 
-                      GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <Button fx:id="btn_dbRestore" mnemonicParsing="false" text="Restore" GridPane.columnIndex="1" GridPane.rowIndex="3">
                 <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
@@ -229,8 +227,7 @@ SOFTWARE.
                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
                   </TextField>
-                  <Button fx:id="btn_browse" maxWidth="Infinity" minWidth="-Infinity" 
-                          prefHeight="26.0" text="Browse">
+                  <Button fx:id="btn_nbBrowse" maxWidth="Infinity" minWidth="-Infinity" prefHeight="26.0" text="Browse">
                     <HBox.margin>
                       <Insets bottom="5.0" left="5.0" top="5.0" />
                     </HBox.margin>
@@ -247,8 +244,7 @@ SOFTWARE.
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
               </TextField>
-              <Button fx:id="btn_n_backup" mnemonicParsing="false" text="Backup" 
-                      GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <Button fx:id="btn_nbBackup" mnemonicParsing="false" text="Backup" GridPane.columnIndex="1" GridPane.rowIndex="2">
                 <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </GridPane.margin>
@@ -268,13 +264,12 @@ SOFTWARE.
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-      <Button fx:id="btn_NetBeans" maxHeight="Infinity" maxWidth="Infinity" text="Start NetBeans">
+      <Button fx:id="btn_runNetBeans" maxHeight="Infinity" maxWidth="Infinity" text="Start NetBeans">
         <GridPane.margin>
           <Insets bottom="5.0" right="5.0" top="5.0" />
         </GridPane.margin>
       </Button>
-      <Button fx:id="btn_MySql" maxHeight="Infinity" maxWidth="Infinity" prefHeight="45.0" 
-              text="Start MySQL" GridPane.columnIndex="1">
+      <Button fx:id="btn_runMySql" maxHeight="Infinity" maxWidth="Infinity" prefHeight="45.0" text="Start MySQL" GridPane.columnIndex="1">
         <GridPane.margin>
           <Insets bottom="5.0" left="5.0" top="5.0" />
         </GridPane.margin>
