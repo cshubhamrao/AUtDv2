@@ -118,6 +118,9 @@ public class MySqlDumpRunner extends AppRunner {
                         return FileVisitResult.CONTINUE;
                     }
                 });
+                if (mySqlLocs.isEmpty()) {
+                    throw new IOException("No valid loaction found");
+                }
             } catch (UncheckedIOException | IOException ex) {
                 logger.log(Level.SEVERE, "Error locating MySQL", ex);
             }
