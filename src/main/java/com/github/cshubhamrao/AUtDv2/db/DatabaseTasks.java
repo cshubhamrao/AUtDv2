@@ -42,23 +42,50 @@ public class DatabaseTasks {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
-    private static Connection getConnection() {
-        Connection con = null;
-        int tries = 0;
-        while (tries < 10) {
-            try {
-                con = DriverManager.getConnection("jdbc:sqlite:autdv2.db");
-                logger.log(Level.INFO, "Got DB Connection");
-                break;
-            } catch (SQLException ex) {
-                tries++;
-                logger.log(Level.INFO, "DB connection failed, Retrying...", ex);
+    public static Classwork fetchCW(int cwNo) {
+        String query = "SELECT * FROM " + Classwork.TABLE_NAME
+                       + " WHERE cw_no = " + cwNo + " ORDER BY rowid DESC;";
+        try (Connection con = getConnection();
+             ResultSet rs = con.createStatement().executeQuery(query)) {
+            //This is always the first row
+            if (rs.next()) {
+                int no = rs.getInt(2);
+                LocalDate date = LocalDate.parse(rs.getString(3));
+                Classwork.Topic topic
+                                = Classwork.Topic.valueOf(rs.getString(4).toUpperCase());
+                String desc = rs.getString(5);
+                Classwork c = new Classwork(no, date, topic, desc);
+                c.setRowID(rs.getInt(1));
+                return c;
             }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error Fetching CW...", ex);
         }
-        if (con == null) {
-            logger.log(Level.SEVERE, "Unable to get connection to DB");
+        return null;
+    }
+
+    public static int updateCW(int rowid, Classwork cw) {
+        int newRow = 0;
+        try (Connection con = getConnection()) {
+            con.createStatement().executeUpdate(Classwork.getSchema());
+            String query
+                   = "UPDATE " + Classwork.TABLE_NAME + " SET "
+                     + "cw_no = ?, "
+                     + "date = ?, "
+                     + "topic = ?, "
+                     + "desc = ?"
+                     + "WHERE rowid = " + rowid + " ;";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setInt(1, cw.getCw_number());
+            stmt.setString(2, cw.getDate().toString());
+            stmt.setString(3, cw.getTopic());
+            stmt.setString(4, cw.getDescription());
+            stmt.executeUpdate();
+            newRow = rowid;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error Updating CW...", ex);
         }
-        return con;
+        return newRow;
     }
 
     public static int writeCW(Classwork cw) {
@@ -66,11 +93,12 @@ public class DatabaseTasks {
         PreparedStatement stmt = null;
         try (Connection con = getConnection()) {
             con.createStatement().executeUpdate(Classwork.getSchema());
-            String query = "INSERT INTO " + Classwork.tblName
-                    + "(" + Classwork.fieldList + ") "
-                    + "VALUES (?, ?, ?, ?)";
+            String query
+                   = "INSERT INTO " + Classwork.TABLE_NAME
+                     + "(" + Classwork.FIELD_LIST + ") "
+                     + "VALUES (?, ?, ?, ?)";
             stmt = con.prepareStatement(query,
-                    Statement.RETURN_GENERATED_KEYS);
+                                        Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, cw.getCw_number());
             stmt.setString(2, cw.getDate().toString());
             stmt.setString(3, cw.getTopic());
@@ -87,48 +115,22 @@ public class DatabaseTasks {
         return rowid;
     }
 
-    public static int updateCW(int rowid, Classwork cw) {
-        int newRow = 0;
-        try (Connection con = getConnection()) {
-            con.createStatement().executeUpdate(Classwork.getSchema());
-            String query = "UPDATE " + Classwork.tblName + " SET "
-                    + "cw_no = ?, "
-                    + "date = ?, "
-                    + "topic = ?, "
-                    + "desc = ?"
-                    + "WHERE rowid = " + rowid + " ;";
-            PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setInt(1, cw.getCw_number());
-            stmt.setString(2, cw.getDate().toString());
-            stmt.setString(3, cw.getTopic());
-            stmt.setString(4, cw.getDescription());
-            stmt.executeUpdate();
-            newRow = rowid;
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Error Updating CW...", ex);
-        }
-        return newRow;
-    }
-
-    public static Classwork fetchCW(int cwNo) {
-        String query = "SELECT * FROM " + Classwork.tblName
-                + " WHERE cw_no = " + cwNo + " ORDER BY rowid DESC;";
-        try (Connection con = getConnection();
-                ResultSet rs = con.createStatement().executeQuery(query);) {
-            //This is always the first row
-            if (rs.next()) {
-                int no = rs.getInt(2);
-                LocalDate date = LocalDate.parse(rs.getString(3));
-                Classwork.Topic topic
-                        = Classwork.Topic.valueOf(rs.getString(4).toUpperCase());
-                String desc = rs.getString(5);
-                Classwork c = new Classwork(no, date, topic, desc);
-                c.setRowID(rs.getInt(1));
-                return c;
+    private static Connection getConnection() {
+        Connection con = null;
+        int tries = 0;
+        while (tries < 10) {
+            try {
+                con = DriverManager.getConnection("jdbc:sqlite:autdv2.db");
+//                logger.log(Level.INFO, "Got DB Connection");
+                break;
+            } catch (SQLException ex) {
+                tries++;
+                logger.log(Level.INFO, "DB connection failed, retrying...", ex);
             }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Error Fetching CW...", ex);
         }
-        return null;
+        if (con == null) {
+            logger.log(Level.SEVERE, "Unable to get connection to DB");
+        }
+        return con;
     }
 }

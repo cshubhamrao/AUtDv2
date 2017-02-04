@@ -53,12 +53,12 @@ public abstract class GoogleDrive {
 
     private static Logger logger = Log.logger;
 
-    private static Credential credential;
+    private static MemoryDataStoreFactory DS_FACTORY;
 
-    static private HttpTransport HTTP_TRANSPORT;
-    static private MemoryDataStoreFactory DS_FACTORY;
-    static private final JsonFactory JSON_FACTORY
-            = JacksonFactory.getDefaultInstance();
+    private static HttpTransport HTTP_TRANSPORT;
+    private static final JsonFactory JSON_FACTORY =
+            JacksonFactory.getDefaultInstance();
+    private static Credential credential;
 
     GoogleDrive() {
         logger.log(Level.INFO, "Setting up DS Factory & HTTP Transport");
@@ -70,16 +70,22 @@ public abstract class GoogleDrive {
         }
     }
 
+    public static void invalidate() {
+        credential = null;
+    }
+
     private void authorize() {
         logger.log(Level.INFO, "Attempting authorization");
         GoogleAuthorizationCodeFlow flow = null;
         try {
-            GoogleClientSecrets clientSecrets = GoogleClientSecrets
-                    .load(JSON_FACTORY, new InputStreamReader(GoogleDrive.class
-                            .getResourceAsStream("/net/client_secret.json")));
+            InputStreamReader jsonFile = new InputStreamReader(
+                    GoogleDrive.class.
+                            getResourceAsStream("/net/client_secret.json"));
+            GoogleClientSecrets clientSecrets =
+                    GoogleClientSecrets.load(JSON_FACTORY, jsonFile);
             List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
-            flow = new GoogleAuthorizationCodeFlow
-                    .Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+            flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT,
+                    JSON_FACTORY, clientSecrets, SCOPES)
                     .setDataStoreFactory(DS_FACTORY)
                     .setAccessType("offline")
                     .build();
@@ -87,9 +93,8 @@ public abstract class GoogleDrive {
             logger.log(Level.SEVERE, "Unable to build auth flow", ex);
         }
         try {
-            credential = new AuthorizationCodeInstalledApp(flow,
-                    new LocalServerReceiver())
-                        .authorize("user");
+            credential = new AuthorizationCodeInstalledApp(
+                    flow, new LocalServerReceiver()).authorize("user");
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Unable to authorize user", ex);
         }
@@ -102,13 +107,10 @@ public abstract class GoogleDrive {
         }
         logger.log(Level.INFO, "Attempting to get Drive Service");
         String APP_NAME = "AUtDv2";
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-                credential).setApplicationName(APP_NAME)
-                           .build();
+        Drive service =
+                new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName(APP_NAME).build();
         return service;
     }
 
-    public static void invalidate() {
-        credential = null;
-    }
 }
