@@ -26,6 +26,8 @@ package com.github.cshubhamrao.AUtDv2.gui;
 import com.github.cshubhamrao.AUtDv2.db.DatabaseTasks;
 import com.github.cshubhamrao.AUtDv2.models.Classwork;
 import com.github.cshubhamrao.AUtDv2.models.Classwork.Topic;
+import com.github.cshubhamrao.AUtDv2.models.MySql;
+import com.github.cshubhamrao.AUtDv2.models.NetbeansProject;
 import com.github.cshubhamrao.AUtDv2.net.GoogleDrive;
 import com.github.cshubhamrao.AUtDv2.net.UploadTask;
 import com.github.cshubhamrao.AUtDv2.net.UserInfoTask;
@@ -227,7 +229,7 @@ public class UIController {
             Future<Integer> resp = executor.submit(
                     new MySqlDumpRunner(dbName, password)
             );
-            uploadSql(resp, dbName);
+            processSql(resp, dbName);
         }
     }
 
@@ -261,12 +263,13 @@ public class UIController {
     }
 
     private void btn_nbBackup_handler(ActionEvent e) {
-        File f = new File(txt_location.getText());
-        Future<Path> result = executor.submit(new CreateZipTask(f));
-        uploadZip(result);
+        File folder = new File(txt_location.getText());
+        String projName = txt_projName.getText();
+        Future<Path> result = executor.submit(new CreateZipTask(folder));
+        processZip(result, projName, folder.getAbsolutePath());
     }
 
-    private void uploadSql(Future<Integer> dbResp, String dbName) {
+    private void processSql(Future<Integer> dbResp, String dbName) {
         new Thread(() -> {
             try {
                 int exit = dbResp.get();
@@ -275,8 +278,10 @@ public class UIController {
                             -> new Alert(Alert.AlertType.INFORMATION,
                                          "Database backup created")
                             .show());
-                    UploadTask task = new UploadTask(
-                            new File(dbName + ".sql"),
+                    File sql_file = new File(dbName + ".sql");
+                    MySql mysql = new MySql(dbName, sql_file.getAbsolutePath());
+                    DatabaseTasks.writeMySql(mysql);
+                    UploadTask task = new UploadTask(sql_file,
                             "Backup of Database: " + dbName);
                     Future<String> driveResp = executor.submit(task);
                     checkDriveSuccess(driveResp);
@@ -398,11 +403,15 @@ public class UIController {
         return cw;
     }
 
-    private void uploadZip(Future<Path> resp) {
+    private void processZip(Future<Path> resp, String name, String folder) {
         new Thread(() -> {
             try {
-                File f = resp.get().toFile();
-                if (f.exists()) {
+                File zip_file = resp.get().toFile();
+                if (zip_file.exists()) {
+                    NetbeansProject nbp
+                            = new NetbeansProject(name, folder,
+                                                  zip_file.getAbsolutePath());
+                    DatabaseTasks.writeNbProject(nbp);
                     UploadTask task =
                             new UploadTask(zip_file, "Project Backup created by"
                                                    + " AUtDv2");
