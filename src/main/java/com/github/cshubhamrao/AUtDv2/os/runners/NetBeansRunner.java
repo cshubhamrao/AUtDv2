@@ -72,6 +72,9 @@ public class NetBeansRunner extends AppRunner {
                     nbLocs.add(pat);
                     logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
                 });
+                if (nbLocs.isEmpty()){
+                    throw new IOException("No valid loaction found");
+                }
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, "Error locating NetBeans", ex);
             }
