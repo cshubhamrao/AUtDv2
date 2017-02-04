@@ -66,11 +66,11 @@ public class NetBeansRunner extends AppRunner {
         List<Path> progDirs = OSLib.getProgramDirs();
 
         for (Path dirs : progDirs) {
-            try (DirectoryStream<Path> subDirs = Files.newDirectoryStream(dirs,
-                    "NetBeans*")) {
-                subDirs.forEach((pat) -> {
-                    nbLocs.add(pat);
-                    logger.log(Level.INFO, "Added {0} to nbLocs", pat.toString());
+            try (DirectoryStream<Path> subDirs =
+                    Files.newDirectoryStream(dirs, "NetBeans*")) {
+                subDirs.forEach((p) -> {
+                    nbLocs.add(p);
+                    logger.log(Level.INFO, "Added {0} to nbLocs", p.toString());
                 });
                 if (nbLocs.isEmpty()){
                     throw new IOException("No valid loaction found");

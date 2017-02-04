@@ -77,15 +77,15 @@ public class MySqlDumpRunner extends AppRunner {
         switch (os) {
             case WINDOWS:
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32",
-                        "cmd.exe").toString();
+                                       "cmd.exe").toString();
                 command.setCommandName(Paths.get(windowsLocation(),
-                        "mysqldump.exe").toString());
+                                                 "mysqldump.exe").toString());
                 command.addArguments("--user=root",
-                        "--password=" + "\"" + password + "\"");
+                                     "--password=" + "\"" + password + "\"");
                 command.addArguments("--hex-blob");
                 command.addArguments("--result-file="
-                        + Paths.get("", dbName + ".sql")
-                                .toAbsolutePath().toString());
+                                     + Paths.get("", dbName + ".sql")
+                        .toAbsolutePath().toString());
                 command.addArguments("\"" + dbName + "\"");
         }
         logger.log(Level.INFO, "Dumping {0}", dbName);
@@ -100,20 +100,20 @@ public class MySqlDumpRunner extends AppRunner {
             System.out.println(dir);
             try {
                 Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class),
-                        3, new SimpleFileVisitor<Path>() {
+                                   3, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path p,
-                            BasicFileAttributes bfa) throws IOException {
+                                   BasicFileAttributes bfa) throws IOException {
                         if (p.getFileName().toString()
                                 .contains("MySQL Server")) {
-                             mySqlLocs.add(p);
+                            mySqlLocs.add(p);
                         }
                         return FileVisitResult.CONTINUE;
                     }
 
                     @Override
                     public FileVisitResult visitFileFailed(Path t,
-                            IOException ioe)
+                                                           IOException ioe)
                             throws IOException {
                         return FileVisitResult.CONTINUE;
                     }
@@ -128,7 +128,7 @@ public class MySqlDumpRunner extends AppRunner {
 
         mySqlLocs.forEach(path
                 -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
-                        path.toString()));
+                              path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());

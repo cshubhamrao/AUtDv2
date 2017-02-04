@@ -54,7 +54,7 @@ public class DatabaseTasks {
                 int no = rs.getInt(2);
                 LocalDate date = LocalDate.parse(rs.getString(3));
                 Classwork.Topic topic
-                                = Classwork.Topic.valueOf(rs.getString(4).toUpperCase());
+                        = Classwork.Topic.valueOf(rs.getString(4).toUpperCase());
                 String desc = rs.getString(5);
                 Classwork c = new Classwork(no, date, topic, desc);
                 c.setRowID(rs.getInt(1));
@@ -71,12 +71,12 @@ public class DatabaseTasks {
         try (Connection con = getConnection()) {
             con.createStatement().executeUpdate(Classwork.getSchema());
             String query
-                   = "UPDATE " + Classwork.TABLE_NAME + " SET "
-                     + "cw_no = ?, "
-                     + "date = ?, "
-                     + "topic = ?, "
-                     + "desc = ?"
-                     + "WHERE rowid = " + rowid + " ;";
+                    = "UPDATE " + Classwork.TABLE_NAME + " SET "
+                      + "cw_no = ?, "
+                      + "date = ?, "
+                      + "topic = ?, "
+                      + "desc = ?"
+                      + "WHERE rowid = " + rowid + " ;";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setInt(1, cw.getCw_number());
             stmt.setString(2, cw.getDate().toString());
@@ -96,9 +96,9 @@ public class DatabaseTasks {
         try (Connection con = getConnection()) {
             con.createStatement().executeUpdate(Classwork.getSchema());
             String query
-                   = "INSERT INTO " + Classwork.TABLE_NAME
-                     + "(" + Classwork.FIELD_LIST + ") "
-                     + "VALUES (?, ?, ?, ?)";
+                    = "INSERT INTO " + Classwork.TABLE_NAME
+                      + "(" + Classwork.FIELD_LIST + ") "
+                      + "VALUES (?, ?, ?, ?)";
             stmt = con.prepareStatement(query,
                                         Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, cw.getCw_number());

@@ -297,13 +297,13 @@ public class UIController {
             try {
                 int exitCode = resp.get();
                 if (exitCode == 0) {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION,
-                                         "Database successfully restored").show());
+                    Platform.runLater(() ->
+                            new Alert(Alert.AlertType.INFORMATION,
+                                      "Database successfully restored").show());
                 } else {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                         "Database restore unsuccessful").show());
+                    Platform.runLater(() ->
+                            new Alert(Alert.AlertType.ERROR,
+                                      "Database restore unsuccessful").show());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error importing DB", ex);
@@ -403,16 +403,17 @@ public class UIController {
             try {
                 File f = resp.get().toFile();
                 if (f.exists()) {
-                    UploadTask task
-                            = new UploadTask(f, "Project Backup created by "
-                                    + "AUtDv2");
+                    UploadTask task =
+                            new UploadTask(zip_file, "Project Backup created by"
+                                                   + " AUtDv2");
                     Future<String> res = executor.submit(task);
                     checkDriveSuccess(res);
                 } else {
                     Platform.runLater(() ->
-                            new Alert(Alert.AlertType.ERROR, "Creating zip file"
-                                    + " failed. Please try again")
-                                    .showAndWait());
+                            new Alert(Alert.AlertType.ERROR,
+                                      "Creating zip file failed. "
+                                      + "Please try again")
+                            .showAndWait());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);

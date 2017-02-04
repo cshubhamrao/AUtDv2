@@ -52,9 +52,9 @@ public class MainUI extends Application {
             primaryStage.setScene(new Scene(root));
         } catch (IOException ex) {
             logger.log(java.util.logging.Level.SEVERE,
-                    "Error in loading main FXML", ex);
+                       "Error in loading main FXML", ex);
             new Alert(Alert.AlertType.ERROR,
-                    "Fatal Error in loading GUI. Exiting...").showAndWait();
+                      "Fatal Error in loading GUI. Exiting...").showAndWait();
             Platform.exit();
         }
 

@@ -67,13 +67,13 @@ public class MySqlRunner extends AppRunner {
                 as expected.
                  */
                 String cmd = Paths.get(System.getenv("WINDIR"), "system32",
-                        "cmd.exe").toString();
+                                       "cmd.exe").toString();
                 command.setCommandName(cmd);
 
                 /*
                 Makes cmd.exe(1) accept a "command" and exit immediately
                 after execution.
-                */
+                 */
                 command.addArguments("/C");
 
                 // "command" for cmd.exe(1) is "start"
@@ -85,7 +85,7 @@ public class MySqlRunner extends AppRunner {
                 break;
             case MAC:
                 logger.log(Level.WARNING,
-                        "Mac OS is untesed. Things may not work.");
+                           "Mac OS is untesed. Things may not work.");
             case LINUX:
                 command.setCommandName("mysql");
                 break;
@@ -102,11 +102,11 @@ public class MySqlRunner extends AppRunner {
         for (Path dir : progDirs) {
             System.out.println(dir);
             try {
-                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class), 3,
-                        new SimpleFileVisitor<Path>() {
+                Files.walkFileTree(dir, EnumSet.noneOf(FileVisitOption.class),
+                                        3, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path p,
-                            BasicFileAttributes bfa) throws IOException {
+                                   BasicFileAttributes bfa) throws IOException {
                         if (p.getFileName().toString().contains("MySQL Server")) {
                             mySqlLocs.add(p);
                         }
@@ -114,7 +114,8 @@ public class MySqlRunner extends AppRunner {
                     }
 
                     @Override
-                    public FileVisitResult visitFileFailed(Path t, IOException ioe)
+                    public FileVisitResult visitFileFailed(Path t,
+                                                           IOException ioe)
                             throws IOException {
                         return FileVisitResult.CONTINUE;
                     }
@@ -129,7 +130,7 @@ public class MySqlRunner extends AppRunner {
 
         mySqlLocs.forEach(path
                 -> logger.log(Level.INFO, "Adding MySQL Location: {0}",
-                        path.toString()));
+                              path.toString()));
 
         location = mySqlLocs.last().resolve("bin");
         logger.log(Level.INFO, "Using {0} for MySQL", location.toString());
