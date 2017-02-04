@@ -31,10 +31,10 @@ import java.time.LocalDate;
  */
 public class Classwork {
 
-    private int rowID;
-    public static final String tblName = "ClassWork";
-    public static final String fieldList = "cw_no, date, topic, desc";
+    public static final String FIELD_LIST = "cw_no, date, topic, desc";
+    public static final String TABLE_NAME = "ClassWork";
 
+    private int rowID;
     private int cw_number;
     private LocalDate date;
     private Topic topic;
@@ -67,11 +67,6 @@ public class Classwork {
         return date;
     }
 
-    public String getTopic() {
-        if(topic == Topic.JAVA) return "Java";
-        else return "MySQL";
-    }
-
     public String getDescription() {
         return description;
     }
@@ -82,6 +77,14 @@ public class Classwork {
 
     public void setRowID(int rowID) {
         this.rowID = rowID;
+    }
+
+    public String getTopic() {
+        if (topic == Topic.JAVA) {
+            return "Java";
+        } else {
+            return "MySQL";
+        }
     }
 
     public enum Topic {

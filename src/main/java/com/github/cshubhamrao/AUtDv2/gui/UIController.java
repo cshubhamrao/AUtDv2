@@ -78,66 +78,84 @@ public class UIController {
     private static final java.util.logging.Logger logger = Log.logger;
 
     @FXML
-    private ImageView img_user;
-    @FXML
-    private Label txt_welcome;
-    @FXML
-    private Button btn_userAction;
-    @FXML
-    private ChoiceBox<String> cb_topic;
+    private Button btn_MySql;
     @FXML
     private Button btn_NetBeans;
     @FXML
-    private Button btn_MySql;
-    @FXML
-    private Spinner<Integer> spinner_cwNo;
-    @FXML
-    private Button btn_m_backup;
-    @FXML
-    private Button btn_n_backup;
-    @FXML
-    private Button btn_m_restore;
-    @FXML
-    private TextField txt_projName;
-    @FXML
-    private TextField txt_dbBackup;
-    @FXML
-    private TextField txt_dbRestore;
-    @FXML
-    private PasswordField txt_mySqlPass;
-    @FXML
     private Button btn_browse;
-    @FXML
-    private TextField txt_location;
     @FXML
     private Button btn_cwInsert;
     @FXML
     private Button btn_cwUpdate;
     @FXML
+    private Button btn_m_backup;
+    @FXML
+    private Button btn_m_restore;
+    @FXML
+    private Button btn_n_backup;
+    @FXML
+    private Button btn_userAction;
+    @FXML
+    private ChoiceBox<String> cb_topic;
+    @FXML
     private DatePicker datePicker;
     @FXML
+    private ImageView img_user;
+    @FXML
+    private Spinner<Integer> spinner_cwNo;
+    @FXML
+    private TextField txt_dbBackup;
+    @FXML
+    private TextField txt_dbRestore;
+    @FXML
     private TextArea txt_desc;
+    @FXML
+    private TextField txt_location;
+    @FXML
+    private PasswordField txt_mySqlPass;
+    @FXML
+    private TextField txt_projName;
+    @FXML
+    private Label txt_welcome;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private DatabaseTasks db;
-    private boolean signedIn = false;
     private int presentRow = 0;
+    private boolean signedIn = false;
 
     /**
      * Initializes the controller class.
      */
     public void initialize() {
         logger.log(Level.INFO, "Initializing Controls");
+        setInitialValues();
+        checkPlatform();
+        setHandlers();
+    }
 
+    private void setInitialValues() {
+        IntegerSpinnerValueFactory factory
+                = new IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
+        TextFormatter formatter = new TextFormatter(factory.getConverter(),
+                                                    factory.getValue());
+        spinner_cwNo.getEditor().setTextFormatter(formatter);
+        factory.valueProperty().bindBidirectional(formatter.valueProperty());
+        spinner_cwNo.setValueFactory(factory);
+        spinner_cwNo.getValueFactory().setValue(0);
+//        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
+        cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
+        btn_cwUpdate.setDisable(true);
+    }
+
+    private void checkPlatform() {
         if (OSLib.getCurrentArchitecture() == OSLib.Architecture.UNKNOWN
-                || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
+            || OSLib.getCurrentOS() == OSLib.OperatingSystem.UNKNOWN) {
 
             new Alert(Alert.AlertType.ERROR,
-                    "Unable to determine current OS and/or System Architecture."
-                    + " Any OS-dependent functionality will not work")
+                      "Unable to find current OS and/or system architecture. "
+                      + "Any OS-dependent functionality will not work")
                     .showAndWait();
             logger.log(Level.SEVERE, "Unable to detect OS and/or architecture"
-                    + " reliably");
+                                     + " reliably");
             logger.log(Level.CONFIG, OSLib.getCurrentArchitecture().toString());
             logger.log(Level.CONFIG, OSLib.getCurrentOS().toString());
 
@@ -146,54 +164,42 @@ public class UIController {
             btn_m_backup.setDisable(true);
             btn_m_restore.setDisable(true);
         }
-        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(1,
-                Integer.MAX_VALUE);
-        TextFormatter formatter = new TextFormatter(factory.getConverter(),
-                factory.getValue());
-        spinner_cwNo.getEditor().setTextFormatter(formatter);
-        factory.valueProperty().bindBidirectional(formatter.valueProperty());
-        spinner_cwNo.setValueFactory(factory);
-        spinner_cwNo.getValueFactory().setValue(0);
-//        spinner_cwNo.setValueFactory(new IntegerSpinnerValueFactory(1, 199));
-        cb_topic.setItems(FXCollections.observableArrayList("Java", "MySQL"));
+    }
 
+    private void setHandlers() {
         btn_NetBeans.setOnAction(e -> executor.submit(new NetBeansRunner()));
-
         btn_MySql.setOnAction(e -> executor.submit(new MySqlRunner()));
 
-        btn_userAction.setOnAction(this::setUserInfo);
-
-        btn_m_backup.setOnAction(this::btn_backup_handler);
-        btn_m_restore.setOnAction(this::btn_restore_handler);
-
-        btn_browse.setOnAction((e) -> {
+        btn_browse.setOnAction(e -> {
             DirectoryChooser dir = new DirectoryChooser();
             File f = dir.showDialog(null);
             txt_location.setText(f.toString());
         });
-        btn_n_backup.setOnAction(this::btn_n_backup_handler);
 
-        btn_cwUpdate.setDisable(true);
+        btn_userAction.setOnAction(this::setUserInfo);
+        btn_m_backup.setOnAction(this::btn_sqlBackup_handler);
+        btn_m_restore.setOnAction(this::btn_restore_handler);
+        btn_n_backup.setOnAction(this::btn_n_backup_handler);
         btn_cwInsert.setOnAction(this::btn_cwInsert_handler);
         btn_cwUpdate.setOnAction(this::btn_cwUpdate_handler);
         spinner_cwNo.valueProperty().addListener(this::fetchClasswork);
     }
 
-    private Classwork getCw() {
-        int cwno = spinner_cwNo.getValue();
-        LocalDate date = datePicker.getValue();
-        Classwork.Topic topic = null;
-        switch (cb_topic.getValue()) {
-            case "Java":
-                topic = Topic.JAVA;
-                break;
-            case "MySQL":
-                topic = Topic.MYSQL;
-                break;
+    private void btn_sqlBackup_handler(ActionEvent e) {
+        String dbName = txt_dbBackup.getText().trim();
+        String password = txt_mySqlPass.getText();
+        if (password.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
         }
-        String desc = txt_desc.getText();
-        Classwork cw = new Classwork(cwno, date, topic, desc);
-        return cw;
+        if (dbName.isEmpty() || dbName.contains(" ")) {
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
+                    .showAndWait();
+        } else {
+            Future<Integer> resp = executor.submit(
+                    new MySqlDumpRunner(dbName, password)
+            );
+            uploadSql(resp, dbName);
+        }
     }
 
     private void btn_cwInsert_handler(ActionEvent e) {
@@ -202,7 +208,7 @@ public class UIController {
             if (presentRow == 0) {
                 Platform.runLater(()
                         -> new Alert(Alert.AlertType.ERROR,
-                                "Error Writing to DB").show());
+                                     "Error Writing to DB").show());
             } else {
                 Platform.runLater(() -> {
                     btn_cwUpdate.setDisable(false);
@@ -218,9 +224,98 @@ public class UIController {
             if (presentRow == 0) {
                 Platform.runLater(()
                         -> new Alert(Alert.AlertType.ERROR,
-                                "Error Writing to DB").show());
+                                     "Error Writing to DB").show());
             }
         }).start();
+    }
+
+    private void btn_n_backup_handler(ActionEvent e) {
+        File f = new File(txt_location.getText());
+        Future<Path> result = executor.submit(new CreateZipTask(f));
+        uploadZip(result);
+    }
+
+    private void btn_restore_handler(ActionEvent e) {
+        String dbName = txt_dbRestore.getText().trim();
+        String password = txt_mySqlPass.getText();
+        if (password.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
+        }
+        File sqlFile = Paths.get(dbName + ".sql").toFile();
+        if (dbName.isEmpty() || dbName.contains(" ")) {
+            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
+                    .showAndWait();
+            return;
+        }
+        if (sqlFile.exists() && sqlFile.canRead()) {
+            Future<Integer> resp = executor.submit(
+                    new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName,
+                                          password));
+            checkImportSuccess(resp);
+        } else {
+            new Alert(Alert.AlertType.ERROR,
+                      ".sql file containing backup of Database \"" + dbName
+                      + "\" not found.\n"
+                      + "Tip: To restore to another Database, rename the .sql"
+                      + " file to desired "
+                      + "Database's name.\n"
+                      + "File name: " + sqlFile.getAbsolutePath())
+                    .showAndWait();
+        }
+    }
+
+    private void checkDriveSuccess(Future<String> resp) {
+        new Thread(() -> {
+            try {
+                String fileId = resp.get();
+                if (fileId == null) {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                         "Upload to Google Drive failed. "
+                                         + "Please try again").showAndWait());
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                         "File Uploaded").show());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error checking for success", ex);
+            }
+        }, "Upload Check Thread").start();
+    }
+
+    private void checkImportSuccess(Future<Integer> resp) {
+        new Thread(() -> {
+            try {
+                int exitCode = resp.get();
+                if (exitCode == 0) {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.INFORMATION,
+                                         "Database successfully restored").show());
+                } else {
+                    Platform.runLater(()
+                            -> new Alert(Alert.AlertType.ERROR,
+                                         "Database restore unsuccessful").show());
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.log(Level.SEVERE, "Error importing DB", ex);
+            }
+        }, "Import DB thread").start();
+    }
+
+    private <T> void commitEditorText(Spinner<T> spinner) {
+        if (!spinner.isEditable()) {
+            return;
+        }
+        String text = spinner.getEditor().getText();
+        SpinnerValueFactory<T> valueFactory = spinner.getValueFactory();
+        if (valueFactory != null) {
+            StringConverter<T> converter = valueFactory.getConverter();
+            if (converter != null) {
+                T value = converter.fromString(text);
+                valueFactory.setValue(value);
+            }
+        }
     }
 
     private void fetchClasswork(ObservableValue obs, int old, int newVal) {
@@ -246,13 +341,30 @@ public class UIController {
         }).start();
     }
 
+    private Classwork getCw() {
+        int cwno = spinner_cwNo.getValue();
+        LocalDate date = datePicker.getValue();
+        Classwork.Topic topic = null;
+        switch (cb_topic.getValue()) {
+            case "Java":
+                topic = Topic.JAVA;
+                break;
+            case "MySQL":
+                topic = Topic.MYSQL;
+                break;
+        }
+        String desc = txt_desc.getText();
+        Classwork cw = new Classwork(cwno, date, topic, desc);
+        return cw;
+    }
+
     private void setUserInfo(ActionEvent e) {
         if (signedIn) {
             GoogleDrive.invalidate();
             btn_userAction.setText("Sign In");
             img_user.setImage(null);
             txt_welcome.setText("Welcome! Click 'Sign In' to backup to "
-                    + "Google Drive");
+                                + "Google Drive");
             signedIn = false;
         } else {
             signedIn = true;
@@ -266,87 +378,15 @@ public class UIController {
                     info = resp.get();
                     Platform.runLater(() -> {
                         txt_welcome.setText("Welcome " + info.get(0) + "! "
-                                + "Have a nice Day.");
+                                            + "Have a nice Day.");
                         img_user.setImage(new Image(info.get(1),
-                                64, 64, true, true, true));
+                                                    64, 64, true, true, true));
                     });
                 } catch (InterruptedException | ExecutionException ex) {
                     logger.log(Level.SEVERE, "Error getting user info", ex);
                 }
             }, "User info thread").start();
         }
-    }
-
-    private void btn_backup_handler(ActionEvent e) {
-        String dbName = txt_dbBackup.getText().trim();
-        String password = txt_mySqlPass.getText();
-        if (password.isEmpty()) {
-            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
-        }
-        if (dbName.isEmpty() || dbName.contains(" ")) {
-            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
-                    .showAndWait();
-        } else {
-            Future<Integer> resp = executor.submit(new MySqlDumpRunner(dbName,
-                    password));
-            uploadSql(resp, dbName);
-        }
-    }
-
-    private void btn_restore_handler(ActionEvent e) {
-        String dbName = txt_dbRestore.getText().trim();
-        String password = txt_mySqlPass.getText();
-        if (password.isEmpty()) {
-            new Alert(Alert.AlertType.ERROR, "Empty password").showAndWait();
-        }
-        File sqlFile = Paths.get(dbName + ".sql").toFile();
-        if (dbName.isEmpty() || dbName.contains(" ")) {
-            new Alert(Alert.AlertType.WARNING, "Invalid name for Database")
-                    .showAndWait();
-            return;
-        }
-        if (sqlFile.exists() && sqlFile.canRead()) {
-            Future<Integer> resp = executor.submit(
-                    new MySqlImportRunner(sqlFile.getAbsolutePath(), dbName,
-                            password));
-            checkImportSuccess(resp);
-        } else {
-            new Alert(Alert.AlertType.ERROR,
-                    ".sql file containing backup of Database \"" + dbName
-                    + "\" not found.\n"
-                    + "Tip: To restore to another Database, rename the .sql"
-                    + " file to desired "
-                    + "Database's name.\n"
-                    + "File name: " + sqlFile.getAbsolutePath())
-                    .showAndWait();
-        }
-    }
-
-    private void btn_n_backup_handler(ActionEvent e) {
-        File f = new File(txt_location.getText());
-        Future<Path> result = executor.submit(new CreateZipTask(f));
-        uploadZip(result);
-    }
-
-    private void uploadZip(Future<Path> resp) {
-        new Thread(() -> {
-            try {
-                File f = resp.get().toFile();
-                if (f.exists()) {
-                    UploadTask task = new UploadTask(f,
-                            "Project Backup created by AUtDv2");
-                    Future<String> res = executor.submit(task);
-                    checkDriveSuccess(res);
-                } else {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                    "Creating zip file failed. "
-                                    + "Please try again").showAndWait());
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.log(Level.SEVERE, "Error checking for success", ex);
-            }
-        }, "Upload zip Thread").start();
     }
 
     private void uploadSql(Future<Integer> resp, String dbName) {
@@ -356,7 +396,7 @@ public class UIController {
                 if (exit == 0) {
                     Platform.runLater(()
                             -> new Alert(Alert.AlertType.INFORMATION,
-                                    "Database backup created")
+                                         "Database backup created")
                             .show());
                     UploadTask task = new UploadTask(
                             new File(dbName + ".sql"),
@@ -366,7 +406,7 @@ public class UIController {
                 } else {
                     Platform.runLater(()
                             -> new Alert(Alert.AlertType.ERROR,
-                                    "Unable to create Backup of database")
+                                         "Unable to create Backup of database")
                             .show());
                 }
             } catch (InterruptedException | ExecutionException ex) {
@@ -375,58 +415,26 @@ public class UIController {
         }, "DB Upload Thread").start();
     }
 
-    private void checkImportSuccess(Future<Integer> resp) {
+    private void uploadZip(Future<Path> resp) {
         new Thread(() -> {
             try {
-                int exitCode = resp.get();
-                if (exitCode == 0) {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION,
-                                    "Database successfully restored").show());
+                File f = resp.get().toFile();
+                if (f.exists()) {
+                    UploadTask task
+                            = new UploadTask(f, "Project Backup created by "
+                                    + "AUtDv2");
+                    Future<String> res = executor.submit(task);
+                    checkDriveSuccess(res);
                 } else {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                    "Database restore unsuccessful").show());
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.log(Level.SEVERE, "Error importing DB", ex);
-            }
-        }, "Import DB thread").start();
-    }
-
-    private void checkDriveSuccess(Future<String> resp) {
-        new Thread(() -> {
-            try {
-                String fileId = resp.get();
-                if (fileId == null) {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.ERROR,
-                                    "Upload to Google Drive failed. "
-                                    + "Please try again").showAndWait());
-                } else {
-                    Platform.runLater(()
-                            -> new Alert(Alert.AlertType.INFORMATION,
-                                    "File Uploaded").show());
+                    Platform.runLater(() ->
+                            new Alert(Alert.AlertType.ERROR, "Creating zip file"
+                                    + " failed. Please try again")
+                                    .showAndWait());
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 logger.log(Level.SEVERE, "Error checking for success", ex);
             }
-        }, "Upload Check Thread").start();
-    }
-
-    private <T> void commitEditorText(Spinner<T> spinner) {
-        if (!spinner.isEditable()) {
-            return;
-        }
-        String text = spinner.getEditor().getText();
-        SpinnerValueFactory<T> valueFactory = spinner.getValueFactory();
-        if (valueFactory != null) {
-            StringConverter<T> converter = valueFactory.getConverter();
-            if (converter != null) {
-                T value = converter.fromString(text);
-                valueFactory.setValue(value);
-            }
-        }
+        }, "Upload zip Thread").start();
     }
 
 }
