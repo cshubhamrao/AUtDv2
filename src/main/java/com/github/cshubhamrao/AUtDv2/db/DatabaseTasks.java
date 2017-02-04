@@ -24,6 +24,8 @@
 package com.github.cshubhamrao.AUtDv2.db;
 
 import com.github.cshubhamrao.AUtDv2.models.Classwork;
+import com.github.cshubhamrao.AUtDv2.models.MySql;
+import com.github.cshubhamrao.AUtDv2.models.NetbeansProject;
 import com.github.cshubhamrao.AUtDv2.util.Log;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -113,6 +115,66 @@ public class DatabaseTasks {
             logger.log(Level.SEVERE, "Error Writing CW...", ex);
         }
         return rowid;
+    }
+
+    public static boolean writeNbProject(NetbeansProject nbp) {
+        boolean success = false;
+        try (Connection con = getConnection()) {
+            con.createStatement().executeUpdate(NetbeansProject.getSchema());
+            String query
+                    = "INSERT INTO " + NetbeansProject.TABLE_NAME
+                      + " (" + NetbeansProject.FIELD_LIST + ") "
+                      + "VALUES (?, ?, ?);";
+            PreparedStatement insertStmt = con.prepareStatement(query);
+            insertStmt.setString(1, nbp.getName());
+            insertStmt.setString(2, nbp.getFolder());
+            insertStmt.setString(3, nbp.getZip_file());
+            insertStmt.executeUpdate();
+            insertStmt.close();
+            success = true;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error Writing Netbeans project...", ex);
+        }
+        return success;
+    }
+
+    public static NetbeansProject fetchNbProject(int id) {
+        String selectQuery = "SELECT * FROM " + NetbeansProject.TABLE_NAME
+                             + " WHERE id = " + id + ";";
+        try (Connection con = getConnection();
+             ResultSet rs = con.createStatement().executeQuery(selectQuery)) {
+            // Always the first (and only) row
+            if (rs.next()) {
+                int ret_id = rs.getInt(1);
+                String name = rs.getString(2);
+                String folder = rs.getString(3);
+                String zip_file = rs.getString(4);
+                NetbeansProject proj =
+                        new NetbeansProject(name, folder, zip_file);
+                proj.setId(ret_id);
+                return proj;
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error Fetching CW...", ex);
+        }
+        return null;
+    }
+
+    public static void writeMySql(MySql mysql) {
+        try (Connection con = getConnection()) {
+            con.createStatement().executeUpdate(MySql.getSchema());
+            String query
+                    = "INSERT INTO " + MySql.TABLE_NAME
+                      + "(" + MySql.FIELD_LIST + ") "
+                      + "VALUES (?, ?)";
+            PreparedStatement insertStmt = con.prepareStatement(query);
+            insertStmt.setString(1, mysql.getName());
+            insertStmt.setString(2, mysql.getSql_file());
+            insertStmt.executeUpdate();
+            insertStmt.close();
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error Writing CW...", ex);
+        }
     }
 
     private static Connection getConnection() {
