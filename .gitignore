@@ -16,6 +16,10 @@ nbbuild/
 dist/
 nbdist/
 
+###IDEA###
+.idea
+*.iml
+
 ###Linux###
 *~
 
