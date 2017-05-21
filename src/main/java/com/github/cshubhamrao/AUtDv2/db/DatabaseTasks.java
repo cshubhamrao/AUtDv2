@@ -44,6 +44,14 @@ public class DatabaseTasks {
 
     private static final java.util.logging.Logger logger = Log.logger;
 
+    static {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException ex) {
+            logger.log(Level.SEVERE, "Unable to Initialize SQLite Driver", ex);
+        }
+    }
+    
     public static Classwork fetchCW(int cwNo) {
         String query = "SELECT * FROM " + Classwork.TABLE_NAME
                        + " WHERE cw_no = " + cwNo + " ORDER BY rowid DESC;";
