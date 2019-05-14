@@ -1,0 +1,8 @@
+title: Auto Upload to Drive v2
+description: 
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-time-machine
+
+gems:
+  - jekyll-mentions
