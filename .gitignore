@@ -41,3 +41,4 @@ target/
 .AUtDv2-creds
 *.sql
 *.zip
+src/main/resources/net/client_secret.json
